@@ -83,6 +83,8 @@ death_causes_data %>%
 
 # Victorian Population Health Survey 2017
 
+The graph below compares the City of Moonee Valley to other local government areas for a number of risk factors, chronic diseases and screening tests. The colours indicate how Moonee Valley compares to Victoria. 
+
 ```{r}
 # top half
 vphs_snap1_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A4:GI52") %>% 
@@ -143,11 +145,15 @@ vphs_shapshot_upper <-  vphs_shapshot_ul %>%
   pivot_longer(-region, names_to = "ind", values_to = "upper") %>% 
   pull()
 
+# indicator groups
+indicator_groups <- c(rep("Modifiable risk factors", 16), rep("Doctor diagnosed \nchronic disease", 9), rep("Screening tests \nand treatment", 6))
+
 # join these up
 vphs_vic_joined <- vphs_vic_point_est %>% 
   mutate(vic_lower = vphs_shapshot_lower) %>% 
   mutate(vic_upper = vphs_shapshot_upper) %>% 
   rename(vic_point_est = percentage) %>% 
+  mutate(type = indicator_groups) %>% 
   select(-lga)
 
 # joined to the lga data
@@ -167,7 +173,9 @@ vphs_comparison_all <- vphs_snapshot_point_est %>%
                                indicator == "Had a bowel exam to detect cancer last 5 years b" ~ "Had a bowel exam to detect cancer last 5 years",
                                indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occasion of drinking",
                                TRUE ~ indicator)) %>% 
-  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher")))
+  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher"))) 
+
+
 
 #for graph
 vphs_comparison <- vphs_comparison_all %>% 
@@ -186,7 +194,8 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
   geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
   geom_point(data = vphs_mv, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
   geom_point(data = vphs_vic, aes(fct_rev(indicator), percentage, shape = lga)) +
-  theme(legend.position = c(0.8, 0.89), legend.box="vertical", legend.margin=margin()) + 
+  theme(legend.position = c(0.75, 0.89), legend.box="vertical", legend.margin=margin()) + 
+  scale_colour_manual(values = c("#E55048", "#E3A51E", "#4EA546")) +
   labs(x = NULL, y = "Percentage", title = "Selected risk factors, disease and tests",
        subtitle = "City of Moonee Valley compared to other LGAs",
        caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
@@ -194,7 +203,8 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
   guides(size = FALSE, alpha = FALSE) + 
   guides(col = guide_legend(nrow = 3)) +
   theme(legend.title = element_text(size=9, face="bold")) +
-  theme(legend.text = element_text(size=9))
+  theme(legend.text = element_text(size=9)) +
+  facet_grid(rows = vars(type), scales = "free_y", space = "free_y")
 ```
 
 
