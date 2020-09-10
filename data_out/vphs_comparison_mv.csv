@@ -1,0 +1,47 @@
+Type,Indicator,Percentage,Lower limit,Upper limit
+Modifiable risk factors,Obese,12.5,9.3,16.8
+Modifiable risk factors,Overweight,47.6,41.7,53.7
+Modifiable risk factors,Daily consumer of sugar sweetened soft drinks,6.4,4.3,9.4
+Modifiable risk factors,Take away food consumed >1 day/week,23.7,17.9,30.7
+Modifiable risk factors,Sedentary (inactive),4.7,2.3,9.3
+Modifiable risk factors,Insufficiently physically active,36.7,31,42.7
+Modifiable risk factors,Complied with vegetable consumption guidelines,4.4,2.8,6.9
+Modifiable risk factors,Complied with fruit consumption guidelines,47.5,41.6,53.4
+Modifiable risk factors,Daily smoker,9.3,6.3,13.6
+Modifiable risk factors,Current (i.e. daily or occasional smoker),15.3,11.2,20.7
+Modifiable risk factors,Increased lifetime risk of alcohol related harm,64.2,58.5,69.5
+Modifiable risk factors,Incr. risk of injury from a single occasion of drinking,46.6,40.7,52.7
+Modifiable risk factors,Fair or poor self reported health,17.7,13.7,22.5
+Modifiable risk factors,Low or medium life satisfaction,19.9,15.3,25.6
+Modifiable risk factors,High or very high levels of psychological distress,12.4,8.9,17.1
+Modifiable risk factors,Doctor diagnosed hypertension,23.8,19.9,28.3
+"Doctor diagnosed 
+chronic disease",Anxiety or depression,30.4,25,36.4
+"Doctor diagnosed 
+chronic disease",Arthritis,15.2,12.5,18.5
+"Doctor diagnosed 
+chronic disease",Asthma ever diagnosed,21.5,17,26.7
+"Doctor diagnosed 
+chronic disease",Cancer,8,6,10.7
+"Doctor diagnosed 
+chronic disease",Type 2 diabetes,3.3,2,5.2
+"Doctor diagnosed 
+chronic disease",Heart disease,6.6,4.8,9
+"Doctor diagnosed 
+chronic disease",Osteoporosis,4.8,3.5,6.5
+"Doctor diagnosed 
+chronic disease",Stroke,2.1,1.2,3.7
+"Doctor diagnosed 
+chronic disease",Two or more chronic diseases,23,19,27.6
+"Screening tests 
+and treatment",Had a blood lipids test in last 2 years,55.6,50,61.2
+"Screening tests 
+and treatment",Had a blood pressure test in last 2 years,78.2,72.6,82.9
+"Screening tests 
+and treatment",Had a blood glucose test in last 2 years,47.6,41.8,53.5
+"Screening tests 
+and treatment",Had a faecal occult blood test 50 years of age,61.2,52.6,69.1
+"Screening tests 
+and treatment",Had a bowel exam to detect cancer last 5 years,41.2,34.6,48.1
+"Screening tests 
+and treatment",Had a mammogram to detect cancer in last 2 years,83.5,74.5,89.7

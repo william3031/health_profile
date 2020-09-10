@@ -86,96 +86,9 @@ death_causes_data %>%
 The graph below compares the City of Moonee Valley to other local government areas for a number of risk factors, chronic diseases and screening tests. The colours indicate how Moonee Valley compares to Victoria. 
 
 ```{r}
-# top half
-vphs_snap1_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A4:GI52") %>% 
-  clean_names() %>% 
-  remove_empty() %>% 
-  mutate(x2 = if_else(is.na(x2), "Victoria", x2)) %>% 
-  rename(lga = x2) %>% 
-  select(-local_government_area) %>% 
-  select(-starts_with("x"))
-
-# bottom half
-vphs_snap2_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A56:GI89") %>% 
-  clean_names() %>% 
-  remove_empty() %>% 
-  mutate(x2 = if_else(is.na(x2), "Victoria", x2)) %>% 
-  rename(lga = x2) %>% 
-  select(-local_government_area) %>% 
-  select(-starts_with("x")) %>% 
-  filter(lga != "Victoria") # only need the one from the first table
-  
-# join them  
-vphs_snap_raw <- bind_rows(vphs_snap1_raw, vphs_snap2_raw)
-
-# point estimates
-vphs_snapshot_point_est <- vphs_snap_raw %>% 
-  select(-ends_with("_2017")) %>% 
-  select(-ends_with("_rse")) %>% 
-  pivot_longer(-lga, names_to = "indicator", values_to = "percentage")
-
-# indicator names
-vphs_ind_names <- vphs_snapshot_point_est %>% 
-  distinct(indicator) %>% 
-  pull()
-
-# Victoria point estimates
-vphs_vic_point_est <- vphs_snapshot_point_est %>% 
-  filter(lga == "Victoria")
-
-# Vic lower limits
-vphs_shapshot_ll <- vphs_snap_raw %>% 
-  filter(lga == "Victoria") %>% 
-  select(ends_with("ll_2017"))
-names(vphs_shapshot_ll) <- vphs_ind_names
-vphs_shapshot_lower <-  vphs_shapshot_ll %>% 
-  rename_all(paste0, "_ll") %>% 
-  mutate(region = "Victoria") %>% 
-  pivot_longer(-region, names_to = "ind", values_to = "lower") %>% 
-  pull()
-
-# Vic upper limits
-vphs_shapshot_ul <- vphs_snap_raw %>% 
-  filter(lga == "Victoria") %>% 
-  select(ends_with("ul_2017"))
-names(vphs_shapshot_ul) <- vphs_ind_names
-vphs_shapshot_upper <-  vphs_shapshot_ul %>% 
-  rename_all(paste0, "_ul") %>% 
-  mutate(region = "Victoria") %>% 
-  pivot_longer(-region, names_to = "ind", values_to = "upper") %>% 
-  pull()
-
-# indicator groups
-indicator_groups <- c(rep("Modifiable risk factors", 16), rep("Doctor diagnosed \nchronic disease", 9), rep("Screening tests \nand treatment", 6))
-
-# join these up
-vphs_vic_joined <- vphs_vic_point_est %>% 
-  mutate(vic_lower = vphs_shapshot_lower) %>% 
-  mutate(vic_upper = vphs_shapshot_upper) %>% 
-  rename(vic_point_est = percentage) %>% 
-  mutate(type = indicator_groups) %>% 
-  select(-lga)
-
-# joined to the lga data
-vphs_comparison_all <- vphs_snapshot_point_est %>% 
-  left_join(vphs_vic_joined, by = "indicator") %>% 
-  mutate(comparison = case_when(percentage < vic_lower ~ "Significantly lower",
-                                percentage > vic_upper ~ "Significantly higher",
-                                TRUE ~ "Not sig. diff.")) %>% 
-  mutate(indicator = str_to_sentence(indicator)) %>% 
-  mutate(indicator = str_replace_all(indicator, "_", " ")) %>% 
-  mutate(indicator = str_replace_all(indicator, "yearsa", "years")) %>% 
-  mutate(indicator = str_replace_all(indicator, "yearsb", "years")) %>% 
-  mutate(indicator = case_when(indicator == "Take away food consumed 1 day week" ~ "Take away food consumed >1 day/week",
-                               indicator == "Current i e daily or occasional smoker" ~ "Current (i.e. daily or occasional smoker)",
-                               indicator == "Sedentary inactive" ~ "Sedentary (inactive)",
-                               indicator == "Had a faecal occult blood test 50 years of age b" ~ "Had a faecal occult blood test 50 years of age",
-                               indicator == "Had a bowel exam to detect cancer last 5 years b" ~ "Had a bowel exam to detect cancer last 5 years",
-                               indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occasion of drinking",
-                               TRUE ~ indicator)) %>% 
-  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher"))) 
-
-
+# read in data from the VPHS summary 
+vphs_comparison_all <- read_csv("data_out/vphs_comparison.csv") %>% 
+  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher")))
 
 #for graph
 vphs_comparison <- vphs_comparison_all %>% 
@@ -195,7 +108,7 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
   geom_point(data = vphs_mv, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
   geom_point(data = vphs_vic, aes(fct_rev(indicator), percentage, shape = lga)) +
   theme(legend.position = c(0.75, 0.89), legend.box="vertical", legend.margin=margin()) + 
-  scale_colour_manual(values = c("#E55048", "#E3A51E", "#4EA546")) +
+  scale_colour_manual(values = c("Significantly lower" = "#E55048", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#4EA546")) +
   labs(x = NULL, y = "Percentage", title = "Selected risk factors, disease and tests",
        subtitle = "City of Moonee Valley compared to other LGAs",
        caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
@@ -215,6 +128,5 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
 * heat vulnerability index
 * ahpc
 * vichealth indicators
-* vphs
 
 
