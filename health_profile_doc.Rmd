@@ -1,0 +1,210 @@
+---
+title: "Moonee Valley Health Profile 2020"
+output:
+  word_document:
+    reference_docx: template.docx
+---
+
+```{r, include = FALSE}
+# libraries
+pacman::p_load(tidyverse, janitor, readxl, ggpubr, flextable, officer)
+
+#knit options - turns off everything
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, fig.width = 7)
+
+# colours
+fair_red <-  #E55048
+  
+colour_table <- tibble(theme = c("Fair", "Thriving", "Connected", "Green", "Beautiful"),
+                       col_code = c("#E55048", "#31788F", "#6A4479", "#4EA546", "#E3A51E"))
+```
+
+
+# Introduction
+
+# Death
+
+```{r}
+# aihw data
+death_prem_raw <- read_excel("data_in/death_data_aihw.xlsx", sheet = "deaths_cleaner", range = "A5:E15") %>% 
+  clean_names()
+
+death_prem <- death_prem_raw %>% 
+  pivot_longer(-(name:year), names_to = "gender", values_to = "prem_deaths") %>% 
+  mutate(gender = str_to_title(gender)) %>% 
+  mutate(name = factor(name, levels = c("Moonee Valley (C)", "Greater Melbourne")))
+
+death_causes <- read_excel("data_in/death_data_aihw.xlsx", sheet = "deaths_cleaner", range = "A20:F40") %>% 
+  clean_names()
+
+```
+
+## Premature deaths
+
+Premature deaths in Moonee Valley declined between 2014 and 2018^[Australian Institute of Health and Welfare, 2020, *Mortality Over Regions and Time (MORT) books*, 7 August 2020, Australian Government, Canberra.]. There were 142.8 premature deaths per 100,000 in Moonee Valley in 2018, compared to 160.5 for Greater Melbourne.
+
+```{r}
+ggplot(death_prem, aes(year, prem_deaths, col = gender)) +
+  theme_pubclean() +
+  geom_point() + geom_line() + facet_wrap(~name) + ylim(0, 300) + 
+  labs(title="Premature deaths age-standardised rate (per 100,000)",
+       subtitle = "Premature deaths (aged under 75)",
+       x = NULL, y = NULL, colour = NULL,
+       caption = "Source: Australian Institure of Health and Welfare, 2020") +
+  theme(legend.position = "bottom")
+```
+\pagebreak
+
+# Top causes of death
+
+The most common causes of death in 2018 were Coronary heart disease, Dementia and Cerebrovascular disease.
+
+```{r}
+# Top ten causes of death in the City of Moonee Valley, 2018
+death_causes_data <- death_causes %>% 
+  select(cause_of_death, deaths, per_cent_of_all_causes) %>% 
+  head(10) %>% 
+  mutate(per_cent_of_all_causes = round(per_cent_of_all_causes, 1)) %>% 
+  mutate(deaths = round(deaths, 1)) %>% 
+  rename(`Cause` = cause_of_death, Deaths = deaths, `Per cent of all causes` = per_cent_of_all_causes)
+
+death_causes_data %>% 
+  flextable()  %>% 
+  autofit() %>% 
+  theme_vanilla() %>% 
+  footnote( i = 1, j = 1:3,
+            value = as_paragraph(
+              c("Source: Australian Institure of Health and Welfare, 2020")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+
+```
+
+# Victorian Population Health Survey 2017
+
+```{r}
+# top half
+vphs_snap1_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A4:GI52") %>% 
+  clean_names() %>% 
+  remove_empty() %>% 
+  mutate(x2 = if_else(is.na(x2), "Victoria", x2)) %>% 
+  rename(lga = x2) %>% 
+  select(-local_government_area) %>% 
+  select(-starts_with("x"))
+
+# bottom half
+vphs_snap2_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A56:GI89") %>% 
+  clean_names() %>% 
+  remove_empty() %>% 
+  mutate(x2 = if_else(is.na(x2), "Victoria", x2)) %>% 
+  rename(lga = x2) %>% 
+  select(-local_government_area) %>% 
+  select(-starts_with("x")) %>% 
+  filter(lga != "Victoria") # only need the one from the first table
+  
+# join them  
+vphs_snap_raw <- bind_rows(vphs_snap1_raw, vphs_snap2_raw)
+
+# point estimates
+vphs_snapshot_point_est <- vphs_snap_raw %>% 
+  select(-ends_with("_2017")) %>% 
+  select(-ends_with("_rse")) %>% 
+  pivot_longer(-lga, names_to = "indicator", values_to = "percentage")
+
+# indicator names
+vphs_ind_names <- vphs_snapshot_point_est %>% 
+  distinct(indicator) %>% 
+  pull()
+
+# Victoria point estimates
+vphs_vic_point_est <- vphs_snapshot_point_est %>% 
+  filter(lga == "Victoria")
+
+# Vic lower limits
+vphs_shapshot_ll <- vphs_snap_raw %>% 
+  filter(lga == "Victoria") %>% 
+  select(ends_with("ll_2017"))
+names(vphs_shapshot_ll) <- vphs_ind_names
+vphs_shapshot_lower <-  vphs_shapshot_ll %>% 
+  rename_all(paste0, "_ll") %>% 
+  mutate(region = "Victoria") %>% 
+  pivot_longer(-region, names_to = "ind", values_to = "lower") %>% 
+  pull()
+
+# Vic upper limits
+vphs_shapshot_ul <- vphs_snap_raw %>% 
+  filter(lga == "Victoria") %>% 
+  select(ends_with("ul_2017"))
+names(vphs_shapshot_ul) <- vphs_ind_names
+vphs_shapshot_upper <-  vphs_shapshot_ul %>% 
+  rename_all(paste0, "_ul") %>% 
+  mutate(region = "Victoria") %>% 
+  pivot_longer(-region, names_to = "ind", values_to = "upper") %>% 
+  pull()
+
+# join these up
+vphs_vic_joined <- vphs_vic_point_est %>% 
+  mutate(vic_lower = vphs_shapshot_lower) %>% 
+  mutate(vic_upper = vphs_shapshot_upper) %>% 
+  rename(vic_point_est = percentage) %>% 
+  select(-lga)
+
+# joined to the lga data
+vphs_comparison_all <- vphs_snapshot_point_est %>% 
+  left_join(vphs_vic_joined, by = "indicator") %>% 
+  mutate(comparison = case_when(percentage < vic_lower ~ "Significantly lower",
+                                percentage > vic_upper ~ "Significantly higher",
+                                TRUE ~ "Not sig. diff.")) %>% 
+  mutate(indicator = str_to_sentence(indicator)) %>% 
+  mutate(indicator = str_replace_all(indicator, "_", " ")) %>% 
+  mutate(indicator = str_replace_all(indicator, "yearsa", "years")) %>% 
+  mutate(indicator = str_replace_all(indicator, "yearsb", "years")) %>% 
+  mutate(indicator = case_when(indicator == "Take away food consumed 1 day week" ~ "Take away food consumed >1 day/week",
+                               indicator == "Current i e daily or occasional smoker" ~ "Current (i.e. daily or occasional smoker)",
+                               indicator == "Sedentary inactive" ~ "Sedentary (inactive)",
+                               indicator == "Had a faecal occult blood test 50 years of age b" ~ "Had a faecal occult blood test 50 years of age",
+                               indicator == "Had a bowel exam to detect cancer last 5 years b" ~ "Had a bowel exam to detect cancer last 5 years",
+                               indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occasion of drinking",
+                               TRUE ~ indicator)) %>% 
+  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher")))
+
+#for graph
+vphs_comparison <- vphs_comparison_all %>% 
+  filter(lga != "Victoria") 
+
+vphs_mv <- vphs_comparison %>% 
+  filter(lga == "Moonee Valley (C)")
+
+vphs_vic <- vphs_comparison_all %>% 
+  filter(lga == "Victoria")
+```
+
+```{r, fig.width=7, fig.height=7}
+ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) + 
+  theme_pubclean() +
+  geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
+  geom_point(data = vphs_mv, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
+  geom_point(data = vphs_vic, aes(fct_rev(indicator), percentage, shape = lga)) +
+  theme(legend.position = c(0.8, 0.89), legend.box="vertical", legend.margin=margin()) + 
+  labs(x = NULL, y = "Percentage", title = "Selected risk factors, disease and tests",
+       subtitle = "City of Moonee Valley compared to other LGAs",
+       caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
+       colour = "Compared to Victoria", shape = NULL) + 
+  guides(size = FALSE, alpha = FALSE) + 
+  guides(col = guide_legend(nrow = 3)) +
+  theme(legend.title = element_text(size=9, face="bold")) +
+  theme(legend.text = element_text(size=9))
+```
+
+
+
+# To add
+
+* aged care https://gen-agedcaredata.gov.au/Topics/Services-and-places-in-aged-care/Explore-services-and-places-in-aged-care
+* heat vulnerability index
+* ahpc
+* vichealth indicators
+* vphs
+
+
