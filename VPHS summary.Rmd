@@ -104,7 +104,7 @@ vphs_comparison_all <- vphs_snapshot_point_est %>%
                                indicator == "Sedentary inactive" ~ "Sedentary (inactive)",
                                indicator == "Had a faecal occult blood test 50 years of age b" ~ "Had a faecal occult blood test 50 years of age",
                                indicator == "Had a bowel exam to detect cancer last 5 years b" ~ "Had a bowel exam to detect cancer last 5 years",
-                               indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occasion of drinking",
+                               indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occ. of drinking",
                                TRUE ~ indicator)) %>% 
   mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher")))
 write_csv(vphs_comparison_all, "data_out/vphs_comparison.csv")
@@ -162,7 +162,7 @@ vphs_mv_joined <- vphs_mv_point_est %>%
                                indicator == "Sedentary inactive" ~ "Sedentary (inactive)",
                                indicator == "Had a faecal occult blood test 50 years of age b" ~ "Had a faecal occult blood test 50 years of age",
                                indicator == "Had a bowel exam to detect cancer last 5 years b" ~ "Had a bowel exam to detect cancer last 5 years",
-                               indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occasion of drinking",
+                               indicator == "Increased risk of injury from a single occasion of drinking" ~ "Incr. risk of injury from a single occ. of drinking",
                                TRUE ~ indicator)) %>% 
   mutate(across(is.numeric, round, 1)) %>% 
   select(type, everything()) %>% 
@@ -180,11 +180,11 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
   geom_point(data = vphs_mv, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
   geom_point(data = vphs_vic, aes(fct_rev(indicator), percentage, shape = lga)) +
   theme(legend.position = c(0.75, 0.89), legend.box="vertical", legend.margin=margin()) + 
-  scale_colour_manual(values = c("Significantly lower" = "#E55048", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#4EA546")) +
+  scale_colour_manual(values = c("Significantly lower" = "#6A4479", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#31788F")) +
   labs(x = NULL, y = "Percentage", title = "Selected risk factors, disease and tests",
        subtitle = "City of Moonee Valley compared to other LGAs",
        caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
-       colour = "Compared to Victoria", shape = NULL) + 
+       colour = "Moonee Valley \ncompared to Victoria", shape = NULL) + 
   guides(size = FALSE, alpha = FALSE) + 
   guides(col = guide_legend(nrow = 3)) +
   theme(legend.title = element_text(size=9, face="bold")) +

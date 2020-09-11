@@ -10,7 +10,7 @@ Victoria,Complied with fruit consumption guidelines,43.19355,43.19355,42.28772,4
 Victoria,Daily smoker,12.42754,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Victoria,Current (i.e. daily or occasional smoker),16.741,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Victoria,Increased lifetime risk of alcohol related harm,59.48907,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Victoria,Incr. risk of injury from a single occasion of drinking,42.98549,42.98549,42.10708,43.86834,Modifiable risk factors,Not sig. diff.
+Victoria,Incr. risk of injury from a single occ. of drinking,42.98549,42.98549,42.10708,43.86834,Modifiable risk factors,Not sig. diff.
 Victoria,Fair or poor self reported health,20.28965,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Victoria,Low or medium life satisfaction,20.45532,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Victoria,High or very high levels of psychological distress,15.43,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -56,7 +56,7 @@ Alpine (S),Complied with fruit consumption guidelines,40.5504,43.19355,42.28772,
 Alpine (S),Daily smoker,16.59514,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Alpine (S),Current (i.e. daily or occasional smoker),22.05102,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Alpine (S),Increased lifetime risk of alcohol related harm,67.43256,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Alpine (S),Incr. risk of injury from a single occasion of drinking,53.64262,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Alpine (S),Incr. risk of injury from a single occ. of drinking,53.64262,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Alpine (S),Fair or poor self reported health,16.12919,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Alpine (S),Low or medium life satisfaction,16.51454,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Alpine (S),High or very high levels of psychological distress,15.1,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -102,7 +102,7 @@ Ararat (RC),Complied with fruit consumption guidelines,36.54699,43.19355,42.2877
 Ararat (RC),Daily smoker,17.22465,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Ararat (RC),Current (i.e. daily or occasional smoker),21.85546,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Ararat (RC),Increased lifetime risk of alcohol related harm,62.112,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Ararat (RC),Incr. risk of injury from a single occasion of drinking,48.96995,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Ararat (RC),Incr. risk of injury from a single occ. of drinking,48.96995,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Ararat (RC),Fair or poor self reported health,21.80474,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Ararat (RC),Low or medium life satisfaction,21.63569,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Ararat (RC),High or very high levels of psychological distress,14.68,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -148,7 +148,7 @@ Ballarat (C),Complied with fruit consumption guidelines,51.25347,43.19355,42.287
 Ballarat (C),Daily smoker,13.48872,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Ballarat (C),Current (i.e. daily or occasional smoker),15.70825,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Ballarat (C),Increased lifetime risk of alcohol related harm,62.79705,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Ballarat (C),Incr. risk of injury from a single occasion of drinking,45.90964,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Ballarat (C),Incr. risk of injury from a single occ. of drinking,45.90964,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Ballarat (C),Fair or poor self reported health,22.4397,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Ballarat (C),Low or medium life satisfaction,20.50742,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Ballarat (C),High or very high levels of psychological distress,17.94,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -194,7 +194,7 @@ Banyule (C),Complied with fruit consumption guidelines,48.36966,43.19355,42.2877
 Banyule (C),Daily smoker,10.48191,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Banyule (C),Current (i.e. daily or occasional smoker),13.63934,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Banyule (C),Increased lifetime risk of alcohol related harm,63.75273,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Banyule (C),Incr. risk of injury from a single occasion of drinking,48.17655,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Banyule (C),Incr. risk of injury from a single occ. of drinking,48.17655,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Banyule (C),Fair or poor self reported health,16.27499,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Banyule (C),Low or medium life satisfaction,17.84407,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Banyule (C),High or very high levels of psychological distress,11.49,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -240,7 +240,7 @@ Bass Coast (S),Complied with fruit consumption guidelines,42.88363,43.19355,42.2
 Bass Coast (S),Daily smoker,18.18584,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Bass Coast (S),Current (i.e. daily or occasional smoker),23.84661,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Bass Coast (S),Increased lifetime risk of alcohol related harm,73.3525,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Bass Coast (S),Incr. risk of injury from a single occasion of drinking,54.45908,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Bass Coast (S),Incr. risk of injury from a single occ. of drinking,54.45908,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Bass Coast (S),Fair or poor self reported health,25.04505,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Bass Coast (S),Low or medium life satisfaction,23.32632,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Bass Coast (S),High or very high levels of psychological distress,20.08,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -286,7 +286,7 @@ Baw Baw (S),Complied with fruit consumption guidelines,52.09098,43.19355,42.2877
 Baw Baw (S),Daily smoker,18.33911,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Baw Baw (S),Current (i.e. daily or occasional smoker),23.35388,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Baw Baw (S),Increased lifetime risk of alcohol related harm,59.188720000000004,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Baw Baw (S),Incr. risk of injury from a single occasion of drinking,45.05243,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Baw Baw (S),Incr. risk of injury from a single occ. of drinking,45.05243,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Baw Baw (S),Fair or poor self reported health,22.58537,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Baw Baw (S),Low or medium life satisfaction,19.44331,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Baw Baw (S),High or very high levels of psychological distress,14.21,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -332,7 +332,7 @@ Bayside (C),Complied with fruit consumption guidelines,47.98834,43.19355,42.2877
 Bayside (C),Daily smoker,3.145213,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Bayside (C),Current (i.e. daily or occasional smoker),9.759404,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Bayside (C),Increased lifetime risk of alcohol related harm,77.68785,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Bayside (C),Incr. risk of injury from a single occasion of drinking,60.02416,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Bayside (C),Incr. risk of injury from a single occ. of drinking,60.02416,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Bayside (C),Fair or poor self reported health,11.59556,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Bayside (C),Low or medium life satisfaction,11.17453,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Bayside (C),High or very high levels of psychological distress,10.22,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -378,7 +378,7 @@ Benalla (RC),Complied with fruit consumption guidelines,38.0843,43.19355,42.2877
 Benalla (RC),Daily smoker,14.41722,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Benalla (RC),Current (i.e. daily or occasional smoker),17.80689,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Benalla (RC),Increased lifetime risk of alcohol related harm,59.55327,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Benalla (RC),Incr. risk of injury from a single occasion of drinking,46.59712,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Benalla (RC),Incr. risk of injury from a single occ. of drinking,46.59712,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Benalla (RC),Fair or poor self reported health,20.61535,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Benalla (RC),Low or medium life satisfaction,17.36541,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Benalla (RC),High or very high levels of psychological distress,19.29,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -424,7 +424,7 @@ Boroondara (C),Complied with fruit consumption guidelines,47.82057,43.19355,42.2
 Boroondara (C),Daily smoker,4.818616,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Boroondara (C),Current (i.e. daily or occasional smoker),9.92287,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Boroondara (C),Increased lifetime risk of alcohol related harm,66.22992,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Boroondara (C),Incr. risk of injury from a single occasion of drinking,44.99023,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Boroondara (C),Incr. risk of injury from a single occ. of drinking,44.99023,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Boroondara (C),Fair or poor self reported health,14.90785,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Boroondara (C),Low or medium life satisfaction,17.37798,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Boroondara (C),High or very high levels of psychological distress,8.85,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -470,7 +470,7 @@ Brimbank (C),Complied with fruit consumption guidelines,41.47477,43.19355,42.287
 Brimbank (C),Daily smoker,16.36719,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Brimbank (C),Current (i.e. daily or occasional smoker),21.00059,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Brimbank (C),Increased lifetime risk of alcohol related harm,40.02309,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Brimbank (C),Incr. risk of injury from a single occasion of drinking,26.46095,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Brimbank (C),Incr. risk of injury from a single occ. of drinking,26.46095,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Brimbank (C),Fair or poor self reported health,27.68898,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Brimbank (C),Low or medium life satisfaction,25.61678,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Brimbank (C),High or very high levels of psychological distress,19.82,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -516,7 +516,7 @@ Buloke (S),Complied with fruit consumption guidelines,39.72369,43.19355,42.28772
 Buloke (S),Daily smoker,10.9544,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Buloke (S),Current (i.e. daily or occasional smoker),13.16969,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Buloke (S),Increased lifetime risk of alcohol related harm,68.82375,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Buloke (S),Incr. risk of injury from a single occasion of drinking,44.86358,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Buloke (S),Incr. risk of injury from a single occ. of drinking,44.86358,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Buloke (S),Fair or poor self reported health,21.87712,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Buloke (S),Low or medium life satisfaction,20.62153,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Buloke (S),High or very high levels of psychological distress,11.48,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -562,7 +562,7 @@ Campaspe (S),Complied with fruit consumption guidelines,42.82427,43.19355,42.287
 Campaspe (S),Daily smoker,12.89057,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Campaspe (S),Current (i.e. daily or occasional smoker),15.9412,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Campaspe (S),Increased lifetime risk of alcohol related harm,69.67132,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Campaspe (S),Incr. risk of injury from a single occasion of drinking,52.925,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Campaspe (S),Incr. risk of injury from a single occ. of drinking,52.925,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Campaspe (S),Fair or poor self reported health,16.39542,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Campaspe (S),Low or medium life satisfaction,18.04218,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Campaspe (S),High or very high levels of psychological distress,12.65,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -608,7 +608,7 @@ Cardinia (S),Complied with fruit consumption guidelines,43.27558,43.19355,42.287
 Cardinia (S),Daily smoker,13.15809,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Cardinia (S),Current (i.e. daily or occasional smoker),14.95674,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Cardinia (S),Increased lifetime risk of alcohol related harm,60.6955,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Cardinia (S),Incr. risk of injury from a single occasion of drinking,44.01773,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Cardinia (S),Incr. risk of injury from a single occ. of drinking,44.01773,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Cardinia (S),Fair or poor self reported health,18.41498,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Cardinia (S),Low or medium life satisfaction,18.14376,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Cardinia (S),High or very high levels of psychological distress,15.89,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -654,7 +654,7 @@ Casey (C),Complied with fruit consumption guidelines,38.68488,43.19355,42.28772,
 Casey (C),Daily smoker,10.91199,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Casey (C),Current (i.e. daily or occasional smoker),16.5173,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Casey (C),Increased lifetime risk of alcohol related harm,52.52164,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Casey (C),Incr. risk of injury from a single occasion of drinking,35.65486,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Casey (C),Incr. risk of injury from a single occ. of drinking,35.65486,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Casey (C),Fair or poor self reported health,26.23765,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Casey (C),Low or medium life satisfaction,21.85942,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Casey (C),High or very high levels of psychological distress,18.84,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -700,7 +700,7 @@ Central Goldfields (S),Complied with fruit consumption guidelines,33.42959,43.19
 Central Goldfields (S),Daily smoker,16.3254,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Central Goldfields (S),Current (i.e. daily or occasional smoker),22.259,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Central Goldfields (S),Increased lifetime risk of alcohol related harm,59.12582,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Central Goldfields (S),Incr. risk of injury from a single occasion of drinking,34.51052,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Central Goldfields (S),Incr. risk of injury from a single occ. of drinking,34.51052,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Central Goldfields (S),Fair or poor self reported health,28.90548,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Central Goldfields (S),Low or medium life satisfaction,30.87268,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Central Goldfields (S),High or very high levels of psychological distress,19.37,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -746,7 +746,7 @@ Colac-Otway (S),Complied with fruit consumption guidelines,41.19855,43.19355,42.
 Colac-Otway (S),Daily smoker,15.29325,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Colac-Otway (S),Current (i.e. daily or occasional smoker),17.4531,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Colac-Otway (S),Increased lifetime risk of alcohol related harm,58.76486,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Colac-Otway (S),Incr. risk of injury from a single occasion of drinking,44.86548,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Colac-Otway (S),Incr. risk of injury from a single occ. of drinking,44.86548,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Colac-Otway (S),Fair or poor self reported health,20.45146,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Colac-Otway (S),Low or medium life satisfaction,18.87952,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Colac-Otway (S),High or very high levels of psychological distress,20.26,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -792,7 +792,7 @@ Corangamite (S),Complied with fruit consumption guidelines,43.5559,43.19355,42.2
 Corangamite (S),Daily smoker,9.307953,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Corangamite (S),Current (i.e. daily or occasional smoker),10.11857,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Corangamite (S),Increased lifetime risk of alcohol related harm,67.68626,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Corangamite (S),Incr. risk of injury from a single occasion of drinking,49.16439,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Corangamite (S),Incr. risk of injury from a single occ. of drinking,49.16439,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Corangamite (S),Fair or poor self reported health,22.52291,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Corangamite (S),Low or medium life satisfaction,18.97301,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Corangamite (S),High or very high levels of psychological distress,14.98,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -838,7 +838,7 @@ Darebin (C),Complied with fruit consumption guidelines,42.75292,43.19355,42.2877
 Darebin (C),Daily smoker,13.35102,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Darebin (C),Current (i.e. daily or occasional smoker),19.82265,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Darebin (C),Increased lifetime risk of alcohol related harm,62.45754,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Darebin (C),Incr. risk of injury from a single occasion of drinking,47.14262,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Darebin (C),Incr. risk of injury from a single occ. of drinking,47.14262,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Darebin (C),Fair or poor self reported health,24.19659,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Darebin (C),Low or medium life satisfaction,22.85659,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Darebin (C),High or very high levels of psychological distress,19.76,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -884,7 +884,7 @@ East Gippsland (S),Complied with fruit consumption guidelines,44.82524,43.19355,
 East Gippsland (S),Daily smoker,13.74437,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 East Gippsland (S),Current (i.e. daily or occasional smoker),15.2949,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 East Gippsland (S),Increased lifetime risk of alcohol related harm,67.24885,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-East Gippsland (S),Incr. risk of injury from a single occasion of drinking,55.66541,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+East Gippsland (S),Incr. risk of injury from a single occ. of drinking,55.66541,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 East Gippsland (S),Fair or poor self reported health,18.68087,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 East Gippsland (S),Low or medium life satisfaction,17.94771,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 East Gippsland (S),High or very high levels of psychological distress,11.59,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -930,7 +930,7 @@ Frankston (C),Complied with fruit consumption guidelines,41.53513,43.19355,42.28
 Frankston (C),Daily smoker,18.36125,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Frankston (C),Current (i.e. daily or occasional smoker),21.59722,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Frankston (C),Increased lifetime risk of alcohol related harm,65.75618,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Frankston (C),Incr. risk of injury from a single occasion of drinking,48.46462,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Frankston (C),Incr. risk of injury from a single occ. of drinking,48.46462,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Frankston (C),Fair or poor self reported health,25.28504,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Frankston (C),Low or medium life satisfaction,22.38907,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Frankston (C),High or very high levels of psychological distress,20.95,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -976,7 +976,7 @@ Gannawarra (S),Complied with fruit consumption guidelines,33.47966,43.19355,42.2
 Gannawarra (S),Daily smoker,15.3253,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Gannawarra (S),Current (i.e. daily or occasional smoker),21.78224,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Gannawarra (S),Increased lifetime risk of alcohol related harm,62.87504,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Gannawarra (S),Incr. risk of injury from a single occasion of drinking,47.72201,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Gannawarra (S),Incr. risk of injury from a single occ. of drinking,47.72201,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Gannawarra (S),Fair or poor self reported health,21.65035,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Gannawarra (S),Low or medium life satisfaction,29.03738,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Gannawarra (S),High or very high levels of psychological distress,21.02,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1022,7 +1022,7 @@ Glen Eira (C),Complied with fruit consumption guidelines,51.49288,43.19355,42.28
 Glen Eira (C),Daily smoker,8.005789,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Glen Eira (C),Current (i.e. daily or occasional smoker),11.64028,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Glen Eira (C),Increased lifetime risk of alcohol related harm,62.47261,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Glen Eira (C),Incr. risk of injury from a single occasion of drinking,42.79708,42.98549,42.10708,43.86834,Modifiable risk factors,Not sig. diff.
+Glen Eira (C),Incr. risk of injury from a single occ. of drinking,42.79708,42.98549,42.10708,43.86834,Modifiable risk factors,Not sig. diff.
 Glen Eira (C),Fair or poor self reported health,19.88166,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Glen Eira (C),Low or medium life satisfaction,18.01798,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Glen Eira (C),High or very high levels of psychological distress,9.37,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1068,7 +1068,7 @@ Glenelg (S),Complied with fruit consumption guidelines,38.32248,43.19355,42.2877
 Glenelg (S),Daily smoker,16.82881,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Glenelg (S),Current (i.e. daily or occasional smoker),24.41593,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Glenelg (S),Increased lifetime risk of alcohol related harm,62.4332,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Glenelg (S),Incr. risk of injury from a single occasion of drinking,49.5008,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Glenelg (S),Incr. risk of injury from a single occ. of drinking,49.5008,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Glenelg (S),Fair or poor self reported health,19.37012,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Glenelg (S),Low or medium life satisfaction,20.1841,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Glenelg (S),High or very high levels of psychological distress,15.47,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -1114,7 +1114,7 @@ Golden Plains (S),Complied with fruit consumption guidelines,35.06186,43.19355,4
 Golden Plains (S),Daily smoker,18.23696,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Golden Plains (S),Current (i.e. daily or occasional smoker),21.0689,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Golden Plains (S),Increased lifetime risk of alcohol related harm,64.30083,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Golden Plains (S),Incr. risk of injury from a single occasion of drinking,49.46252,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Golden Plains (S),Incr. risk of injury from a single occ. of drinking,49.46252,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Golden Plains (S),Fair or poor self reported health,20.20482,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Golden Plains (S),Low or medium life satisfaction,19.65069,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Golden Plains (S),High or very high levels of psychological distress,10.57,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1160,7 +1160,7 @@ Greater Bendigo (C),Complied with fruit consumption guidelines,43.30526,43.19355
 Greater Bendigo (C),Daily smoker,12.36415,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Greater Bendigo (C),Current (i.e. daily or occasional smoker),14.13476,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Greater Bendigo (C),Increased lifetime risk of alcohol related harm,62.6243,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Greater Bendigo (C),Incr. risk of injury from a single occasion of drinking,48.15144,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Greater Bendigo (C),Incr. risk of injury from a single occ. of drinking,48.15144,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Greater Bendigo (C),Fair or poor self reported health,23.77877,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Greater Bendigo (C),Low or medium life satisfaction,25.19351,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Greater Bendigo (C),High or very high levels of psychological distress,17.71,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1206,7 +1206,7 @@ Greater Dandenong (C),Complied with fruit consumption guidelines,37.92237,43.193
 Greater Dandenong (C),Daily smoker,18.53712,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Greater Dandenong (C),Current (i.e. daily or occasional smoker),21.0698,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Greater Dandenong (C),Increased lifetime risk of alcohol related harm,41.30845,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Greater Dandenong (C),Incr. risk of injury from a single occasion of drinking,25.00112,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Greater Dandenong (C),Incr. risk of injury from a single occ. of drinking,25.00112,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Greater Dandenong (C),Fair or poor self reported health,25.28401,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Greater Dandenong (C),Low or medium life satisfaction,26.57729,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Greater Dandenong (C),High or very high levels of psychological distress,22.11,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1252,7 +1252,7 @@ Greater Geelong (C),Complied with fruit consumption guidelines,47.12519,43.19355
 Greater Geelong (C),Daily smoker,13.71126,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Greater Geelong (C),Current (i.e. daily or occasional smoker),18.06174,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Greater Geelong (C),Increased lifetime risk of alcohol related harm,65.94166,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Greater Geelong (C),Incr. risk of injury from a single occasion of drinking,50.0319,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Greater Geelong (C),Incr. risk of injury from a single occ. of drinking,50.0319,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Greater Geelong (C),Fair or poor self reported health,18.55382,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Greater Geelong (C),Low or medium life satisfaction,21.19869,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Greater Geelong (C),High or very high levels of psychological distress,18.02,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1298,7 +1298,7 @@ Greater Shepparton (C),Complied with fruit consumption guidelines,33.37075,43.19
 Greater Shepparton (C),Daily smoker,13.18351,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Greater Shepparton (C),Current (i.e. daily or occasional smoker),16.72877,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Greater Shepparton (C),Increased lifetime risk of alcohol related harm,59.5588,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Greater Shepparton (C),Incr. risk of injury from a single occasion of drinking,42.36705,42.98549,42.10708,43.86834,Modifiable risk factors,Not sig. diff.
+Greater Shepparton (C),Incr. risk of injury from a single occ. of drinking,42.36705,42.98549,42.10708,43.86834,Modifiable risk factors,Not sig. diff.
 Greater Shepparton (C),Fair or poor self reported health,19.78803,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Greater Shepparton (C),Low or medium life satisfaction,22.5153,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Greater Shepparton (C),High or very high levels of psychological distress,17.37,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1344,7 +1344,7 @@ Hepburn (S),Complied with fruit consumption guidelines,41.05994,43.19355,42.2877
 Hepburn (S),Daily smoker,15.31562,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Hepburn (S),Current (i.e. daily or occasional smoker),16.71107,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Hepburn (S),Increased lifetime risk of alcohol related harm,65.74462,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Hepburn (S),Incr. risk of injury from a single occasion of drinking,48.25331,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Hepburn (S),Incr. risk of injury from a single occ. of drinking,48.25331,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Hepburn (S),Fair or poor self reported health,17.39212,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Hepburn (S),Low or medium life satisfaction,12.26499,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Hepburn (S),High or very high levels of psychological distress,11.96,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1390,7 +1390,7 @@ Hindmarsh (S),Complied with fruit consumption guidelines,36.86272,43.19355,42.28
 Hindmarsh (S),Daily smoker,17.72821,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Hindmarsh (S),Current (i.e. daily or occasional smoker),18.71514,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Hindmarsh (S),Increased lifetime risk of alcohol related harm,58.93636,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Hindmarsh (S),Incr. risk of injury from a single occasion of drinking,47.22676,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Hindmarsh (S),Incr. risk of injury from a single occ. of drinking,47.22676,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Hindmarsh (S),Fair or poor self reported health,23.23831,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Hindmarsh (S),Low or medium life satisfaction,22.75728,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Hindmarsh (S),High or very high levels of psychological distress,13.79,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1436,7 +1436,7 @@ Hobsons Bay (C),Complied with fruit consumption guidelines,43.79617,43.19355,42.
 Hobsons Bay (C),Daily smoker,9.026369,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Hobsons Bay (C),Current (i.e. daily or occasional smoker),12.96348,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Hobsons Bay (C),Increased lifetime risk of alcohol related harm,61.98227,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Hobsons Bay (C),Incr. risk of injury from a single occasion of drinking,45.9461,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Hobsons Bay (C),Incr. risk of injury from a single occ. of drinking,45.9461,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Hobsons Bay (C),Fair or poor self reported health,19.15616,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Hobsons Bay (C),Low or medium life satisfaction,17.91824,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Hobsons Bay (C),High or very high levels of psychological distress,12.1,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1482,7 +1482,7 @@ Horsham (RC),Complied with fruit consumption guidelines,40.11311,43.19355,42.287
 Horsham (RC),Daily smoker,16.05226,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Horsham (RC),Current (i.e. daily or occasional smoker),16.45505,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Horsham (RC),Increased lifetime risk of alcohol related harm,56.63108,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Horsham (RC),Incr. risk of injury from a single occasion of drinking,45.10397,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Horsham (RC),Incr. risk of injury from a single occ. of drinking,45.10397,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Horsham (RC),Fair or poor self reported health,19.4463,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Horsham (RC),Low or medium life satisfaction,12.18559,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Horsham (RC),High or very high levels of psychological distress,13.59,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1528,7 +1528,7 @@ Hume (C),Complied with fruit consumption guidelines,36.00538,43.19355,42.28772,4
 Hume (C),Daily smoker,17.22892,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Hume (C),Current (i.e. daily or occasional smoker),20.7412,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Hume (C),Increased lifetime risk of alcohol related harm,50.73135,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Hume (C),Incr. risk of injury from a single occasion of drinking,33.14004,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Hume (C),Incr. risk of injury from a single occ. of drinking,33.14004,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Hume (C),Fair or poor self reported health,25.24358,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Hume (C),Low or medium life satisfaction,26.15634,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Hume (C),High or very high levels of psychological distress,22.37,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1574,7 +1574,7 @@ Indigo (S),Complied with fruit consumption guidelines,47.16068,43.19355,42.28772
 Indigo (S),Daily smoker,13.69599,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Indigo (S),Current (i.e. daily or occasional smoker),16.28683,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Indigo (S),Increased lifetime risk of alcohol related harm,69.45694,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Indigo (S),Incr. risk of injury from a single occasion of drinking,50.70446,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Indigo (S),Incr. risk of injury from a single occ. of drinking,50.70446,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Indigo (S),Fair or poor self reported health,22.96237,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Indigo (S),Low or medium life satisfaction,22.19597,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Indigo (S),High or very high levels of psychological distress,16.68,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1620,7 +1620,7 @@ Kingston (C),Complied with fruit consumption guidelines,48.73743,43.19355,42.287
 Kingston (C),Daily smoker,11.68825,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Kingston (C),Current (i.e. daily or occasional smoker),15.37664,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Kingston (C),Increased lifetime risk of alcohol related harm,63.9495,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Kingston (C),Incr. risk of injury from a single occasion of drinking,43.98955,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Kingston (C),Incr. risk of injury from a single occ. of drinking,43.98955,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Kingston (C),Fair or poor self reported health,18.81771,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Kingston (C),Low or medium life satisfaction,16.94012,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Kingston (C),High or very high levels of psychological distress,10.26,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1666,7 +1666,7 @@ Knox (C),Complied with fruit consumption guidelines,40.17555,43.19355,42.28772,4
 Knox (C),Daily smoker,13.65406,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Knox (C),Current (i.e. daily or occasional smoker),16.11235,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Knox (C),Increased lifetime risk of alcohol related harm,60.29821,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Knox (C),Incr. risk of injury from a single occasion of drinking,44.86445,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Knox (C),Incr. risk of injury from a single occ. of drinking,44.86445,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Knox (C),Fair or poor self reported health,20.095,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Knox (C),Low or medium life satisfaction,21.80732,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Knox (C),High or very high levels of psychological distress,18.25,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1712,7 +1712,7 @@ Latrobe (C),Complied with fruit consumption guidelines,37.09339,43.19355,42.2877
 Latrobe (C),Daily smoker,18.72791,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Latrobe (C),Current (i.e. daily or occasional smoker),21.547,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Latrobe (C),Increased lifetime risk of alcohol related harm,63.53384,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Latrobe (C),Incr. risk of injury from a single occasion of drinking,47.80802,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Latrobe (C),Incr. risk of injury from a single occ. of drinking,47.80802,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Latrobe (C),Fair or poor self reported health,23.77156,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Latrobe (C),Low or medium life satisfaction,25.16436,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Latrobe (C),High or very high levels of psychological distress,17.52,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1758,7 +1758,7 @@ Loddon (S),Complied with fruit consumption guidelines,32.91937,43.19355,42.28772
 Loddon (S),Daily smoker,25.48534,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Loddon (S),Current (i.e. daily or occasional smoker),26.88297,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Loddon (S),Increased lifetime risk of alcohol related harm,68.6683,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Loddon (S),Incr. risk of injury from a single occasion of drinking,57.21903,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Loddon (S),Incr. risk of injury from a single occ. of drinking,57.21903,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Loddon (S),Fair or poor self reported health,22.85306,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Loddon (S),Low or medium life satisfaction,25.43952,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Loddon (S),High or very high levels of psychological distress,20.48,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1804,7 +1804,7 @@ Macedon Ranges (S),Complied with fruit consumption guidelines,49.31908,43.19355,
 Macedon Ranges (S),Daily smoker,10.54747,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Macedon Ranges (S),Current (i.e. daily or occasional smoker),14.92032,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Macedon Ranges (S),Increased lifetime risk of alcohol related harm,72.88999,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Macedon Ranges (S),Incr. risk of injury from a single occasion of drinking,55.55323,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Macedon Ranges (S),Incr. risk of injury from a single occ. of drinking,55.55323,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Macedon Ranges (S),Fair or poor self reported health,14.59953,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Macedon Ranges (S),Low or medium life satisfaction,19.72849,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Macedon Ranges (S),High or very high levels of psychological distress,12.35,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1850,7 +1850,7 @@ Manningham (C),Complied with fruit consumption guidelines,45.10833,43.19355,42.2
 Manningham (C),Daily smoker,5.183363,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Manningham (C),Current (i.e. daily or occasional smoker),8.592628,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Manningham (C),Increased lifetime risk of alcohol related harm,55.40683,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Manningham (C),Incr. risk of injury from a single occasion of drinking,38.39202,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Manningham (C),Incr. risk of injury from a single occ. of drinking,38.39202,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Manningham (C),Fair or poor self reported health,16.76664,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Manningham (C),Low or medium life satisfaction,19.99283,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Manningham (C),High or very high levels of psychological distress,11.33,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -1896,7 +1896,7 @@ Mansfield (S),Complied with fruit consumption guidelines,44.40136,43.19355,42.28
 Mansfield (S),Daily smoker,18.22109,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Mansfield (S),Current (i.e. daily or occasional smoker),21.19666,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Mansfield (S),Increased lifetime risk of alcohol related harm,66.62139,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Mansfield (S),Incr. risk of injury from a single occasion of drinking,54.34576,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Mansfield (S),Incr. risk of injury from a single occ. of drinking,54.34576,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Mansfield (S),Fair or poor self reported health,19.14337,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Mansfield (S),Low or medium life satisfaction,11.26879,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Mansfield (S),High or very high levels of psychological distress,16.27,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1942,7 +1942,7 @@ Maribyrnong (C),Complied with fruit consumption guidelines,39.65978,43.19355,42.
 Maribyrnong (C),Daily smoker,12.12123,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Maribyrnong (C),Current (i.e. daily or occasional smoker),15.29804,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Maribyrnong (C),Increased lifetime risk of alcohol related harm,52.42381,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Maribyrnong (C),Incr. risk of injury from a single occasion of drinking,41.07009,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Maribyrnong (C),Incr. risk of injury from a single occ. of drinking,41.07009,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Maribyrnong (C),Fair or poor self reported health,22.92351,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Maribyrnong (C),Low or medium life satisfaction,25.8661,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Maribyrnong (C),High or very high levels of psychological distress,18.06,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -1988,7 +1988,7 @@ Maroondah (C),Complied with fruit consumption guidelines,42.42671,43.19355,42.28
 Maroondah (C),Daily smoker,13.59936,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Maroondah (C),Current (i.e. daily or occasional smoker),15.06555,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Maroondah (C),Increased lifetime risk of alcohol related harm,62.82796,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Maroondah (C),Incr. risk of injury from a single occasion of drinking,46.70122,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Maroondah (C),Incr. risk of injury from a single occ. of drinking,46.70122,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Maroondah (C),Fair or poor self reported health,14.14074,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Maroondah (C),Low or medium life satisfaction,18.21077,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Maroondah (C),High or very high levels of psychological distress,13.07,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2034,7 +2034,7 @@ Melbourne (C),Complied with fruit consumption guidelines,49.46887,43.19355,42.28
 Melbourne (C),Daily smoker,4.25606,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Melbourne (C),Current (i.e. daily or occasional smoker),9.062941,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Melbourne (C),Increased lifetime risk of alcohol related harm,54.79651,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Melbourne (C),Incr. risk of injury from a single occasion of drinking,41.10981,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Melbourne (C),Incr. risk of injury from a single occ. of drinking,41.10981,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Melbourne (C),Fair or poor self reported health,20.09937,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Melbourne (C),Low or medium life satisfaction,24.16481,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Melbourne (C),High or very high levels of psychological distress,17.76,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2080,7 +2080,7 @@ Melton (S),Complied with fruit consumption guidelines,35.54651,43.19355,42.28772
 Melton (S),Daily smoker,18.5358,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Melton (S),Current (i.e. daily or occasional smoker),21.25409,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Melton (S),Increased lifetime risk of alcohol related harm,53.1477,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Melton (S),Incr. risk of injury from a single occasion of drinking,37.52269,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Melton (S),Incr. risk of injury from a single occ. of drinking,37.52269,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Melton (S),Fair or poor self reported health,24.10441,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Melton (S),Low or medium life satisfaction,21.16797,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Melton (S),High or very high levels of psychological distress,20.18,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2126,7 +2126,7 @@ Mildura (RC),Complied with fruit consumption guidelines,39.6162,43.19355,42.2877
 Mildura (RC),Daily smoker,15.07555,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Mildura (RC),Current (i.e. daily or occasional smoker),18.54065,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Mildura (RC),Increased lifetime risk of alcohol related harm,57.59087,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Mildura (RC),Incr. risk of injury from a single occasion of drinking,47.56562,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Mildura (RC),Incr. risk of injury from a single occ. of drinking,47.56562,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Mildura (RC),Fair or poor self reported health,22.26793,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Mildura (RC),Low or medium life satisfaction,21.27241,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Mildura (RC),High or very high levels of psychological distress,17.42,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2172,7 +2172,7 @@ Mitchell (S),Complied with fruit consumption guidelines,38.48811,43.19355,42.287
 Mitchell (S),Daily smoker,17.25991,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Mitchell (S),Current (i.e. daily or occasional smoker),23.66143,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Mitchell (S),Increased lifetime risk of alcohol related harm,66.56403,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Mitchell (S),Incr. risk of injury from a single occasion of drinking,49.8711,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Mitchell (S),Incr. risk of injury from a single occ. of drinking,49.8711,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Mitchell (S),Fair or poor self reported health,25.13006,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Mitchell (S),Low or medium life satisfaction,23.8249,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Mitchell (S),High or very high levels of psychological distress,21.79,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2218,7 +2218,7 @@ Moira (S),Complied with fruit consumption guidelines,39.11346,43.19355,42.28772,
 Moira (S),Daily smoker,19.68824,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Moira (S),Current (i.e. daily or occasional smoker),24.00129,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Moira (S),Increased lifetime risk of alcohol related harm,68.27542,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Moira (S),Incr. risk of injury from a single occasion of drinking,51.5134,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Moira (S),Incr. risk of injury from a single occ. of drinking,51.5134,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Moira (S),Fair or poor self reported health,26.36196,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Moira (S),Low or medium life satisfaction,18.80932,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Moira (S),High or very high levels of psychological distress,14.62,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2264,7 +2264,7 @@ Monash (C),Complied with fruit consumption guidelines,41.21249,43.19355,42.28772
 Monash (C),Daily smoker,9.499371,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Monash (C),Current (i.e. daily or occasional smoker),13.58679,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Monash (C),Increased lifetime risk of alcohol related harm,45.13902,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Monash (C),Incr. risk of injury from a single occasion of drinking,28.58928,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Monash (C),Incr. risk of injury from a single occ. of drinking,28.58928,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Monash (C),Fair or poor self reported health,20.95889,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Monash (C),Low or medium life satisfaction,19.06672,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Monash (C),High or very high levels of psychological distress,15.24,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -2310,7 +2310,7 @@ Moonee Valley (C),Complied with fruit consumption guidelines,47.47225,43.19355,4
 Moonee Valley (C),Daily smoker,9.349328,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Moonee Valley (C),Current (i.e. daily or occasional smoker),15.34788,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Moonee Valley (C),Increased lifetime risk of alcohol related harm,64.16935,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Moonee Valley (C),Incr. risk of injury from a single occasion of drinking,46.64904,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Moonee Valley (C),Incr. risk of injury from a single occ. of drinking,46.64904,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Moonee Valley (C),Fair or poor self reported health,17.70139,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Moonee Valley (C),Low or medium life satisfaction,19.92386,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Moonee Valley (C),High or very high levels of psychological distress,12.45,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2356,7 +2356,7 @@ Moorabool (S),Complied with fruit consumption guidelines,40.72379,43.19355,42.28
 Moorabool (S),Daily smoker,17.20753,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Moorabool (S),Current (i.e. daily or occasional smoker),22.47376,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Moorabool (S),Increased lifetime risk of alcohol related harm,67.22696,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Moorabool (S),Incr. risk of injury from a single occasion of drinking,51.30446,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Moorabool (S),Incr. risk of injury from a single occ. of drinking,51.30446,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Moorabool (S),Fair or poor self reported health,24.88005,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Moorabool (S),Low or medium life satisfaction,23.33657,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Moorabool (S),High or very high levels of psychological distress,16.43,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2402,7 +2402,7 @@ Moreland (C),Complied with fruit consumption guidelines,45.25343,43.19355,42.287
 Moreland (C),Daily smoker,12.45702,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Moreland (C),Current (i.e. daily or occasional smoker),18.57819,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Moreland (C),Increased lifetime risk of alcohol related harm,58.30759,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Moreland (C),Incr. risk of injury from a single occasion of drinking,44.16535,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Moreland (C),Incr. risk of injury from a single occ. of drinking,44.16535,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Moreland (C),Fair or poor self reported health,21.95296,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Moreland (C),Low or medium life satisfaction,21.71541,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Moreland (C),High or very high levels of psychological distress,15.64,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -2448,7 +2448,7 @@ Mornington Peninsula (S),Complied with fruit consumption guidelines,41.49526,43.
 Mornington Peninsula (S),Daily smoker,16.62391,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Mornington Peninsula (S),Current (i.e. daily or occasional smoker),25.81105,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Mornington Peninsula (S),Increased lifetime risk of alcohol related harm,70.03561,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Mornington Peninsula (S),Incr. risk of injury from a single occasion of drinking,55.86874,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Mornington Peninsula (S),Incr. risk of injury from a single occ. of drinking,55.86874,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Mornington Peninsula (S),Fair or poor self reported health,22.98914,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Mornington Peninsula (S),Low or medium life satisfaction,18.43431,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Mornington Peninsula (S),High or very high levels of psychological distress,14.79,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -2494,7 +2494,7 @@ Mount Alexander (S),Complied with fruit consumption guidelines,49.1842,43.19355,
 Mount Alexander (S),Daily smoker,15.32872,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Mount Alexander (S),Current (i.e. daily or occasional smoker),20.25969,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Mount Alexander (S),Increased lifetime risk of alcohol related harm,66.71674,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Mount Alexander (S),Incr. risk of injury from a single occasion of drinking,45.77098,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Mount Alexander (S),Incr. risk of injury from a single occ. of drinking,45.77098,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Mount Alexander (S),Fair or poor self reported health,22.83916,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Mount Alexander (S),Low or medium life satisfaction,25.47791,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Mount Alexander (S),High or very high levels of psychological distress,22.29,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2540,7 +2540,7 @@ Moyne (S),Complied with fruit consumption guidelines,40.19523,43.19355,42.28772,
 Moyne (S),Daily smoker,11.64285,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Moyne (S),Current (i.e. daily or occasional smoker),19.33498,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Moyne (S),Increased lifetime risk of alcohol related harm,74.03865,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Moyne (S),Incr. risk of injury from a single occasion of drinking,54.90601,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Moyne (S),Incr. risk of injury from a single occ. of drinking,54.90601,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Moyne (S),Fair or poor self reported health,21.50254,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Moyne (S),Low or medium life satisfaction,25.32491,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Moyne (S),High or very high levels of psychological distress,15.29,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -2586,7 +2586,7 @@ Murrindindi (S),Complied with fruit consumption guidelines,48.76504,43.19355,42.
 Murrindindi (S),Daily smoker,17.12876,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Murrindindi (S),Current (i.e. daily or occasional smoker),18.11746,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Murrindindi (S),Increased lifetime risk of alcohol related harm,70.24354,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Murrindindi (S),Incr. risk of injury from a single occasion of drinking,44.29323,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Murrindindi (S),Incr. risk of injury from a single occ. of drinking,44.29323,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Murrindindi (S),Fair or poor self reported health,15.99985,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Murrindindi (S),Low or medium life satisfaction,29.3878,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Murrindindi (S),High or very high levels of psychological distress,9.59,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2632,7 +2632,7 @@ Nillumbik (S),Complied with fruit consumption guidelines,48.42309,43.19355,42.28
 Nillumbik (S),Daily smoker,10.17819,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Nillumbik (S),Current (i.e. daily or occasional smoker),15.36159,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Nillumbik (S),Increased lifetime risk of alcohol related harm,69.77643,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Nillumbik (S),Incr. risk of injury from a single occasion of drinking,46.91144,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Nillumbik (S),Incr. risk of injury from a single occ. of drinking,46.91144,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Nillumbik (S),Fair or poor self reported health,19.30879,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Nillumbik (S),Low or medium life satisfaction,17.00335,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Nillumbik (S),High or very high levels of psychological distress,13.48,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2678,7 +2678,7 @@ Northern Grampians (S),Complied with fruit consumption guidelines,37.68237,43.19
 Northern Grampians (S),Daily smoker,16.58229,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Northern Grampians (S),Current (i.e. daily or occasional smoker),20.19349,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Northern Grampians (S),Increased lifetime risk of alcohol related harm,66.1305,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Northern Grampians (S),Incr. risk of injury from a single occasion of drinking,53.16106,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Northern Grampians (S),Incr. risk of injury from a single occ. of drinking,53.16106,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Northern Grampians (S),Fair or poor self reported health,27.36814,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Northern Grampians (S),Low or medium life satisfaction,22.63479,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Northern Grampians (S),High or very high levels of psychological distress,18.84,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2724,7 +2724,7 @@ Port Phillip (C),Complied with fruit consumption guidelines,50.70227,43.19355,42
 Port Phillip (C),Daily smoker,6.654032,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Port Phillip (C),Current (i.e. daily or occasional smoker),10.08064,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Port Phillip (C),Increased lifetime risk of alcohol related harm,68.85268,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Port Phillip (C),Incr. risk of injury from a single occasion of drinking,51.47023,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Port Phillip (C),Incr. risk of injury from a single occ. of drinking,51.47023,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Port Phillip (C),Fair or poor self reported health,8.327112,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Port Phillip (C),Low or medium life satisfaction,14.65518,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Port Phillip (C),High or very high levels of psychological distress,10.86,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2770,7 +2770,7 @@ Pyrenees (S),Complied with fruit consumption guidelines,36.28341,43.19355,42.287
 Pyrenees (S),Daily smoker,20.82114,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Pyrenees (S),Current (i.e. daily or occasional smoker),23.48478,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Pyrenees (S),Increased lifetime risk of alcohol related harm,76.23196,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Pyrenees (S),Incr. risk of injury from a single occasion of drinking,54.50623,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Pyrenees (S),Incr. risk of injury from a single occ. of drinking,54.50623,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Pyrenees (S),Fair or poor self reported health,15.28521,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Pyrenees (S),Low or medium life satisfaction,9.671947,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Pyrenees (S),High or very high levels of psychological distress,9.8,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2816,7 +2816,7 @@ Queenscliffe (B),Complied with fruit consumption guidelines,36.98385,43.19355,42
 Queenscliffe (B),Daily smoker,0.6036142,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Queenscliffe (B),Current (i.e. daily or occasional smoker),0.8298108,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Queenscliffe (B),Increased lifetime risk of alcohol related harm,80.52924,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Queenscliffe (B),Incr. risk of injury from a single occasion of drinking,58.20448,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Queenscliffe (B),Incr. risk of injury from a single occ. of drinking,58.20448,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Queenscliffe (B),Fair or poor self reported health,20.55101,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Queenscliffe (B),Low or medium life satisfaction,10.66469,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Queenscliffe (B),High or very high levels of psychological distress,14.21,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2862,7 +2862,7 @@ South Gippsland (S),Complied with fruit consumption guidelines,41.04789,43.19355
 South Gippsland (S),Daily smoker,14.37254,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 South Gippsland (S),Current (i.e. daily or occasional smoker),19.8576,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 South Gippsland (S),Increased lifetime risk of alcohol related harm,66.62501,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-South Gippsland (S),Incr. risk of injury from a single occasion of drinking,46.83966,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+South Gippsland (S),Incr. risk of injury from a single occ. of drinking,46.83966,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 South Gippsland (S),Fair or poor self reported health,16.81102,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 South Gippsland (S),Low or medium life satisfaction,19.5824,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 South Gippsland (S),High or very high levels of psychological distress,21.52,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -2908,7 +2908,7 @@ Southern Grampians (S),Complied with fruit consumption guidelines,30.51757,43.19
 Southern Grampians (S),Daily smoker,6.360041,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Southern Grampians (S),Current (i.e. daily or occasional smoker),7.67219,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Southern Grampians (S),Increased lifetime risk of alcohol related harm,59.84375,59.48907,58.59407,60.37781,Modifiable risk factors,Not sig. diff.
-Southern Grampians (S),Incr. risk of injury from a single occasion of drinking,44.90385,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Southern Grampians (S),Incr. risk of injury from a single occ. of drinking,44.90385,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Southern Grampians (S),Fair or poor self reported health,15.28296,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Southern Grampians (S),Low or medium life satisfaction,16.98093,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Southern Grampians (S),High or very high levels of psychological distress,8.01,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -2954,7 +2954,7 @@ Stonnington (C),Complied with fruit consumption guidelines,45.80858,43.19355,42.
 Stonnington (C),Daily smoker,9.702069,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Stonnington (C),Current (i.e. daily or occasional smoker),17.73458,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Stonnington (C),Increased lifetime risk of alcohol related harm,75.22945,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Stonnington (C),Incr. risk of injury from a single occasion of drinking,50.18178,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Stonnington (C),Incr. risk of injury from a single occ. of drinking,50.18178,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Stonnington (C),Fair or poor self reported health,11.07587,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Stonnington (C),Low or medium life satisfaction,16.09761,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Stonnington (C),High or very high levels of psychological distress,13.02,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3000,7 +3000,7 @@ Strathbogie (S),Complied with fruit consumption guidelines,35.25602,43.19355,42.
 Strathbogie (S),Daily smoker,12.86197,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Strathbogie (S),Current (i.e. daily or occasional smoker),15.6296,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Strathbogie (S),Increased lifetime risk of alcohol related harm,66.98488,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Strathbogie (S),Incr. risk of injury from a single occasion of drinking,48.09585,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Strathbogie (S),Incr. risk of injury from a single occ. of drinking,48.09585,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Strathbogie (S),Fair or poor self reported health,25.26949,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Strathbogie (S),Low or medium life satisfaction,25.05491,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Strathbogie (S),High or very high levels of psychological distress,17.5,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -3046,7 +3046,7 @@ Surf Coast (S),Complied with fruit consumption guidelines,38.22866,43.19355,42.2
 Surf Coast (S),Daily smoker,5.465874,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Surf Coast (S),Current (i.e. daily or occasional smoker),17.66674,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Surf Coast (S),Increased lifetime risk of alcohol related harm,74.11936,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Surf Coast (S),Incr. risk of injury from a single occasion of drinking,59.22699,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Surf Coast (S),Incr. risk of injury from a single occ. of drinking,59.22699,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Surf Coast (S),Fair or poor self reported health,11.09037,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Surf Coast (S),Low or medium life satisfaction,14.53663,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Surf Coast (S),High or very high levels of psychological distress,9.05,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3092,7 +3092,7 @@ Swan Hill (RC),Complied with fruit consumption guidelines,43.76004,43.19355,42.2
 Swan Hill (RC),Daily smoker,21.53529,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Swan Hill (RC),Current (i.e. daily or occasional smoker),23.22716,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Swan Hill (RC),Increased lifetime risk of alcohol related harm,54.76472,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Swan Hill (RC),Incr. risk of injury from a single occasion of drinking,38.32044,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Swan Hill (RC),Incr. risk of injury from a single occ. of drinking,38.32044,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Swan Hill (RC),Fair or poor self reported health,27.02992,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Swan Hill (RC),Low or medium life satisfaction,23.04049,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Swan Hill (RC),High or very high levels of psychological distress,23.26,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -3138,7 +3138,7 @@ Towong (S),Complied with fruit consumption guidelines,45.49291,43.19355,42.28772
 Towong (S),Daily smoker,9.232552,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Towong (S),Current (i.e. daily or occasional smoker),14.43464,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Towong (S),Increased lifetime risk of alcohol related harm,72.59144,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Towong (S),Incr. risk of injury from a single occasion of drinking,56.33732,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Towong (S),Incr. risk of injury from a single occ. of drinking,56.33732,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Towong (S),Fair or poor self reported health,14.81318,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Towong (S),Low or medium life satisfaction,13.70695,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Towong (S),High or very high levels of psychological distress,12.74,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3184,7 +3184,7 @@ Wangaratta (RC),Complied with fruit consumption guidelines,45.0802,43.19355,42.2
 Wangaratta (RC),Daily smoker,8.055735,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Wangaratta (RC),Current (i.e. daily or occasional smoker),9.094016,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Wangaratta (RC),Increased lifetime risk of alcohol related harm,69.85826,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Wangaratta (RC),Incr. risk of injury from a single occasion of drinking,49.80757,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Wangaratta (RC),Incr. risk of injury from a single occ. of drinking,49.80757,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Wangaratta (RC),Fair or poor self reported health,17.9689,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Wangaratta (RC),Low or medium life satisfaction,15.19483,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Wangaratta (RC),High or very high levels of psychological distress,12.9,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3230,7 +3230,7 @@ Warrnambool (C),Complied with fruit consumption guidelines,40.08734,43.19355,42.
 Warrnambool (C),Daily smoker,15.31146,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Warrnambool (C),Current (i.e. daily or occasional smoker),19.80932,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Warrnambool (C),Increased lifetime risk of alcohol related harm,61.10889,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Warrnambool (C),Incr. risk of injury from a single occasion of drinking,45.82659,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Warrnambool (C),Incr. risk of injury from a single occ. of drinking,45.82659,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Warrnambool (C),Fair or poor self reported health,18.35429,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Warrnambool (C),Low or medium life satisfaction,23.7689,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Warrnambool (C),High or very high levels of psychological distress,16.66,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -3276,7 +3276,7 @@ Wellington (S),Complied with fruit consumption guidelines,42.4898,43.19355,42.28
 Wellington (S),Daily smoker,11.26949,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Wellington (S),Current (i.e. daily or occasional smoker),18.0242,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Wellington (S),Increased lifetime risk of alcohol related harm,64.80902,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Wellington (S),Incr. risk of injury from a single occasion of drinking,53.38523,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Wellington (S),Incr. risk of injury from a single occ. of drinking,53.38523,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Wellington (S),Fair or poor self reported health,21.30177,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Wellington (S),Low or medium life satisfaction,14.85335,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Wellington (S),High or very high levels of psychological distress,9.78,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3322,7 +3322,7 @@ West Wimmera (S),Complied with fruit consumption guidelines,40.60668,43.19355,42
 West Wimmera (S),Daily smoker,13.54302,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 West Wimmera (S),Current (i.e. daily or occasional smoker),16.23847,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 West Wimmera (S),Increased lifetime risk of alcohol related harm,66.97356,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-West Wimmera (S),Incr. risk of injury from a single occasion of drinking,50.20698,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+West Wimmera (S),Incr. risk of injury from a single occ. of drinking,50.20698,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 West Wimmera (S),Fair or poor self reported health,27.38868,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 West Wimmera (S),Low or medium life satisfaction,21.42403,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 West Wimmera (S),High or very high levels of psychological distress,11.61,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3368,7 +3368,7 @@ Whitehorse (C),Complied with fruit consumption guidelines,42.60694,43.19355,42.2
 Whitehorse (C),Daily smoker,6.218603,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Whitehorse (C),Current (i.e. daily or occasional smoker),11.82032,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Whitehorse (C),Increased lifetime risk of alcohol related harm,55.32445,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Whitehorse (C),Incr. risk of injury from a single occasion of drinking,39.07096,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Whitehorse (C),Incr. risk of injury from a single occ. of drinking,39.07096,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Whitehorse (C),Fair or poor self reported health,19.81616,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Whitehorse (C),Low or medium life satisfaction,16.35396,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Whitehorse (C),High or very high levels of psychological distress,9.81,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3414,7 +3414,7 @@ Whittlesea (C),Complied with fruit consumption guidelines,44.21892,43.19355,42.2
 Whittlesea (C),Daily smoker,18.38613,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Whittlesea (C),Current (i.e. daily or occasional smoker),23.03007,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Whittlesea (C),Increased lifetime risk of alcohol related harm,47.77041,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Whittlesea (C),Incr. risk of injury from a single occasion of drinking,33.44584,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Whittlesea (C),Incr. risk of injury from a single occ. of drinking,33.44584,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Whittlesea (C),Fair or poor self reported health,23.31886,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Whittlesea (C),Low or medium life satisfaction,22.18425,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Whittlesea (C),High or very high levels of psychological distress,16.5,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
@@ -3460,7 +3460,7 @@ Wodonga (RC),Complied with fruit consumption guidelines,39.22838,43.19355,42.287
 Wodonga (RC),Daily smoker,12.95684,12.42754,11.80477,13.0783,Modifiable risk factors,Not sig. diff.
 Wodonga (RC),Current (i.e. daily or occasional smoker),16.16481,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Wodonga (RC),Increased lifetime risk of alcohol related harm,72.549,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Wodonga (RC),Incr. risk of injury from a single occasion of drinking,54.55533,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Wodonga (RC),Incr. risk of injury from a single occ. of drinking,54.55533,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Wodonga (RC),Fair or poor self reported health,21.74997,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Wodonga (RC),Low or medium life satisfaction,20.93199,20.45532,19.69321,21.23913,Modifiable risk factors,Not sig. diff.
 Wodonga (RC),High or very high levels of psychological distress,14.04,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3506,7 +3506,7 @@ Wyndham (C),Complied with fruit consumption guidelines,36.57128,43.19355,42.2877
 Wyndham (C),Daily smoker,15.42697,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Wyndham (C),Current (i.e. daily or occasional smoker),20.795,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Wyndham (C),Increased lifetime risk of alcohol related harm,49.1506,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly lower
-Wyndham (C),Incr. risk of injury from a single occasion of drinking,33.28345,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
+Wyndham (C),Incr. risk of injury from a single occ. of drinking,33.28345,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly lower
 Wyndham (C),Fair or poor self reported health,19.76249,20.28965,19.55869,21.04079,Modifiable risk factors,Not sig. diff.
 Wyndham (C),Low or medium life satisfaction,23.88817,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Wyndham (C),High or very high levels of psychological distress,15.89,15.43,14.75,16.14,Modifiable risk factors,Not sig. diff.
@@ -3552,7 +3552,7 @@ Yarra (C),Complied with fruit consumption guidelines,48.00157,43.19355,42.28772,
 Yarra (C),Daily smoker,10.0202,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Yarra (C),Current (i.e. daily or occasional smoker),15.81425,16.741,16.03742,17.46903,Modifiable risk factors,Significantly lower
 Yarra (C),Increased lifetime risk of alcohol related harm,69.64336,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Yarra (C),Incr. risk of injury from a single occasion of drinking,52.81758,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Yarra (C),Incr. risk of injury from a single occ. of drinking,52.81758,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Yarra (C),Fair or poor self reported health,19.23371,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Yarra (C),Low or medium life satisfaction,18.94054,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Yarra (C),High or very high levels of psychological distress,12.2,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3598,7 +3598,7 @@ Yarra Ranges (S),Complied with fruit consumption guidelines,44.50104,43.19355,42
 Yarra Ranges (S),Daily smoker,10.84914,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly lower
 Yarra Ranges (S),Current (i.e. daily or occasional smoker),16.52894,16.741,16.03742,17.46903,Modifiable risk factors,Not sig. diff.
 Yarra Ranges (S),Increased lifetime risk of alcohol related harm,66.58257,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Yarra Ranges (S),Incr. risk of injury from a single occasion of drinking,49.5786,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Yarra Ranges (S),Incr. risk of injury from a single occ. of drinking,49.5786,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Yarra Ranges (S),Fair or poor self reported health,18.48575,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly lower
 Yarra Ranges (S),Low or medium life satisfaction,22.19093,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly higher
 Yarra Ranges (S),High or very high levels of psychological distress,14.61,15.43,14.75,16.14,Modifiable risk factors,Significantly lower
@@ -3644,7 +3644,7 @@ Yarriambiack (S),Complied with fruit consumption guidelines,40.84268,43.19355,42
 Yarriambiack (S),Daily smoker,17.68029,12.42754,11.80477,13.0783,Modifiable risk factors,Significantly higher
 Yarriambiack (S),Current (i.e. daily or occasional smoker),22.79586,16.741,16.03742,17.46903,Modifiable risk factors,Significantly higher
 Yarriambiack (S),Increased lifetime risk of alcohol related harm,60.96986,59.48907,58.59407,60.37781,Modifiable risk factors,Significantly higher
-Yarriambiack (S),Incr. risk of injury from a single occasion of drinking,49.88333,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
+Yarriambiack (S),Incr. risk of injury from a single occ. of drinking,49.88333,42.98549,42.10708,43.86834,Modifiable risk factors,Significantly higher
 Yarriambiack (S),Fair or poor self reported health,26.15489,20.28965,19.55869,21.04079,Modifiable risk factors,Significantly higher
 Yarriambiack (S),Low or medium life satisfaction,18.38929,20.45532,19.69321,21.23913,Modifiable risk factors,Significantly lower
 Yarriambiack (S),High or very high levels of psychological distress,17.61,15.43,14.75,16.14,Modifiable risk factors,Significantly higher
