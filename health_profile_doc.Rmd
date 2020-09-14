@@ -8,7 +8,7 @@ output:
 ```{r, include = FALSE}
 # libraries
 pacman::p_load(tidyverse, janitor, readxl, ggpubr, flextable, officer, officedown, scales, glue, sf,
-               cartography, captioner, lubridate, ggrepel)
+               cartography, captioner, lubridate, ggrepel, cowplot)
 
 #knit options - turns off everything
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, fig.width = 7)
@@ -30,7 +30,7 @@ Some sort of infographic like the previous health tracker
 
 # Introduction
 
-`r run_pagebreak()`
+\pagebreak
 
 # Population
 
@@ -101,12 +101,12 @@ The population structure of the City of Moonee Valley is not forecast to change 
 
 ```{r, fig.height=4.25, fig.width=7}
 pp_mv <- pp_nh_data("City of Moonee Valley") %>% 
-  filter(year %in% c(2020, 2030, 2040))
+  filter(year %in% c(2020, 2040))
 
 ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
   geom_bar(stat = "identity", width = 1) + 
   theme_pubclean() + 
-  scale_y_continuous(breaks=c(-3, 0, 3), labels=c("3%", "0%", "3%")) + 
+  scale_y_continuous(breaks=c(-4, -2, 0, 2, 4), labels=c("4%", "2%", "0%", "2%", "4%")) + 
   coord_flip() + 
   scale_fill_manual(values = mv2040_cols) + 
   labs(x = NULL, y = NULL, fill = NULL, title = "City of Moonee Valley forecast population structure", subtitle = "By year (at 30 June)", caption = "Data source: .id consulting, 2017") + 
@@ -115,6 +115,8 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
 ```
 
 * Location of young/old
+
+
 
 # Environmental factors
 
@@ -134,7 +136,7 @@ irsd_nh <- irsd_raw %>%
   summarise(pop = sum(pop)) %>% 
   ungroup %>% 
   group_by(nh) %>% 
-  mutate(pct = pop/sum(pop)*100)
+  mutate(prop = pop/sum(pop))
 
 sa1_shp <- st_read("data_in/shp/SA1_2016_MV.shp", quiet = TRUE) %>% 
   clean_names() %>% 
@@ -149,18 +151,18 @@ seifa_shp <- sa1_shp %>%
 Data from the Socio-Economic Indexes for Areas (SEIFA) Index of Relative Socio-economic Disadvantage (IRSD) shows that there is great economic diversity in Moonee Valley households. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods.
 
 ```{r, fig.height= 6, fig.width=7}
-ggplot(irsd_nh, aes(decile)) +
-  geom_density(fill = "#E55048") + facet_wrap(~nh, nrow =4) + theme(legend.position="none") +
+ggplot(irsd_nh, aes(decile, prop)) +
+  geom_col(fill = "#E55048") + facet_wrap(~nh, nrow =4) + theme(legend.position="none") +
   theme_pubclean() +
   labs(title = "SEIFA Index of Relative Socio-economic Disadvantage (IRSD)",
        subtitle = "By neighbourhood", caption = "Data source: ABS, 2016 Census",
        x = "SEIFA IRSD decile (1 = most disadvantaged, 10 = least disadvantaged)", y = "Percentage of neighbourhood population") + 
-  scale_x_continuous(breaks=c(0,2,4,6,8,10)) + scale_y_continuous(labels = percent)
+  scale_x_continuous(breaks=c(seq(1,10,1))) + scale_y_continuous(labels = percent)
 ```
 
 This disparity is shown on the map below. The greatest concentrations of disadvantage are one the public housing estates in Flemington and Ascot Vale.
 
-!! perhaps make the maps in ArcGIS instead?
+!! perhaps make the maps in ArcGIS instead to match the EGM and alcohol ones
 
 
 ```{r}
@@ -201,6 +203,8 @@ hvi_shp <- st_read("data_in/shp/HEAT_VULNERABILITY_INDEX_2018.shp", quiet = TRUE
   select(sa1 = sa1_7dig16, hvi_index, pop_dens = popu_dens)
 ```
 
+!! perhaps make the maps in ArcGIS instead to match the EGM and alcohol ones - see if Evie has already made one
+
 ```{r}
 plot(st_geometry(hvi_shp), col = NA, border = NA, bg = "white")
 # plot population density
@@ -224,6 +228,9 @@ layoutLayer(title = "Heat Vulnerability Index by SA1",
 north(pos = "topleft")
 ```
 
+## Walkability
+
+* See what Evie has done
 
 # Gender inequality
 
@@ -239,205 +246,306 @@ north(pos = "topleft")
 
 ## Oral health
 
-```{r}
-num_decayed <- tibble(region = c("Moonee Valley","Moonee Valley",
-                                      "Moonee Valley","Victoria","Victoria","Victoria"),
-         age.group = c("0 to 5", "6", "12", "0 to 5", "6", "12"),
-             value = c(0.092, 1.88, 1.18, 1.11, 2.36, 1.87))
+Data from the Victorian Population Health Survey shows that Moonee Valley residents have better self-reported dental health, lower incidence of gum disease when compared to the Western Melbourne Area and Victoria. Moonee Valley residents are also less likely to delay visiting a dental professional because of cost when compared to Victoria.
 
-prop_with_decayed <- tibble(region = c("Moonee Valley",
+```{r, fig.height=3, fig.width=7}
+# function more just for single plots
+vphs_ggplot_function <- function(dataset, title_text, yval = 2.5,  subtitle_text = NULL,
+                                 caption_text = "Source: Victorian Population Health Survey, 2017"){
+  ggplot(dataset, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() + 
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + coord_flip() +
+  geom_text(aes(label = pct, y = yval), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = title_text, subtitle = subtitle_text,
+       x = NULL, y = "Percentage (with 95% CI)",
+       caption = caption_text)
+}
+
+vphs_srdhs <- read_csv("data_in/vphs_srdhs.csv") %>%  # self reported dental health status
+  filter(selections == "Excellent / Very good") %>% 
+  mutate(type = "Self-reported dental\nhealth status \n (Excellent or very good)")
+vphs_srgd <- read_csv("data_in/vphs_srgd.csv") %>% # self reported gum disease
+  filter(selections == "Yes") %>% 
+  mutate(type = "Self-reported gum disease")
+vphs_addbc <- read_csv("data_in/vphs_addbc.csv") %>% # avoided or delayed dental because of cost
+  filter(selections == "Yes") %>% 
+  mutate(type = "Delayed visiting \ndental professional \nbecause of cost")
+
+vphs_dental <- bind_rows(vphs_srdhs, vphs_srgd, vphs_addbc) %>% 
+  mutate(selections = type) %>% 
+  select(-type) %>% 
+  mutate(selections = factor(selections, levels = c("Self-reported dental\nhealth status \n (Excellent or very good)",
+                                                    "Self-reported gum disease",
+                                                    "Delayed visiting \ndental professional \nbecause of cost")))
+  
+ggplot(vphs_dental, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + 
+  facet_wrap(~selections, ncol = 3) + coord_flip() + 
+  geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = "Dental health", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+
+```
+
+Data from Dental Health Services Victoria shows that children in Moonee Valley are also less likely to present at public health dental services with a decayed tooth when compared to Victoria at all age groups.
+
+```{r, fig.height=3, fig.width=7}
+# Dental Health Services Victoria 2017-19
+prop_with_decayed <- tibble(type = "Proportion with at least one decayed tooth",
+                            region = c("Moonee Valley",
                                             "Moonee Valley","Moonee Valley","Victoria",
                                             "Victoria","Victoria"),
-                              age.group = c("0 to 5","6","12",
-                                            "0 to 5","6","12"),
-             value = c(0.22, 0.38, 0.45, 0.26, 0.51, 0.59))
+                              age_group = c("0 to 5","6","12", "0 to 5","6","12"),
+             prop = c(0.22, 0.38, 0.45, 0.26, 0.51, 0.59)) %>% 
+  mutate(age_group = factor(age_group, levels = c("0 to 5", "6", "12"))) %>% 
+  mutate(pct = prop * 100) %>% 
+  mutate(age_group = glue("{age_group} years")) %>% 
+  mutate(age_group = factor(age_group, levels = c("0 to 5 years", "6 years", "12 years")))
+
+ggplot(prop_with_decayed, aes(region, pct, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~age_group, ncol = 3) +
+  geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = "Proportion of children presenting with at least one decayed tooth", 
+       subtitle = "Attending public dental services, 2017",
+       x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2017-19")
 
 ```
 
+## Healthy eating and food security
 
+* map of fast food/supermarkets?
 
-```{r}
-vphs_srdhs <- read_csv("data_in/vphs_srdhs.csv") # self reported dental health status
-vphs_srgd <- read_csv("data_in/vphs_srgd.csv") # self reported gum disease
-vphs_addbc <- read_csv("data_in/vphs_addbc.csv") # avoided or delayed dental because of cost
+Data from the Victorian Population Health Survey shows that about 3.2 per cent of Moonee Valley residents met the fruit and vegetable consumption guidelines, though the margin of error for this indicator is large.
+
+```{r, fig.height=2.5, fig.width=7}
+vphs_fvi <- read_csv("data_in/vphs_fvi.csv") %>%  # self reported dental health status
+  filter(selections == "Met fruit and vegetable consumption guidelines")
+
+vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Met fruit and vegetable consumption guidelines",
+                     subtitle_text = "Two serves of fruit and five serves of vegetables per day")
 ```
 
-## Healthy eating
 
 ## Chronic disease
 
-```{r}
-# read in data from the VPHS summary 
-vphs_comparison_all <- read_csv("data_out/vphs_comparison.csv") %>% 
-  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher")))
+* add more here
 
-#for graph
-vphs_comparison <- vphs_comparison_all %>% 
-  filter(lga != "Victoria") 
+### Tests for chronic disease
 
-vphs_mv <- vphs_comparison %>% 
-  filter(lga == "Moonee Valley (C)")
-
-vphs_vic <- vphs_comparison_all %>% 
-  filter(lga == "Victoria")
-
-vphs_comparison_chr <- vphs_comparison %>% 
-  filter(type == "Doctor diagnosed \nchronic disease") 
-
-vphs_mv_chr <- vphs_mv %>% 
-  filter(type == "Doctor diagnosed \nchronic disease") 
-
-vphs_vic_chr <- vphs_vic %>% 
-  filter(type == "Doctor diagnosed \nchronic disease") 
-
-# for tables
-vphs_mv_joined <- read_csv("data_out/vphs_comparison_mv.csv")
-```
+Data from the Victorian Population Health Survey 2017 shows that testing for chronic disease in Moonee Valley is similar to levels in Western Melbourne. Bowel examinations are lower, and faecal blood occult tests are higher than for Western Melbourne, but these differences are not statistically significant.
 
 ```{r}
-vphs_mv_joined %>% 
-  filter(Type == "Doctor diagnosed \nchronic disease") %>% 
-  select(-Type) %>% 
-  flextable() %>% 
-  #merge_v(j = ~Type) %>% 
-  autofit() %>% 
-  theme_vanilla() %>% 
-  footnote( i = 1, j = 1:4,
-            value = as_paragraph(
-              c("Source: Victorian Population Health survey, 2017")
-            ),
-            ref_symbols = c(""),
-            part = "header")
-```
+vphs_blood <- read_csv("data_in/vphs_blood.csv") %>%  # blood tests
+  mutate(selections = str_to_lower(selections)) %>% 
+  mutate(selections = glue("Had {selections} \nin the last 2 years"))
+vphs_fobt <- read_csv("data_in/vphs_fobt.csv") %>% # faecal blood test
+  filter(selections == "Completed and returned the FOBT kit") %>% 
+  mutate(selections = "Had faecal occult blood \n test, 50 years of age")
+vphs_bowel <- read_csv("data_in/vphs_bowel.csv") %>% # bowel examination
+  filter(selections == "People") %>% 
+  mutate(selections = "Had bowel exam to detect \n cancer, last 5 years")
+vphs_mamm <- read_csv("data_in/vphs_mamm.csv") %>% 
+  filter(selections == "In last 2 years") %>% 
+  mutate(selections = "Had mammogram to detect \n cancer, last 2 years")
 
-```{r,fig.width=7, fig.height=3.5}
-ggplot(vphs_comparison_chr, aes(fct_rev(indicator), percentage)) + 
+vphs_chrtests <- bind_rows(vphs_blood, vphs_fobt, vphs_bowel, vphs_mamm)
+
+ggplot(vphs_chrtests, aes(fct_rev(region), pct, fill = region)) + 
   theme_pubclean() +
-  geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
-  geom_point(data = vphs_mv_chr, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
-  geom_point(data = vphs_vic_chr, aes(fct_rev(indicator), percentage, shape = lga)) +
-  theme(legend.position = "bottom", legend.margin=margin()) + 
-  scale_colour_manual(values = c("Significantly lower" = "#6A4479", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#31788F")) +
-  labs(x = NULL, y = "Percentage", title = "Doctor diagnosed chronic disease",
-       subtitle = "City of Moonee Valley compared to other LGAs",
-       caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
-       colour = "Moonee Valley \ncompared \nto Victoria", shape = NULL) + 
-  guides(size = FALSE, alpha = FALSE) + 
-  guides(col = guide_legend(nrow = 2)) +
-  theme(legend.title = element_text(size=9, face="bold")) +
-  theme(legend.text = element_text(size=9)) 
-```
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + coord_flip() + 
+  geom_text(aes(label = pct, y = 10), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = "Tests for chronic disease", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
 
+```
 
 ## Modifiable risk factors
 
-### Tobacco
+### Smoking
+
+Data from the Victorian Population Health Survey 2017 shows that smoking levels in Moonee Valley are similar to those in Western Melbourne and Victoria. About 15 per cent of the population are current smokers.
+
+```{r, fig.height=3, fig.width=7}
+vphs_smoking <- read_csv("data_in/vphs_smoking.csv")
+
+ggplot(vphs_smoking, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
+  geom_text(aes(label = pct, y = 7), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Smoking status", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+```
+
+Smoking levels are higher for men, than for women, though again the confidence interval is quite large.
+
+```{r}
+# Current smoker (daily + occasional) by age
+smoking_gender <- tibble(
+            Gender = c("Women", "Men"),
+               Percentage = c(14.2, 17),
+                `Lower limit` = c(8.8, 11.2),
+                `Upper limit` = c(22.1, 24.9))
+
+smoking_gender %>% 
+  flextable() %>% 
+  autofit() %>% 
+  add_header_lines(values = "Current smokers (daily and occasional) by gender, City of Moonee Valley") %>% 
+  theme_vanilla() %>%
+  footnote( i = 1, j = 1:4,
+            value = as_paragraph(
+              c("Source: Victorian Population Health Survey, 2017")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
+
 
 ### Alcohol
 
+* AOD stats
+* map of venues - use the ones from fair
+
 ### Drugs
+
+* AOD stats
 
 ### Gambling
 
+* VCGLR 
+* map of venues - use the ones from fair
+
+### Obesity
+
+Data from the Victorian Population Health Survey 2017 shows that the proportion of residents who are overweight is similar to the proportion in the Western Melbourne Area.
+
+```{r, fig.height=3, fig.width=7}
+vphs_obese <- read_csv("data_in/vphs_obese.csv") # overweight (pre-obese or obese)
+
+vphs_ggplot_function(dataset = vphs_obese, yval = 2, title_text = "Adult population who are overweight",
+                     subtitle_text = "Pre-obese or obese based on BMI")
+```
+
+Residents in Moonee Valley have lower consumption of sugar-sweetened beverages though; 6.4 per cent of residents consume these drinks daily.
+
+```{r, fig.height=3, fig.width=7}
+vphs_takeaway <- read_csv("data_in/vphs_takeaway.csv") %>% # take away meals 
+  filter(selections == "More than 1 times/week") %>% 
+  mutate(selections = "Had takeaway snacks or meals more \nthan once a week")
+vphs_sugardr <- read_csv("data_in/vphs_sugardr.csv") %>%  # sugar sweetened drinks
+  mutate(selections = "Consumed sugar-sweetened \n drinks daily")
+
+vphs_obesity <- bind_rows(vphs_takeaway, vphs_sugardr)
+
+ggplot(vphs_obesity, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
+  geom_text(aes(label = pct, y = 2), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Consumption of soft drinks and takeaway", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+```
+
+
 ### Physical activity
+
+Data from the Victorian Population Health Survey 2017 shows that about 58 per cent of Moonee Valley residents complied with the physical activity, compared to 48.5 per cent in the Western Melbourne Area. About 30 per cent of residents spent 7 or more hours sitting on an average weekday.
+
+```{r, fig.height=3, fig.width=7}
+vphs_phys <- read_csv("data_in/vphs_phys.csv") %>% 
+  filter(selections == "Met guidelines") %>% 
+  mutate(selections = "Met physical activity guidelines")
+vphs_sitting <- read_csv("data_in/vphs_sitting.csv") %>% 
+  filter(selections == "Week day") %>% 
+  mutate(selections = "Spent 7+ hours sitting on \n an average weekday")
+
+vphs_phys_act <- bind_rows(vphs_phys, vphs_sitting) 
+
+ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
+  geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Physical activity", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+  
+```
+
 
 ### Mental health
 
-The graph below will need to be split up
 
-```{r}
-vphs_comparison_mrf <- vphs_comparison %>% 
-  filter(type == "Modifiable risk factors") 
+Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. Thic compares to about 42 per cent for Victoria and the Western Melbourne Area.
 
-vphs_mv_mrf <- vphs_mv %>% 
-  filter(type == "Modifiable risk factors") 
+```{r, fig.height=2.5, fig.width=7}
+vphs_srhealth <- read_csv("data_in/vphs_srhealth.csv") %>%  # anxiety or depression
+  filter(selections == "Excellent / very good")
 
-vphs_vic_mrf <- vphs_vic %>% 
-  filter(type == "Modifiable risk factors") 
+vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Self-reported health",
+                     subtitle_text = "Excellent or very good health status")
 ```
 
+About three in ten residents rated their life satisfaction and their feeling of life being worthwhile as 'very high'.
+
+```{r, fig.height=2.5, fig.width=7}
+vphs_lifesat <- read_csv("data_in/vphs_lifesat.csv") %>% 
+  filter(region == "Moonee Valley") %>% 
+  mutate(type = "Life satisfaction")
+vphs_worthwhile <- read_csv("data_in/vphs_worthwhile.csv") %>% 
+  filter(region == "Moonee Valley") %>% 
+  mutate(type = "Feeling of life being worthwhile")
+
+vphs_mhw <- bind_rows(vphs_lifesat, vphs_worthwhile) %>% 
+  mutate(selections = factor(selections, levels = c("Low or medium (0-6)", "High (7-8)", "Very high (9-10)")))
+
+ggplot(vphs_mhw, aes(selections, pct, fill = fair_red)) + 
+  theme_pubclean() +
+  geom_col() + geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") + 
+  geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) +
+  facet_wrap(~type) + coord_flip() +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") +
+  labs(title = "Mental wellbeing, Moonee Valley", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+
+```
+
+Data from the Victorian Population Health Survey 2017 shows that about 30 per cent of Moonee Valley residents had ever been diagnosed with anxiety of depression. This compares with 25 per cent for Western Melbourne.
+
+```{r, fig.height=2.5, fig.width=7}
+vphs_anx <- read_csv("data_in/vphs_anx.csv") # anxiety or depression
+
+vphs_ggplot_function(dataset = vphs_anx, yval = 2, title_text = "Proportion of adults ever diagnosed \nwith anxiety or depression")
+```
+
+Females in Moonee Valley were more likely to seek professional help for mental health problems than males.
+
 ```{r}
-vphs_mv_joined %>% 
-  filter(Type == "Modifiable risk factors") %>% 
-  select(-Type) %>% 
+# professional help for a mental health problem within the last year
+vphs_mh_gender <- tibble(Gender = c("Males","Females"),
+       Percentage = c(18, 21.1),
+       `Lower limit` = c(12.1, 14.5),
+       `Upper limit` = c(26, 29.7)
+)
+
+vphs_mh_gender %>% 
   flextable() %>% 
-  #merge_v(j = ~Type) %>% 
   autofit() %>% 
-  theme_vanilla() %>% 
+  add_header_lines(values = "Adults who sought rofessional help for a mental health problem within the last year by gender, City of Moonee Valley") %>% 
+  theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
-              c("Source: Victorian Population Health survey, 2017")
+              c("Source: Victorian Population Health Survey, 2017")
             ),
             ref_symbols = c(""),
             part = "header")
 ```
 
-```{r,fig.width=7, fig.height=5}
-ggplot(vphs_comparison_mrf, aes(fct_rev(indicator), percentage)) + 
-  theme_pubclean() +
-  geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
-  geom_point(data = vphs_mv_mrf, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
-  geom_point(data = vphs_vic_mrf, aes(fct_rev(indicator), percentage, shape = lga)) +
-  theme(legend.position = "bottom", legend.margin=margin()) + 
-  scale_colour_manual(values = c("Significantly lower" = "#6A4479", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#31788F")) +
-  labs(x = NULL, y = "Percentage", title = "Modifiable risk factors",
-       subtitle = "City of Moonee Valley compared to other LGAs",
-       caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
-       colour = "Moonee Valley \ncompared \nto Victoria", shape = NULL) + 
-  guides(size = FALSE, alpha = FALSE) + 
-  guides(col = guide_legend(nrow = 3)) +
-  theme(legend.title = element_text(size=9, face="bold")) +
-  theme(legend.text = element_text(size=9)) 
-```
-
-## Screening tests and treatments
-
-```{r}
-vphs_comparison_stt <- vphs_comparison %>% 
-  filter(type == "Screening tests \nand treatment") 
-
-vphs_mv_stt <- vphs_mv %>% 
-  filter(type == "Screening tests \nand treatment") 
-
-vphs_vic_stt <- vphs_vic %>% 
-  filter(type == "Screening tests \nand treatment") 
-```
-
-```{r}
-vphs_mv_joined %>% 
-  filter(Type == "Screening tests \nand treatment") %>% 
-  select(-Type) %>% 
-  flextable() %>% 
-  #merge_v(j = ~Type) %>% 
-  autofit() %>% 
-  theme_vanilla() %>% 
-  footnote( i = 1, j = 1:4,
-            value = as_paragraph(
-              c("Source: Victorian Population Health survey, 2017")
-            ),
-            ref_symbols = c(""),
-            part = "header")
-```
-
-```{r,fig.width=7, fig.height=3.5}
-ggplot(vphs_comparison_stt, aes(fct_rev(indicator), percentage)) + 
-  theme_pubclean() +
-  geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
-  geom_point(data = vphs_mv_stt, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
-  geom_point(data = vphs_vic_stt, aes(fct_rev(indicator), percentage, shape = lga)) +
-  theme(legend.position = "bottom", legend.margin=margin()) + 
-  scale_colour_manual(values = c("Significantly lower" = "#6A4479", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#31788F")) +
-  labs(x = NULL, y = "Percentage", title = "Screening tests and treatments",
-       subtitle = "City of Moonee Valley compared to other LGAs",
-       caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
-       colour = "Moonee Valley \ncompared \nto Victoria", shape = NULL) + 
-  guides(size = FALSE, alpha = FALSE) + 
-  guides(col = guide_legend(nrow = 3)) +
-  theme(legend.title = element_text(size=9, face="bold")) +
-  theme(legend.text = element_text(size=9)) 
-```
-
-## Food security
 
 ## Sexual and reporductive health
 
@@ -475,8 +583,6 @@ ggplot(fam_vio_comp, aes(year, rate, colour = lga, label = rate)) +
   geom_text_repel(show.legend = FALSE)
 ```
 
-
-
 ## Death
 
 ### Premature deaths
@@ -496,7 +602,6 @@ death_prem <- death_prem_raw %>%
 
 death_causes <- read_excel("data_in/death_data_aihw.xlsx", sheet = "deaths_cleaner", range = "A20:F40") %>% 
   clean_names()
-
 ```
 
 ```{r}
@@ -511,7 +616,6 @@ ggplot(death_prem, aes(year, prem_deaths, col = name, label = prem_deaths)) +
   theme(legend.position = "bottom") +
   geom_text_repel(data = death_prem %>% filter(year == 2018), show.legend = FALSE)
 ```
-
 
 ### Top causes of death
 
@@ -529,6 +633,7 @@ death_causes_data <- death_causes %>%
 death_causes_data %>% 
   flextable()  %>% 
   autofit() %>% 
+  add_header_lines(values = "Top ten causes of death in Moonee Valley, 2018") %>% 
   theme_vanilla() %>% 
   footnote( i = 1, j = 1:3,
             value = as_paragraph(
@@ -536,9 +641,7 @@ death_causes_data %>%
             ),
             ref_symbols = c(""),
             part = "header")
-
 ```
-
 
 # To add
 
@@ -549,3 +652,103 @@ death_causes_data %>%
 * family violence
 * community survey
 
+\pagebreak
+
+# Appendices
+
+## Victorian Population Health Survey 2017 data, comparison against other local government areas
+
+```{r}
+# read in data from the VPHS summary 
+vphs_comparison_all <- read_csv("data_out/vphs_comparison.csv") %>% 
+  mutate(comparison = factor(comparison, levels = c("Significantly lower", "Not sig. diff.", "Significantly higher")))
+
+#for graph
+vphs_comparison <- vphs_comparison_all %>% 
+  filter(lga != "Victoria") 
+
+vphs_mv <- vphs_comparison %>% 
+  filter(lga == "Moonee Valley (C)")
+
+vphs_vic <- vphs_comparison_all %>% 
+  filter(lga == "Victoria")
+
+# for tables
+vphs_mv_joined <- read_csv("data_out/vphs_comparison_mv.csv")
+```
+
+```{r, fig.width=7, fig.height=7}
+ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) + 
+  theme_pubclean() +
+  geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
+  geom_point(data = vphs_mv, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
+  geom_point(data = vphs_vic, aes(fct_rev(indicator), percentage, shape = lga)) +
+  theme(legend.position = c(0.75, 0.89), legend.box="vertical", legend.margin=margin()) + 
+  scale_colour_manual(values = c("Significantly lower" = "#6A4479", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#31788F")) +
+  labs(x = NULL, y = "Percentage", title = "Selected risk factors, disease and tests",
+       subtitle = "City of Moonee Valley compared to other LGAs",
+       caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
+       colour = "Moonee Valley \ncompared to Victoria", shape = NULL) + 
+  guides(size = FALSE, alpha = FALSE) + 
+  guides(col = guide_legend(nrow = 3)) +
+  theme(legend.title = element_text(size=9, face="bold")) +
+  theme(legend.text = element_text(size=9)) +
+  facet_grid(rows = vars(type), scales = "free_y", space = "free_y")
+```
+
+\pagebreak
+
+```{r}
+vphs_mv_joined %>% 
+  filter(Type == "Modifiable risk factors") %>% 
+  select(-Type) %>% 
+  flextable() %>% 
+  #merge_v(j = ~Type) %>% 
+  autofit() %>% 
+  add_header_lines(values = "Modifiable risk factors, City of Moonee Valley") %>% 
+  theme_vanilla() %>%
+  footnote( i = 1, j = 1:4,
+            value = as_paragraph(
+              c("Source: Victorian Population Health Survey, 2017")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
+
+\pagebreak
+
+```{r}
+vphs_mv_joined %>% 
+  filter(Type == "Doctor diagnosed \nchronic disease") %>% 
+  select(-Type) %>% 
+  flextable() %>% 
+  #merge_v(j = ~Type) %>% 
+  autofit() %>% 
+  add_header_lines(values = "Doctor diagnosed chronic disease, City of Moonee Valley") %>% 
+  theme_vanilla() %>%
+  footnote( i = 1, j = 1:4,
+            value = as_paragraph(
+              c("Source: Victorian Population Health Survey, 2017")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
+
+\  
+
+```{r}
+vphs_mv_joined %>% 
+  filter(Type == "Screening tests \nand treatment") %>% 
+  select(-Type) %>% 
+  flextable() %>% 
+  #merge_v(j = ~Type) %>% 
+  autofit() %>% 
+  add_header_lines(values = "Screening tests and treatment, City of Moonee Valley") %>% 
+  theme_vanilla() %>%
+  footnote( i = 1, j = 1:4,
+            value = as_paragraph(
+              c("Source: Victorian Population Health Survey, 2017")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
