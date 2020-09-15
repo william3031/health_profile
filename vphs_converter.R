@@ -17,9 +17,8 @@ vphs_dash_converter <- function(dataset, suffix){
                               region == "wma"~ "Western Melbourne Area",
                               region == "wd" ~ "West Division",
                               region == "vic" ~ "Victoria")) %>%
-    pivot_wider(names_from = column, values_from = percentage) %>%
     filter(region != "West Division") %>%
-    write_csv(paste0("data_in/vphs_", suffix, ".csv"))
+    write_csv(paste0("data_in/vphs/vphs_vphs_", suffix, ".csv"))
 }
 
 # function to convert from datapasta'd content from the vphs dashboard spreadsheet
@@ -40,7 +39,7 @@ vphs_dash_converter2 <- function(dataset, suffix){
                               region == "vic" ~ "Victoria")) %>%
     pivot_wider(names_from = column, values_from = percentage) %>%
     filter(region != "West Division") %>%
-    write_csv(paste0("data_in/vphs_", suffix, ".csv"))
+    write_csv(paste0("data_in/vphs/vphs_vphs_", suffix, ".csv"))
 }
 
 # dental ####

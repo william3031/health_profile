@@ -28,6 +28,8 @@ mf_cols <- c("#E55048", "#41B6E6", "#E3A51E")
 
 Some sort of infographic like the previous health tracker
 
+\pagebreak
+
 # Introduction
 
 \pagebreak
@@ -123,29 +125,29 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
 ## Socio-economic disadvantage
 
 ```{r}
-irsd_raw <- read_csv("data_in/SEIFA2016IRSD.csv") %>% 
-  clean_names() %>% 
-  rename(sa1 = sa1_7digit_code_2016, nh = neighbourhood, pop = usual_resident_population) %>% 
-  mutate(nh = str_to_title(nh)) %>% 
-  mutate(nh = str_replace_all(nh, "/", "-\n")) %>% 
+irsd_raw <- read_csv("data_in/SEIFA2016IRSD.csv") %>%
+  clean_names() %>%
+  rename(sa1 = sa1_7digit_code_2016, nh = neighbourhood, pop = usual_resident_population) %>%
+  mutate(nh = str_to_title(nh)) %>%
+  mutate(nh = str_replace_all(nh, "/", "-\n")) %>%
   mutate(sa1 = as.character(sa1))
 
 irsd_nh <- irsd_raw %>%
-  select(-sa1, -score) %>% 
-  group_by(nh, decile) %>% 
-  summarise(pop = sum(pop)) %>% 
-  ungroup %>% 
-  group_by(nh) %>% 
+  select(-sa1, -score) %>%
+  group_by(nh, decile) %>%
+  summarise(pop = sum(pop)) %>%
+  ungroup %>%
+  group_by(nh) %>%
   mutate(prop = pop/sum(pop))
-
-sa1_shp <- st_read("data_in/shp/SA1_2016_MV.shp", quiet = TRUE) %>% 
-  clean_names() %>% 
-  select(sa1 = sa1_7digit)
-
-seifa_shp <- sa1_shp %>% 
-  left_join(irsd_raw, by = "sa1") %>% 
-  select(sa1, decile) %>% 
-  filter(!is.na(decile))
+# 
+# sa1_shp <- st_read("data_in/shp/SA1_2016_MV.shp", quiet = TRUE) %>% 
+#   clean_names() %>% 
+#   select(sa1 = sa1_7digit)
+# 
+# seifa_shp <- sa1_shp %>% 
+#   left_join(irsd_raw, by = "sa1") %>% 
+#   select(sa1, decile) %>% 
+#   filter(!is.na(decile))
 ```
 
 Data from the Socio-Economic Indexes for Areas (SEIFA) Index of Relative Socio-economic Disadvantage (IRSD) shows that there is great economic diversity in Moonee Valley households. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods.
@@ -162,70 +164,70 @@ ggplot(irsd_nh, aes(decile, prop)) +
 
 This disparity is shown on the map below. The greatest concentrations of disadvantage are one the public housing estates in Flemington and Ascot Vale.
 
-!! perhaps make the maps in ArcGIS instead to match the EGM and alcohol ones
+![SEIFA IRSD map](maps/SEIFA layout.png)
 
 
 ```{r}
-plot(st_geometry(seifa_shp), col = NA, border = NA, bg = "white")
-# plot population density
-choroLayer(
-  x = seifa_shp, 
-  var = "decile",
-  method = "pretty",
-  nclass=5,
-  col = rev(carto.pal(pal1 = "orange.pal", n1 = 5)),
-  border = "white", 
-  lwd = 0.5,
-  legend.pos = "topright", 
-  legend.title.txt = "SEIFA IRSD decile",
-  add = TRUE
-) 
-# layout
-layoutLayer(title = "IRSD decile by SA1", 
-            sources = "Source: ABS, 2016",
-            frame = FALSE, north = FALSE, tabtitle = TRUE, col = "white", coltitle = "black") 
-# north arrow
-north(pos = "topleft")
+# plot(st_geometry(seifa_shp), col = NA, border = NA, bg = "white")
+# # plot population density
+# choroLayer(
+#   x = seifa_shp, 
+#   var = "decile",
+#   method = "pretty",
+#   nclass=5,
+#   col = rev(carto.pal(pal1 = "orange.pal", n1 = 5)),
+#   border = "white", 
+#   lwd = 0.5,
+#   legend.pos = "topright", 
+#   legend.title.txt = "SEIFA IRSD decile",
+#   add = TRUE
+# ) 
+# # layout
+# layoutLayer(title = "IRSD decile by SA1", 
+#             sources = "Source: ABS, 2016",
+#             frame = FALSE, north = FALSE, tabtitle = TRUE, col = "white", coltitle = "black") 
+# # north arrow
+# north(pos = "topleft")
 ```
 
 
 ## Heat Vulnerability Index
 
-* define then show map
-
-https://www.planning.vic.gov.au/policy-and-strategy/planning-for-melbourne/plan-melbourne/cooling-greening-melbourne/mapping-and-analysis-of-vegetation,-heat-and-land-use
+The Heat Vulnerability Index measures the impact of the Urban Heat Island effect on vulnerable populations. Within Moonee Valley, the most vulnerable areas are in the east of the municipality, where there is a higher concentration of older adults.
 
 ```{r}
-hvi_shp <- st_read("data_in/shp/HEAT_VULNERABILITY_INDEX_2018.shp", quiet = TRUE) %>% 
-  clean_names() %>% 
-  filter(sa3_name16 %in% c("Essendon", "Keilor")) %>% 
-  filter(!sa2_name16 %in% "Keilor") %>% 
-  select(sa1 = sa1_7dig16, hvi_index, pop_dens = popu_dens)
+# hvi_shp <- st_read("data_in/shp/HEAT_VULNERABILITY_INDEX_2018.shp", quiet = TRUE) %>% 
+#   clean_names() %>% 
+#   filter(sa3_name16 %in% c("Essendon", "Keilor")) %>% 
+#   filter(!sa2_name16 %in% "Keilor") %>% 
+#   select(sa1 = sa1_7dig16, hvi_index, pop_dens = popu_dens)
 ```
 
-!! perhaps make the maps in ArcGIS instead to match the EGM and alcohol ones - see if Evie has already made one
+
+![HVI map](maps/HVI layout.png)
+
 
 ```{r}
-plot(st_geometry(hvi_shp), col = NA, border = NA, bg = "white")
-# plot population density
-choroLayer(
-  x = hvi_shp, 
-  var = "hvi_index",
-  method = "equal",
-  nclass=5,
-  col = carto.pal(pal1 = "orange.pal", n1 = 5),
-  border = "white", 
-  lwd = 0.5,
-  legend.pos = "topright", 
-  legend.title.txt = "Heat Vulnerability",
-  add = TRUE
-) 
-# layout
-layoutLayer(title = "Heat Vulnerability Index by SA1", 
-            sources = "Source: DELWP, 2019",
-            frame = FALSE, north = FALSE, tabtitle = TRUE, col = "white", coltitle = "black") 
-# north arrow
-north(pos = "topleft")
+# plot(st_geometry(hvi_shp), col = NA, border = NA, bg = "white")
+# # plot population density
+# choroLayer(
+#   x = hvi_shp, 
+#   var = "hvi_index",
+#   method = "equal",
+#   nclass=5,
+#   col = carto.pal(pal1 = "orange.pal", n1 = 5),
+#   border = "white", 
+#   lwd = 0.5,
+#   legend.pos = "topright", 
+#   legend.title.txt = "Heat Vulnerability",
+#   add = TRUE
+# ) 
+# # layout
+# layoutLayer(title = "Heat Vulnerability Index by SA1", 
+#             sources = "Source: DELWP, 2019",
+#             frame = FALSE, north = FALSE, tabtitle = TRUE, col = "white", coltitle = "black") 
+# # north arrow
+# north(pos = "topleft")
 ```
 
 ## Walkability
@@ -235,12 +237,73 @@ north(pos = "topleft")
 # Gender inequality
 
 * some differences between genders from the Census and VPHS
+* also from this https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FGender%20Equality%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Gender%20Equality%20Moonee%20Valley.pdf
+
+plus
+
+* education
+* labour force status
+* occupation type
 
 # Employment
 
+* types of jobs?
+
+## Unemployment rate
+
+The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne.
+
+```{r, fig.height=3, fig.width=7}
+# import from economic tracker
+salm_mv <- read_csv("data_in/salm_chart_rate_data.csv") %>% 
+  filter(region %in% c("City of Moonee Valley", "Greater Melbourne")) 
+
+ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
+  geom_point() + geom_line() + ylim(3.5, 7.5) +
+  theme_pubclean() +
+  theme(legend.position = "bottom") + 
+  scale_colour_manual(values = mv2040_cols) + 
+  geom_text_repel(data = salm_mv %>% filter(date == as.Date("2020-03-01")), show.legend = FALSE) +
+  labs(title = "Unemployment Rate", x = NULL, y = "Unemployment rate (%)", colour = NULL,
+       caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+```
+
+
 # Affordable housing
 
+According to the Rental Report from the Department of Health and Human Services, there were 21 affordable lettings in Moonee Valley in June 2020. These are private rental properties (newly leased) affordable to households on statutory incomes by bedroom number. There have been fewer than 30 affordable lettings in Moonee Valley since 2015. 
+
+```{r, fig.height=4, fig.width=7}
+rr_affordable_lga <- read_csv("data_in/dhhs_rental_report/lga_affordable.csv")
+
+mv_affordable <- rr_affordable_lga %>% 
+  filter(region == "Moonee Valley", type == "Affordable lettings") %>% 
+  mutate(values = as.integer(values)) %>% 
+  filter(bedrooms != "total") %>% 
+  filter(month >= as.Date("2005-01-01"))
+
+# # just a look at the totals
+# rr_affordable_lga %>%
+#   filter(region == "Moonee Valley", type == "Affordable lettings") %>%
+#   mutate(values = as.integer(values)) %>%
+#   filter(bedrooms == "total") %>%
+#   tail(30)
+
+ggplot(mv_affordable, aes(month, values, colour = bedrooms, label = values)) +
+  geom_point() + geom_line() + 
+  theme_pubclean() +
+  scale_color_manual(values = mv2040_cols) +
+  theme(legend.position = c(0.9, 0.8)) + 
+  labs(title = "Affordable lettings, City of Moonee Valley",
+       x = NULL, y = "Dwellings", colour = "Bedrooms",
+       caption = "Source:  Department of Health and Human Services, 2020")
+```
+
+* add the prices as well by suburb and the amounts perhaps
+
 # Community Safety
+
+* the community survey
 
 # Health Status
 
@@ -262,13 +325,13 @@ vphs_ggplot_function <- function(dataset, title_text, yval = 2.5,  subtitle_text
        caption = caption_text)
 }
 
-vphs_srdhs <- read_csv("data_in/vphs_srdhs.csv") %>%  # self reported dental health status
+vphs_srdhs <- read_csv("data_in/vphs/vphs_srdhs.csv") %>%  # self reported dental health status
   filter(selections == "Excellent / Very good") %>% 
   mutate(type = "Self-reported dental\nhealth status \n (Excellent or very good)")
-vphs_srgd <- read_csv("data_in/vphs_srgd.csv") %>% # self reported gum disease
+vphs_srgd <- read_csv("data_in/vphs/vphs_srgd.csv") %>% # self reported gum disease
   filter(selections == "Yes") %>% 
   mutate(type = "Self-reported gum disease")
-vphs_addbc <- read_csv("data_in/vphs_addbc.csv") %>% # avoided or delayed dental because of cost
+vphs_addbc <- read_csv("data_in/vphs/vphs_addbc.csv") %>% # avoided or delayed dental because of cost
   filter(selections == "Yes") %>% 
   mutate(type = "Delayed visiting \ndental professional \nbecause of cost")
 
@@ -292,7 +355,7 @@ ggplot(vphs_dental, aes(fct_rev(region), pct, fill = region)) +
 
 Data from Dental Health Services Victoria shows that children in Moonee Valley are also less likely to present at public health dental services with a decayed tooth when compared to Victoria at all age groups.
 
-```{r, fig.height=3, fig.width=7}
+```{r, fig.height=3, fig.width=6}
 # Dental Health Services Victoria 2017-19
 prop_with_decayed <- tibble(type = "Proportion with at least one decayed tooth",
                             region = c("Moonee Valley",
@@ -323,7 +386,7 @@ ggplot(prop_with_decayed, aes(region, pct, fill = region)) +
 Data from the Victorian Population Health Survey shows that about 3.2 per cent of Moonee Valley residents met the fruit and vegetable consumption guidelines, though the margin of error for this indicator is large.
 
 ```{r, fig.height=2.5, fig.width=7}
-vphs_fvi <- read_csv("data_in/vphs_fvi.csv") %>%  # self reported dental health status
+vphs_fvi <- read_csv("data_in/vphs/vphs_fvi.csv") %>%  # self reported dental health status
   filter(selections == "Met fruit and vegetable consumption guidelines")
 
 vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Met fruit and vegetable consumption guidelines",
@@ -334,22 +397,23 @@ vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Met fruit and
 ## Chronic disease
 
 * add more here
+* cancer from here https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FCancer%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Cancer%20Moonee%20Valley.pdf
 
 ### Tests for chronic disease
 
 Data from the Victorian Population Health Survey 2017 shows that testing for chronic disease in Moonee Valley is similar to levels in Western Melbourne. Bowel examinations are lower, and faecal blood occult tests are higher than for Western Melbourne, but these differences are not statistically significant.
 
-```{r}
-vphs_blood <- read_csv("data_in/vphs_blood.csv") %>%  # blood tests
+```{r, fig.height=4, fig.width=7}
+vphs_blood <- read_csv("data_in/vphs/vphs_blood.csv") %>%  # blood tests
   mutate(selections = str_to_lower(selections)) %>% 
   mutate(selections = glue("Had {selections} \nin the last 2 years"))
-vphs_fobt <- read_csv("data_in/vphs_fobt.csv") %>% # faecal blood test
+vphs_fobt <- read_csv("data_in/vphs/vphs_fobt.csv") %>% # faecal blood test
   filter(selections == "Completed and returned the FOBT kit") %>% 
   mutate(selections = "Had faecal occult blood \n test, 50 years of age")
-vphs_bowel <- read_csv("data_in/vphs_bowel.csv") %>% # bowel examination
+vphs_bowel <- read_csv("data_in/vphs/vphs_bowel.csv") %>% # bowel examination
   filter(selections == "People") %>% 
   mutate(selections = "Had bowel exam to detect \n cancer, last 5 years")
-vphs_mamm <- read_csv("data_in/vphs_mamm.csv") %>% 
+vphs_mamm <- read_csv("data_in/vphs/vphs_mamm.csv") %>% 
   filter(selections == "In last 2 years") %>% 
   mutate(selections = "Had mammogram to detect \n cancer, last 2 years")
 
@@ -371,8 +435,8 @@ ggplot(vphs_chrtests, aes(fct_rev(region), pct, fill = region)) +
 
 Data from the Victorian Population Health Survey 2017 shows that smoking levels in Moonee Valley are similar to those in Western Melbourne and Victoria. About 15 per cent of the population are current smokers.
 
-```{r, fig.height=3, fig.width=7}
-vphs_smoking <- read_csv("data_in/vphs_smoking.csv")
+```{r, fig.height=2.5, fig.width=7}
+vphs_smoking <- read_csv("data_in/vphs/vphs_smoking.csv")
 
 ggplot(vphs_smoking, aes(fct_rev(region), pct, fill = region)) + 
   theme_pubclean() +
@@ -410,7 +474,32 @@ smoking_gender %>%
 ### Alcohol
 
 * AOD stats
-* map of venues - use the ones from fair
+
+Data from the Victorian Population Health Survey 2017 shows that Moonee Valley residents are more likely to have increased alcohol related harm when compared to Western Melbourne and Victoria. This is for both lifetime risk of alcohol-related harm, as well as for alcohol related harm from a single occasion of drinking.
+
+```{r, fig.height=2.5, fig.width=7}
+vphs_alcohol <- tibble(
+                       region = c("Moonee Valley","Western Melbourne Area","Victoria",
+                                  "Moonee Valley","Western Melbourne Area","Victoria"),
+           pct = c(64.2, 54.6, 59.5, 46.6, 39.5, 43.0),
+                ll = c(58.5, 51.6, 58.6, 40.73, 36.69, 42.11),
+                ul = c(69.5, 57.5, 60.4, 52.66, 42.37, 43.87),
+                         selections = c(rep("Increased lifetime risk of \nalcohol-related harm", 3),
+                                        rep("Increased risk of alcohol-related \nharm from a single occasion \nof drinking", 3))
+)
+
+ggplot(vphs_alcohol, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
+  geom_text(aes(label = pct, y = 7), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Alcohol consumption", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+```
+
+On and off licence alcohol outlets are generally distributed in the activity centres in Moonee Valley. These are generally in the east of the city.  
+
+![Alcohol venues map](maps/Alcohol map layout.png)
 
 ### Drugs
 
@@ -418,15 +507,83 @@ smoking_gender %>%
 
 ### Gambling
 
-* VCGLR 
-* map of venues - use the ones from fair
+Data from the Victorian Responsible Gaming Foundation shows that over $77.6 million was spent on pokies in Moonee Valley in 2018-19.
+
+![pokies chart](images/gambling-in-victoria-moonee-valley.png)
+
+In a usual year, almost $80 million is lost at pokies in venues in the City of Moonee Valley.
+
+```{r, fig.height=3, fig.width=7}
+pokies_time <- read_excel("data_in/vcglr/historical_yearly_egm_data_by_lga_2002-2020_1.xls", sheet = "2010-2020", skip = 8) %>% 
+  clean_names() %>% 
+  filter(lga_name == "City of Moonee Valley") %>% 
+  select(-region) %>% 
+  pivot_longer(-lga_name, names_to = "year", values_to = "expenditure") %>% 
+  mutate(year = str_sub(year, start = -9, end = -1)) %>% 
+  mutate(year = str_replace_all(year, "_jun_", "-06-20")) %>% 
+  mutate(year = as.Date(year, format = "%d-%m-%Y")) %>% 
+  mutate(exp_m = round(expenditure/1000000, 1))
+
+ggplot(pokies_time, aes(year, exp_m, colour = "#E55048", label = exp_m)) +
+  geom_point() + geom_line() + 
+  theme_pubclean() +
+  theme(legend.position = "none") + 
+  scale_y_continuous(limits = c(40, 80)) + 
+  geom_text_repel(show.legend = FALSE) +
+  annotate("text", x = as.Date("2018-09-01"), y = 55, label = "Pokies have been closed\n since 16 March 2020\n due to COVID-19") +
+  labs(title = "Expenditure, Electronic Gaming Machines in Moonee Valley", subtitle = "$ (millions), year to 30 June",
+       x = NULL, y = "Expenditure ($ millions)", colour = NULL,
+       caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
+```
+
+Nearly $19 million was lost at the Skyways Taverner in the year to 30 June 2019, one of the highest in Victoria.
+
+```{r, fig.height=4, fig.width=7}
+pokies_venues_raw <- read_excel("data_in/vcglr/current_6_month_venue_data_release_.xls", sheet = "Detail Data 2018 - 2019", skip = 8) %>% 
+  clean_names() %>% 
+  filter(lga_name == "City of Moonee Valley") %>% 
+  select(name, expenditure_01_jul_18_30_june_19, egm_numbers_as_at_30_june_2019) %>% 
+  mutate(name = str_to_title(name)) %>% 
+  mutate(name = case_when(name == "Essendon Football & Community Sporting C" ~ "Essendon FC",
+                          name == "Keilor East Rsl" ~ "Keilor East RSL",
+                          name == "Mvrc Junction Club" ~ "MVRC Junction Club",
+                          TRUE ~ name)) %>% 
+  rename(expenditure = expenditure_01_jul_18_30_june_19, egms = egm_numbers_as_at_30_june_2019, venue = name) %>% 
+  mutate(exp_m = round(expenditure/1000000, 1)) %>% 
+  select(-expenditure) 
+
+pokies_venues_order <- pokies_venues_raw %>% 
+  arrange(egms) %>% 
+  select(venue) %>% 
+  mutate(order = row_number())
+
+pokies_venues <- pokies_venues_raw %>% 
+  pivot_longer(-venue, names_to = "category", values_to = "values") %>% 
+  mutate(category = case_when(category == "egms" ~ "Electronic Gaming Machines",
+                              category == "exp_m" ~ "Expenditure ($ millions)")) %>% 
+  left_join(pokies_venues_order, by = "venue")
+
+ggplot(pokies_venues, aes(reorder(venue, order), values, fill = "#E55048")) + 
+  theme_pubclean() +
+  geom_col() + coord_flip() + facet_wrap(~category, scales = "free_x") +
+  geom_text(aes(label = values, hjust = 1.5), col = "white", fontface = "bold") +
+  theme(legend.position = "none") +
+  labs(title = "Electronic Gaming Machines venues in Moonee Valley", subtitle = "Year to 30 June 2019",
+       x = NULL, y = NULL,
+       caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
+```
+
+
+When looking at the distribution of Electronic Gaming Machines in Moonee Valley, we can see that they are concentrated in the east of the municipality.
+
+![Pokies venues map](maps/EGM map layout.png)
 
 ### Obesity
 
 Data from the Victorian Population Health Survey 2017 shows that the proportion of residents who are overweight is similar to the proportion in the Western Melbourne Area.
 
-```{r, fig.height=3, fig.width=7}
-vphs_obese <- read_csv("data_in/vphs_obese.csv") # overweight (pre-obese or obese)
+```{r, fig.height=2.5, fig.width=7}
+vphs_obese <- read_csv("data_in/vphs/vphs_obese.csv") # overweight (pre-obese or obese)
 
 vphs_ggplot_function(dataset = vphs_obese, yval = 2, title_text = "Adult population who are overweight",
                      subtitle_text = "Pre-obese or obese based on BMI")
@@ -434,11 +591,11 @@ vphs_ggplot_function(dataset = vphs_obese, yval = 2, title_text = "Adult populat
 
 Residents in Moonee Valley have lower consumption of sugar-sweetened beverages though; 6.4 per cent of residents consume these drinks daily.
 
-```{r, fig.height=3, fig.width=7}
-vphs_takeaway <- read_csv("data_in/vphs_takeaway.csv") %>% # take away meals 
+```{r, fig.height=2.5, fig.width=7}
+vphs_takeaway <- read_csv("data_in/vphs/vphs_takeaway.csv") %>% # take away meals 
   filter(selections == "More than 1 times/week") %>% 
   mutate(selections = "Had takeaway snacks or meals more \nthan once a week")
-vphs_sugardr <- read_csv("data_in/vphs_sugardr.csv") %>%  # sugar sweetened drinks
+vphs_sugardr <- read_csv("data_in/vphs/vphs_sugardr.csv") %>%  # sugar sweetened drinks
   mutate(selections = "Consumed sugar-sweetened \n drinks daily")
 
 vphs_obesity <- bind_rows(vphs_takeaway, vphs_sugardr)
@@ -457,11 +614,11 @@ ggplot(vphs_obesity, aes(fct_rev(region), pct, fill = region)) +
 
 Data from the Victorian Population Health Survey 2017 shows that about 58 per cent of Moonee Valley residents complied with the physical activity, compared to 48.5 per cent in the Western Melbourne Area. About 30 per cent of residents spent 7 or more hours sitting on an average weekday.
 
-```{r, fig.height=3, fig.width=7}
-vphs_phys <- read_csv("data_in/vphs_phys.csv") %>% 
+```{r, fig.height=2.5, fig.width=7}
+vphs_phys <- read_csv("data_in/vphs/vphs_phys.csv") %>% 
   filter(selections == "Met guidelines") %>% 
   mutate(selections = "Met physical activity guidelines")
-vphs_sitting <- read_csv("data_in/vphs_sitting.csv") %>% 
+vphs_sitting <- read_csv("data_in/vphs/vphs_sitting.csv") %>% 
   filter(selections == "Week day") %>% 
   mutate(selections = "Spent 7+ hours sitting on \n an average weekday")
 
@@ -480,11 +637,12 @@ ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) +
 
 ### Mental health
 
+* more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FMental%20Health%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Mental%20Health%20Moonee%20Valley.pdf
 
 Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. Thic compares to about 42 per cent for Victoria and the Western Melbourne Area.
 
 ```{r, fig.height=2.5, fig.width=7}
-vphs_srhealth <- read_csv("data_in/vphs_srhealth.csv") %>%  # anxiety or depression
+vphs_srhealth <- read_csv("data_in/vphs/vphs_srhealth.csv") %>%  # anxiety or depression
   filter(selections == "Excellent / very good")
 
 vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Self-reported health",
@@ -494,10 +652,10 @@ vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Self-repor
 About three in ten residents rated their life satisfaction and their feeling of life being worthwhile as 'very high'.
 
 ```{r, fig.height=2.5, fig.width=7}
-vphs_lifesat <- read_csv("data_in/vphs_lifesat.csv") %>% 
+vphs_lifesat <- read_csv("data_in/vphs/vphs_lifesat.csv") %>% 
   filter(region == "Moonee Valley") %>% 
   mutate(type = "Life satisfaction")
-vphs_worthwhile <- read_csv("data_in/vphs_worthwhile.csv") %>% 
+vphs_worthwhile <- read_csv("data_in/vphs/vphs_worthwhile.csv") %>% 
   filter(region == "Moonee Valley") %>% 
   mutate(type = "Feeling of life being worthwhile")
 
@@ -518,7 +676,7 @@ ggplot(vphs_mhw, aes(selections, pct, fill = fair_red)) +
 Data from the Victorian Population Health Survey 2017 shows that about 30 per cent of Moonee Valley residents had ever been diagnosed with anxiety of depression. This compares with 25 per cent for Western Melbourne.
 
 ```{r, fig.height=2.5, fig.width=7}
-vphs_anx <- read_csv("data_in/vphs_anx.csv") # anxiety or depression
+vphs_anx <- read_csv("data_in/vphs/vphs_anx.csv") # anxiety or depression
 
 vphs_ggplot_function(dataset = vphs_anx, yval = 2, title_text = "Proportion of adults ever diagnosed \nwith anxiety or depression")
 ```
@@ -549,7 +707,11 @@ vphs_mh_gender %>%
 
 ## Sexual and reporductive health
 
+perhaps from the 2015 health dataset https://www2.health.vic.gov.au/about/reporting-planning-data/gis-and-planning-products/geographical-profiles
+
 ## Family violence
+
+* and more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FViolence%20Against%20Women%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Violence%20Against%20Women%20Moonee%20Valley.pdf
 
 ```{r}
 fam_violence_raw <- read_excel("data_in/Victoria Police Data Tables 2018-19.xlsx", sheet = "Table 3", range = "C14:H29") %>% 
@@ -582,6 +744,39 @@ ggplot(fam_vio_comp, aes(year, rate, colour = lga, label = rate)) +
   theme(legend.position = "bottom") +
   geom_text_repel(show.legend = FALSE)
 ```
+
+## Aged care
+
+Data from the Australian Institure of Health and Wellbeing shows that in June 2019, there were 1,168 residential aged care places in the City of Moonee Valley. The majority of aged care facilities in Moonee Valley are not-for profit facilities or private facilities. 
+
+
+```{r, fig.height=4.5, fig.width=7}
+aged_care <- read_csv("data_in/shp/Services_141_Full_Data_data.csv") %>% 
+  clean_names() %>% 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>% 
+  st_transform(crs = 28355)
+
+mvcc_boundary <- st_read("data_in/shp/mvcc_boundary.shp", quiet = TRUE)
+
+aged_care_mv <- aged_care %>% 
+  st_intersection(mvcc_boundary) %>% 
+  st_set_geometry(NULL) %>% 
+  select(service_name, important_calc_1_service_name_and_suburb, organisation_type, residential_places)
+
+sum(aged_care_mv$residential_places)
+
+ggplot(aged_care_mv, aes(reorder(service_name, residential_places), residential_places, fill = organisation_type)) + 
+  theme_pubclean() +
+  geom_col() + geom_text(aes(label = residential_places, y = 10), col = "white", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = c("Government" = "#31788F", "Private" = "#E55048", "Not-for-profit" = "#4EA546")) + 
+  labs(title = "Aged care places", subtitle =  "Moonee Valley (30 June 2019)", fill = "Type",
+       x = NULL, y = "Places", caption = "Source: Australian Institute of Health and Wellbeing, 2020") + 
+  theme(legend.position = c(0.8, 0.2)) +  guides(fill = guide_legend(nrow = 3))
+```
+
+There is one government facility (Cyril Jewell House) in Keilor East. 
+
+![Aged care map](maps/Aged care layout.png)
 
 ## Death
 
@@ -645,7 +840,6 @@ death_causes_data %>%
 
 # To add
 
-* aged care https://gen-agedcaredata.gov.au/Topics/Services-and-places-in-aged-care/Explore-services-and-places-in-aged-care
 * ahpc
 * vichealth indicators
 * vcams
