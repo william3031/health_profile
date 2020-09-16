@@ -46,7 +46,7 @@ mv_pop_hh <- pop_hh_raw %>%
   filter(area == "City of Moonee Valley", data_type %in% c("Total Population", "Households"))
 ```
 
-The population of the City of Moonee Valley is forecast to increase from about 130,000 in 2019^[Australian Bureau of Statistics, 2020, *Regional Population Growth, 2018-19*, cat. No. 3218.0, https://www.abs.gov.au/ausstats/abs@.nsf/mf/3218.0], to around 170,000 in 2040^[.id consulting, 2017, *Moonee Valley Population Forecasts*].
+The population of the City of Moonee Valley is forecast to increase from about 130,000 in 2019, to around 170,000 in 2040.
 
 ```{r}
 ggplot(mv_pop_hh, aes(year, number, colour = data_type)) +
@@ -55,7 +55,7 @@ ggplot(mv_pop_hh, aes(year, number, colour = data_type)) +
   scale_colour_manual(values = mv2040_cols) +
   theme(legend.position = "bottom") + 
   scale_y_continuous(labels = comma, limits = c(0, 200000)) + 
-  labs(title = "Forecast dwellings and population", x = NULL, y = NULL, colour = NULL,
+  labs(title = "Forecast households and population", x = NULL, y = NULL, colour = NULL,
        caption = "Source: .id consulting, 2017")
 ```
 
@@ -116,8 +116,54 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
 
 ```
 
-* Location of young/old
+* Location of over 65s
+* 0-25?
 
+## Self-reported health
+
+Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. Thic compares to about 42 per cent for Victoria and the Western Melbourne Area.
+
+```{r, fig.height=2.5, fig.width=7}
+# function more just for single plots
+vphs_ggplot_function <- function(dataset, title_text, yval = 2.5,  subtitle_text = NULL,
+                                 caption_text = "Source: Victorian Population Health Survey, 2017"){
+  ggplot(dataset, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() + 
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + coord_flip() +
+  geom_text(aes(label = pct, y = yval), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = title_text, subtitle = subtitle_text,
+       x = NULL, y = "Percentage (with 95% CI)",
+       caption = caption_text)
+}
+
+vphs_srhealth <- read_csv("data_in/vphs/vphs_srhealth.csv") %>%  # anxiety or depression
+  filter(selections == "Excellent / very good")
+
+vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Self-reported health",
+                     subtitle_text = "Excellent or very good health status")
+```
+
+The same data shows that women in Moonee Valley were more likely to self-report higher levels of health than males.
+
+```{r, fig.height=2.5, fig.width=7}
+vphs_srh_gender <- tibble(
+            gender = c("Women", "Women", "Women", "Men", "Men", "Men"),
+         selection = c("Excellent/Very good","Good",
+                       "Fair/Poor","Excellent/Very good","Good","Fair/Poor"),
+               pct = c(53.7, 27.9, 18.2, 41.1, 42.3, 16.6),
+                ll = c(46, 21.8, 13.2, 32.7, 33.9, 11),
+                ul = c(61.3, 35, 24.6, 50, 51.2, 24.3)) %>% 
+  mutate(selection = factor(selection, levels = c("Excellent/Very good","Good", "Fair/Poor")))
+
+ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~gender, ncol = 3) +
+  geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Self-reported health status by gender", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+```
 
 
 # Environmental factors
@@ -255,7 +301,9 @@ The unemployment rate in the City of Moonee Valley has generally been lower than
 
 ```{r, fig.height=3, fig.width=7}
 # import from economic tracker
-salm_mv <- read_csv("data_in/salm_chart_rate_data.csv") %>% 
+salm_raw <- read_csv("data_in/salm_chart_rate_data.csv") 
+
+salm_mv <- salm_raw %>% 
   filter(region %in% c("City of Moonee Valley", "Greater Melbourne")) 
 
 ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
@@ -268,6 +316,20 @@ ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
        caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
 ```
 
+The unemployment rate is highest in the Flemington and Ascot Vale Statistical Area Level 2 (SA2) geographical areas.
+
+```{r}
+salm_sa2 <- salm_raw %>% 
+  filter(region != "City of Moonee Valley") %>% 
+  filter(region != "Greater Melbourne")
+
+ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
+  geom_point() + geom_line() + facet_wrap(~region) +
+  theme_pubclean() +
+  theme(legend.position = "none") + 
+  labs(title = "Unemployment Rate (Statistical Area Level 2)", x = NULL, y = "Unemployment rate (%)", colour = NULL,
+       caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+```
 
 # Affordable housing
 
@@ -296,14 +358,36 @@ ggplot(mv_affordable, aes(month, values, colour = bedrooms, label = values)) +
   theme(legend.position = c(0.9, 0.8)) + 
   labs(title = "Affordable lettings, City of Moonee Valley",
        x = NULL, y = "Dwellings", colour = "Bedrooms",
-       caption = "Source:  Department of Health and Human Services, 2020")
+       caption = "Source: Rental Report, Department of Health and Human Services, 2020")
 ```
 
 * add the prices as well by suburb and the amounts perhaps
 
 # Community Safety
 
-* the community survey
+Data from the Community Survey shows that about less than half of all residents feel safe walking alone in their local area at night. About 80 per cent feel safe at public transport stops and stations, while almost all residents feel safe when walking alone in their local area during the day.
+
+```{r, fig.width=7, fig.height=4}
+cs_safety <- read_csv("data_in/community_survey/safety_full_2020.csv")
+
+cs_safety_mv <- cs_safety %>% 
+  filter(cat == "Overall") %>% 
+  filter(safety == "'Very safe' or 'safe'") %>% 
+  mutate(name = str_replace(name, "your local", "your \nlocal")) %>% 
+  mutate(name = str_replace(name, "stops and", "stops \nand"))
+
+ggplot(cs_safety_mv, aes(year, pct, label = pct, colour = name)) +
+  theme_pubclean() +
+  geom_point() + geom_line()  + ylim(0, 100) + 
+  geom_errorbar(aes(ymin = lower, ymax = upper, width=.05), colour = "darkgrey") +
+  labs(title="Community safety",
+       x = NULL, y = "Percentage (with 95% CI)", colour = NULL,
+       caption = "Source: Moonee Valley Community Survey, 2020") +
+  scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
+  theme(legend.position = "bottom") +
+  geom_text_repel(show.legend = FALSE)
+```
+
 
 # Health Status
 
@@ -312,19 +396,6 @@ ggplot(mv_affordable, aes(month, values, colour = bedrooms, label = values)) +
 Data from the Victorian Population Health Survey shows that Moonee Valley residents have better self-reported dental health, lower incidence of gum disease when compared to the Western Melbourne Area and Victoria. Moonee Valley residents are also less likely to delay visiting a dental professional because of cost when compared to Victoria.
 
 ```{r, fig.height=3, fig.width=7}
-# function more just for single plots
-vphs_ggplot_function <- function(dataset, title_text, yval = 2.5,  subtitle_text = NULL,
-                                 caption_text = "Source: Victorian Population Health Survey, 2017"){
-  ggplot(dataset, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() + 
-  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + coord_flip() +
-  geom_text(aes(label = pct, y = yval), col = "white", fontface = "bold") +
-  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
-  labs(title = title_text, subtitle = subtitle_text,
-       x = NULL, y = "Percentage (with 95% CI)",
-       caption = caption_text)
-}
-
 vphs_srdhs <- read_csv("data_in/vphs/vphs_srdhs.csv") %>%  # self reported dental health status
   filter(selections == "Excellent / Very good") %>% 
   mutate(type = "Self-reported dental\nhealth status \n (Excellent or very good)")
@@ -398,6 +469,7 @@ vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Met fruit and
 
 * add more here
 * cancer from here https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FCancer%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Cancer%20Moonee%20Valley.pdf
+* ahpc data - diabetes and other things?
 
 ### Tests for chronic disease
 
@@ -460,7 +532,7 @@ smoking_gender <- tibble(
 smoking_gender %>% 
   flextable() %>% 
   autofit() %>% 
-  add_header_lines(values = "Current smokers (daily and occasional) by gender, City of Moonee Valley") %>% 
+  add_header_lines(values = "Current smokers (daily and occasional) by gender, Moonee Valley") %>% 
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
@@ -639,17 +711,7 @@ ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) +
 
 * more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FMental%20Health%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Mental%20Health%20Moonee%20Valley.pdf
 
-Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. Thic compares to about 42 per cent for Victoria and the Western Melbourne Area.
-
-```{r, fig.height=2.5, fig.width=7}
-vphs_srhealth <- read_csv("data_in/vphs/vphs_srhealth.csv") %>%  # anxiety or depression
-  filter(selections == "Excellent / very good")
-
-vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Self-reported health",
-                     subtitle_text = "Excellent or very good health status")
-```
-
-About three in ten residents rated their life satisfaction and their feeling of life being worthwhile as 'very high'.
+Data from the Victorian Population Health Survey 2017 shows that about three in ten residents rated their life satisfaction and their feeling of life being worthwhile as 'very high'.
 
 ```{r, fig.height=2.5, fig.width=7}
 vphs_lifesat <- read_csv("data_in/vphs/vphs_lifesat.csv") %>% 
@@ -694,7 +756,7 @@ vphs_mh_gender <- tibble(Gender = c("Males","Females"),
 vphs_mh_gender %>% 
   flextable() %>% 
   autofit() %>% 
-  add_header_lines(values = "Adults who sought rofessional help for a mental health problem within the last year by gender, City of Moonee Valley") %>% 
+  add_header_lines(values = "Adults who sought rofessional help for a mental health problem within the last year by gender, Moonee Valley") %>% 
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
@@ -782,7 +844,7 @@ There is one government facility (Cyril Jewell House) in Keilor East.
 
 ### Premature deaths
 
-Premature deaths in Moonee Valley declined between 2014 and 2018^[Australian Institute of Health and Welfare, 2020, *Mortality Over Regions and Time (MORT) books*, 7 August 2020, Australian Government, Canberra.]. There were 142.8 premature deaths per 100,000 in Moonee Valley in 2018, compared to 160.5 for Greater Melbourne.
+Premature deaths in Moonee Valley declined between 2014 and 2018. There were 142.8 premature deaths per 100,000 in Moonee Valley in 2018, compared to 160.5 for Greater Melbourne.
 
 ```{r}
 # aihw data
@@ -806,7 +868,7 @@ ggplot(death_prem, aes(year, prem_deaths, col = name, label = prem_deaths)) +
   labs(title="Premature deaths age-standardised rate",
        subtitle = "Premature deaths (aged under 75)",
        x = NULL, y = "Premature deaths (per 100,000) ASR", colour = NULL,
-       caption = "Source: Australian Institure of Health and Welfare, 2020") +
+       caption = "Source: MORT Books, Australian Institure of Health and Welfare, 2020") +
   scale_color_manual(values = mv2040_cols) +
   theme(legend.position = "bottom") +
   geom_text_repel(data = death_prem %>% filter(year == 2018), show.legend = FALSE)
@@ -832,19 +894,16 @@ death_causes_data %>%
   theme_vanilla() %>% 
   footnote( i = 1, j = 1:3,
             value = as_paragraph(
-              c("Source: Australian Institure of Health and Welfare, 2020")
+              c("Source: MORT Books, Australian Institure of Health and Welfare, 2020")
             ),
             ref_symbols = c(""),
             part = "header")
 ```
 
-# To add
-
+# To add (possibly)
 * ahpc
 * vichealth indicators
 * vcams
-* family violence
-* community survey
 
 \pagebreak
 
@@ -899,7 +958,7 @@ vphs_mv_joined %>%
   flextable() %>% 
   #merge_v(j = ~Type) %>% 
   autofit() %>% 
-  add_header_lines(values = "Modifiable risk factors, City of Moonee Valley") %>% 
+  add_header_lines(values = "Modifiable risk factors, Moonee Valley") %>% 
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
@@ -918,7 +977,7 @@ vphs_mv_joined %>%
   flextable() %>% 
   #merge_v(j = ~Type) %>% 
   autofit() %>% 
-  add_header_lines(values = "Doctor diagnosed chronic disease, City of Moonee Valley") %>% 
+  add_header_lines(values = "Doctor diagnosed chronic disease, Moonee Valley") %>% 
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
@@ -937,7 +996,7 @@ vphs_mv_joined %>%
   flextable() %>% 
   #merge_v(j = ~Type) %>% 
   autofit() %>% 
-  add_header_lines(values = "Screening tests and treatment, City of Moonee Valley") %>% 
+  add_header_lines(values = "Screening tests and treatment, Moonee Valley") %>% 
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
