@@ -116,12 +116,46 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
 
 ```
 
-* Location of over 65s
-* 0-25?
+By neighbourhood, we can see that the highest proportions of those aged 65 years and over are in Milleara and Avondale Heights. Aberfeldie and Flemington have the highest proportions of young people.
+
+```{r, fig.height= 5, fig.width=7}
+age_5yr_raw <- read_excel("data_in/Forecast.id update (December 2017 update).xlsx", sheet = "Age structure (5 year groups)") %>% 
+  clean_names()
+
+age_5yr_nh <- age_5yr_raw %>% 
+  filter(str_detect(area, "Neighbourhood")) %>% 
+  mutate(area = str_remove(area, " Neighbourhood")) %>% 
+  mutate(area = str_replace(area, "/-", "/-\n")) %>% 
+  select(-gender) %>% 
+  mutate(age_gr2 = case_when(age_group %in% c("0-4 years", "5-9 years ", "10-14 years", "15-19 years ", "20-24 years") ~ "0-24",
+                             age_group %in% c("65-69 years", "70-74 years", "75-79 years",
+                                              "80-84 years", "85 years and over") ~ "65+",
+                             TRUE ~ "25-64")) %>% 
+  filter(year == 2020) %>% 
+  group_by(area, age_gr2) %>% 
+  summarise(number = sum(number)) %>% 
+  ungroup() %>% 
+  group_by(area) %>% 
+  mutate(pct = round(number/sum(number)*100,1))
+
+ggplot(age_5yr_nh, aes(fct_rev(area), pct, fill = age_gr2)) +
+  geom_col(position = position_stack(reverse = TRUE))  + theme(legend.position="none") +
+  theme_pubclean() + coord_flip() +
+  scale_fill_manual(values = mv2040_cols) +
+  geom_text(data = age_5yr_nh %>% filter(age_gr2 == "0-24"), aes(label = pct, y = 5), col = "white", fontface = "bold") +
+  geom_text(data = age_5yr_nh %>% filter(age_gr2 == "25-64"), aes(label = pct, y = 50), col = "white", fontface = "bold") +
+  geom_text(data = age_5yr_nh %>% filter(age_gr2 == "65+"), aes(label = pct, y = 95), col = "white", fontface = "bold") +
+  labs(title = "Age groups by neighbourhood", subtitle = "Estimated population 30 June 2020",
+       caption = "Data source: .id consulting, 2017",
+       x = NULL, y = "Percentage of neighbourhood population", fill = "Age group") +
+  theme(legend.position = "bottom")
+
+```
+
 
 ## Self-reported health
 
-Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. Thic compares to about 42 per cent for Victoria and the Western Melbourne Area.
+Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. This compares to about 42 per cent for Victoria and the Western Melbourne Area.
 
 ```{r, fig.height=2.5, fig.width=7}
 # function more just for single plots
@@ -478,7 +512,7 @@ Data from the Victorian Population Health Survey 2017 shows that testing for chr
 ```{r, fig.height=4, fig.width=7}
 vphs_blood <- read_csv("data_in/vphs/vphs_blood.csv") %>%  # blood tests
   mutate(selections = str_to_lower(selections)) %>% 
-  mutate(selections = glue("Had {selections} \nin the last 2 years"))
+  mutate(selections = glue("Had {selections} test \nin the last 2 years"))
 vphs_fobt <- read_csv("data_in/vphs/vphs_fobt.csv") %>% # faecal blood test
   filter(selections == "Completed and returned the FOBT kit") %>% 
   mutate(selections = "Had faecal occult blood \n test, 50 years of age")
@@ -545,8 +579,6 @@ smoking_gender %>%
 
 ### Alcohol
 
-* AOD stats
-
 Data from the Victorian Population Health Survey 2017 shows that Moonee Valley residents are more likely to have increased alcohol related harm when compared to Western Melbourne and Victoria. This is for both lifetime risk of alcohol-related harm, as well as for alcohol related harm from a single occasion of drinking.
 
 ```{r, fig.height=2.5, fig.width=7}
@@ -573,9 +605,75 @@ On and off licence alcohol outlets are generally distributed in the activity cen
 
 ![Alcohol venues map](maps/Alcohol map layout.png)
 
+```{r}
+hosp_adm_alc <- read_csv("data_in/aodstats/alcohol_hosp_admissions.csv", skip = 2) %>% 
+  clean_names() %>% 
+  filter(map_area == "Moonee Valley") %>% 
+  select(-region) %>% 
+  pivot_longer(-map_area, names_to = "type", values_to = "values") %>% 
+  mutate(yearb = str_sub(type, 7, 8)) %>% 
+  mutate(type2 = "Alcohol hopsitalisations") %>% 
+  separate(type, c("del","group"), sep = "on_") %>% 
+  select(-del) %>% 
+  mutate(year = paste0("20", yearb, "-06-30")) %>% 
+  mutate(year = ymd(year)) %>% 
+  select(-yearb) %>% 
+  rename(type = type2) %>% 
+  mutate(group = str_to_title(group)) %>% 
+  mutate(group = str_replace(group, "_", "-"))
+
+hosp_adm_alc_gend <- hosp_adm_alc %>% 
+  filter(group %in% c("Male", "Female"))
+```
+
+Data from Turning Point shows that there were over 600 alcohol related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males.
+
+```{r, fig.width=7, fig.height=3}
+ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
+  geom_point() + geom_line() + 
+  theme_pubclean() +
+  theme(legend.position = "bottom") + 
+  scale_colour_manual(values = mv2040_cols) + 
+  geom_text_repel(show.legend = FALSE) +
+  labs(title = "Alcohol related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
+       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+```
+
 ### Drugs
 
-* AOD stats
+```{r}
+hosp_adm_drugs <- read_csv("data_in/aodstats/illicit_drugs_hosp_admissions.csv", skip = 2) %>% 
+  clean_names() %>% 
+  filter(map_area == "Moonee Valley") %>% 
+  select(-region) %>% 
+  pivot_longer(-map_area, names_to = "type", values_to = "values") %>% 
+  mutate(yearb = str_sub(type, 7, 8)) %>% 
+  mutate(type2 = "Illicit drugs hospital admission") %>% 
+  separate(type, c("del","group"), sep = "on_") %>% 
+  select(-del) %>% 
+  mutate(year = paste0("20", yearb, "-06-30")) %>% 
+  mutate(year = ymd(year)) %>% 
+  select(-yearb) %>% 
+  rename(type = type2) %>% 
+  mutate(group = str_to_title(group)) %>% 
+  mutate(group = str_replace(group, "_", "-"))
+
+hosp_adm_drugs_gend <- hosp_adm_drugs %>% 
+  filter(group %in% c("Male", "Female"))
+```
+
+Data from Turning Point shows that there were over 300 illicit drugs related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males.
+
+```{r, fig.width=7, fig.height=3}
+ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
+  geom_point() + geom_line() + 
+  theme_pubclean() +
+  theme(legend.position = "bottom") + 
+  scale_colour_manual(values = mv2040_cols) + 
+  geom_text_repel(show.legend = FALSE) +
+  labs(title = "Illicit drugs related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
+       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+```
 
 ### Gambling
 
@@ -767,11 +865,11 @@ vphs_mh_gender %>%
 ```
 
 
-## Sexual and reporductive health
+# Sexual and reporductive health
 
 perhaps from the 2015 health dataset https://www2.health.vic.gov.au/about/reporting-planning-data/gis-and-planning-products/geographical-profiles
 
-## Family violence
+# Family violence
 
 * and more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FViolence%20Against%20Women%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Violence%20Against%20Women%20Moonee%20Valley.pdf
 
@@ -807,7 +905,11 @@ ggplot(fam_vio_comp, aes(year, rate, colour = lga, label = rate)) +
   geom_text_repel(show.legend = FALSE)
 ```
 
-## Aged care
+# Births
+
+* add birth data from MCH - otherwise use ABS data
+
+# Aged care
 
 Data from the Australian Institure of Health and Wellbeing shows that in June 2019, there were 1,168 residential aged care places in the City of Moonee Valley. The majority of aged care facilities in Moonee Valley are not-for profit facilities or private facilities. 
 
