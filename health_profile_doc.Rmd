@@ -312,24 +312,87 @@ The Heat Vulnerability Index measures the impact of the Urban Heat Island effect
 
 ## Walkability
 
-* See what Evie has done
+* See what Evie has done. Otherwise, just use the ones from MV2040
 
 # Gender inequality
 
-* some differences between genders from the Census and VPHS
 * also from this https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FGender%20Equality%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Gender%20Equality%20Moonee%20Valley.pdf
 
-plus
+```{r}
+census_wk_inc <- read_csv("data_in/census/2016Census_G17A_VIC_LGA.csv") %>% 
+  left_join(read_csv("data_in/census/2016Census_G17B_VIC_LGA.csv")) %>% 
+  left_join(read_csv("data_in/census/2016Census_G17C_VIC_LGA.csv")) %>% 
+  clean_names() %>% 
+  pivot_longer(-lga_code_2016, names_to = "category", values_to = "count") %>% 
+  filter(lga_code_2016 == "LGA25060") %>% 
+  mutate(gender = str_sub(category, 1,1)) %>% 
+  mutate(cat = str_sub(category, 3, -1)) %>% 
+  select(-category) %>% 
+  filter(str_ends(cat, "tot")) %>% 
+  filter(cat != "tot") %>% 
+  mutate(cat = str_remove(cat, "_tot")) %>% 
+  mutate(cat2 = case_when(cat %in% c("1250_1499", "1500_1749", "1750_1999", "2000_2999", "3000_more") ~ "Weekly income greater than $1250 pw",
+                          TRUE ~ "Weekly income less than $1250 pw")) %>% 
+  group_by(gender, cat2) %>% 
+  summarise(count = sum(count)) %>% 
+  mutate(pct = round(count/sum(count)*100,1)) %>% 
+  filter(gender %in% c("f", "m")) %>% 
+  mutate(gender = if_else(gender == "f", "Female", "Male")) 
 
-* education
-* labour force status
-* occupation type
+census_unpwork <- read_csv("data_in/census/2016Census_G20A_VIC_LGA.csv") %>% 
+  left_join(read_csv("data_in/census/2016Census_G20B_VIC_LGA.csv")) %>% 
+  clean_names() %>% 
+  pivot_longer(-lga_code_2016, names_to = "category", values_to = "count") %>% 
+  filter(lga_code_2016 == "LGA25060") %>% 
+  mutate(gender = str_sub(category, 1,1)) %>% 
+  mutate(cat = str_sub(category, 3, -1)) %>% 
+  select(-category) %>% 
+  filter(str_starts(cat, "tot")) %>% 
+  filter(cat != "tot_total") %>% 
+  mutate(cat = str_remove(cat, "tot_")) %>% 
+  mutate(cat2 = case_when(cat %in% c("dudw_30_h_mo", "dudw_15_29_h") ~ "Did 15+ hours of unpaid work/week",
+                          TRUE ~ "Did fewer than 15 hours of unpaid work/week")) %>% 
+  group_by(gender, cat2) %>% 
+  summarise(count = sum(count)) %>% 
+  mutate(pct = round(count/sum(count)*100,1)) %>% 
+  filter(gender %in% c("f", "m")) %>% 
+  mutate(gender = if_else(gender == "f", "Female", "Male")) 
 
-# Employment
+census_lfp <- read_csv("data_in/census/2016Census_G40_VIC_LGA.csv") %>% 
+  clean_names() %>% 
+  pivot_longer(-lga_code_2016, names_to = "category", values_to = "count") %>% 
+  filter(lga_code_2016 == "LGA25060") %>% 
+  mutate(gender = str_sub(category, -1,-1)) %>% 
+  filter(str_detect(category, "percnt_lab_forc_prticipation")) %>% 
+  mutate(cat2 = "Labour force participation rate") %>% 
+  select(-category, -lga_code_2016) %>% 
+  filter(gender %in% c("f", "m")) %>% 
+  mutate(gender = if_else(gender == "f", "Female", "Male")) %>% 
+  rename(pct = count)
 
-* types of jobs?
+census_ineq <- bind_rows(census_wk_inc, census_unpwork, census_lfp) %>% 
+  filter(!cat2 %in% c("Weekly income less than $1250 pw", "Did fewer than 15 hours of unpaid work/week")) %>% 
+  select(-count)
+```
 
-## Unemployment rate
+Data from the 2016 Census shows that females do more unpaid work (housework), while having lower incomes and being less likely to be in the labour force.
+
+```{r, fig.height=3, fig.width=7}
+ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) + 
+  theme_pubclean() +
+  geom_col(position = "dodge") +
+  geom_text(aes(label = pct, y = 3), col = "white", fontface = "bold", position = position_dodge(width = 1)) +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = c(0.8, 0.85)) + coord_flip() +
+  labs(title = "Gender inequality", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, 2016 Census") +
+  guides(fill = guide_legend(nrow = 1))
+
+```
+
+
+
+
+## Unemployment
 
 The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne.
 
@@ -681,7 +744,7 @@ Data from the Victorian Responsible Gaming Foundation shows that over $77.6 mill
 
 ![pokies chart](images/gambling-in-victoria-moonee-valley.png)
 
-In a usual year, almost $80 million is lost at pokies in venues in the City of Moonee Valley.
+In a usual year, almost $80 million is lost at pokies in venues in the City of Moonee Valley. This of course has been reduced as pokies venues have been closed temporarily  due to COVID-19.
 
 ```{r, fig.height=3, fig.width=7}
 pokies_time <- read_excel("data_in/vcglr/historical_yearly_egm_data_by_lga_2002-2020_1.xls", sheet = "2010-2020", skip = 8) %>% 
