@@ -796,9 +796,10 @@ pokies_venues <- pokies_venues_raw %>%
                               category == "exp_m" ~ "Expenditure ($ millions)")) %>% 
   left_join(pokies_venues_order, by = "venue")
 
-ggplot(pokies_venues, aes(reorder(venue, order), values, fill = "#E55048")) + 
+ggplot(pokies_venues, aes(reorder(venue, order), values, fill = category)) + 
   theme_pubclean() +
   geom_col() + coord_flip() + facet_wrap(~category, scales = "free_x") +
+  scale_fill_manual(values = mv2040_cols) +
   geom_text(aes(label = values, hjust = 1.5), col = "white", fontface = "bold") +
   theme(legend.position = "none") +
   labs(title = "Electronic Gaming Machines venues in Moonee Valley", subtitle = "Year to 30 June 2019",
@@ -885,7 +886,7 @@ vphs_worthwhile <- read_csv("data_in/vphs/vphs_worthwhile.csv") %>%
 vphs_mhw <- bind_rows(vphs_lifesat, vphs_worthwhile) %>% 
   mutate(selections = factor(selections, levels = c("Low or medium (0-6)", "High (7-8)", "Very high (9-10)")))
 
-ggplot(vphs_mhw, aes(selections, pct, fill = fair_red)) + 
+ggplot(vphs_mhw, aes(selections, pct, fill = type)) + 
   theme_pubclean() +
   geom_col() + geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") + 
   geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) +
@@ -970,7 +971,37 @@ ggplot(fam_vio_comp, aes(year, rate, colour = lga, label = rate)) +
 
 # Births
 
-* add birth data from MCH - otherwise use ABS data
+Data from Moonee Valley's Maternal Child and Health (MCH) team show that there were 1,487 births in the municipality in the 2019-20 financial year. This is higher than in 2018-19, but lower than in earlier years. The highest number of births are recorded at the Strathmore and Milleara Integrated Learning and Development Centre (MILD) Maternal and Child Health centres.
+
+```{r}
+births_mch_raw <- read_excel("data_in/birth_notifications_mch.xlsx", sheet = "Sheet1") %>% 
+  clean_names()
+
+births_mch <- births_mch_raw %>% 
+  rename(mch = birth_notifications_by_financial_year) %>% 
+  pivot_longer(-mch, names_to = "year", values_to = "births") %>% 
+  mutate(year = str_replace(year, "x", "20")) %>% 
+  mutate(year = str_replace(year, "_", "-"))
+
+# probably better as a table
+births_mch %>% 
+  pivot_wider(names_from = year, values_from = births) %>% 
+  rename(MCH = mch) %>% 
+  adorn_totals() %>% 
+  flextable()  %>% 
+  autofit() %>% 
+  bold(i = 11, j = NULL, bold = TRUE, part = "body") %>% 
+  add_header_lines(values = "Births by Maternal Child Health Centre") %>% 
+  theme_vanilla() %>% 
+  footnote( i = 1, j = 1:6,
+            value = as_paragraph(
+              c("Source: Moonee Valley City Council, 2020")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+
+```
+
 
 # Aged care
 
