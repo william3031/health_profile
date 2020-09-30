@@ -32,6 +32,8 @@ Some sort of infographic like the previous health tracker
 
 # Introduction
 
+within the document, interleave with diagrams from https://www.aihw.gov.au/reports/australias-health/australias-health-2016/contents/chapter-3-leading-causes-of-ill-health
+
 \pagebreak
 
 # Population
@@ -56,7 +58,7 @@ ggplot(mv_pop_hh, aes(year, number, colour = data_type)) +
   theme(legend.position = "bottom") + 
   scale_y_continuous(labels = comma, limits = c(0, 200000)) + 
   labs(title = "Forecast households and population", x = NULL, y = NULL, colour = NULL,
-       caption = "Source: .id consulting, 2017")
+       caption = "Source: .id consulting, Moonee Valley Population Forecasts, 2017")
 ```
 
 ## Age breakdown
@@ -111,9 +113,8 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
   scale_y_continuous(breaks=c(-4, -2, 0, 2, 4), labels=c("4%", "2%", "0%", "2%", "4%")) + 
   coord_flip() + 
   scale_fill_manual(values = mv2040_cols) + 
-  labs(x = NULL, y = NULL, fill = NULL, title = "City of Moonee Valley forecast population structure", subtitle = "By year (at 30 June)", caption = "Data source: .id consulting, 2017") + 
+  labs(x = NULL, y = NULL, fill = NULL, title = "City of Moonee Valley forecast population structure", subtitle = "By year (at 30 June)", caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
-
 ```
 
 By neighbourhood, we can see that the highest proportions of those aged 65 years and over are in Milleara and Avondale Heights. Aberfeldie and Flemington have the highest proportions of young people.
@@ -146,12 +147,11 @@ ggplot(age_5yr_nh, aes(fct_rev(area), pct, fill = age_gr2)) +
   geom_text(data = age_5yr_nh %>% filter(age_gr2 == "25-64"), aes(label = pct, y = 50), col = "white", fontface = "bold") +
   geom_text(data = age_5yr_nh %>% filter(age_gr2 == "65+"), aes(label = pct, y = 95), col = "white", fontface = "bold") +
   labs(title = "Age groups by neighbourhood", subtitle = "Estimated population 30 June 2020",
-       caption = "Data source: .id consulting, 2017",
+       caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017",
        x = NULL, y = "Percentage of neighbourhood population", fill = "Age group") +
   theme(legend.position = "bottom")
 
 ```
-
 
 ## Self-reported health
 
@@ -160,7 +160,7 @@ Data from the Victorian Population Health Survey 2017 shows that about 47.5 per 
 ```{r, fig.height=2.5, fig.width=7}
 # function more just for single plots
 vphs_ggplot_function <- function(dataset, title_text, yval = 2.5,  subtitle_text = NULL,
-                                 caption_text = "Source: Victorian Population Health Survey, 2017"){
+                                 caption_text = "Source: DHHS, Victorian Population Health Survey, 2017"){
   ggplot(dataset, aes(fct_rev(region), pct, fill = region)) + 
   theme_pubclean() + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + coord_flip() +
@@ -196,9 +196,12 @@ ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) +
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Self-reported health status by gender", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
+## Long term conditions by age and sex
+
+add prevalance from national health survey with mv pop
 
 # Environmental factors
 
@@ -485,6 +488,36 @@ ggplot(cs_safety_mv, aes(year, pct, label = pct, colour = name)) +
   geom_text_repel(show.legend = FALSE)
 ```
 
+# Health workforce
+
+Data from the National Health Workforce Data Set shows that there were over 1,500 health professionals working in Moonee Valley in 2017. About one-third of these were nurses and midwives.
+
+```{r}
+pop_2017 <- 125411
+
+nhwds <- read_csv("data_in/nhwds_20200930.csv", skip = 11) %>% 
+  filter(Year != "Professions") %>% 
+  select(Professions = Year, Practitioners =  `2017`) %>% 
+  mutate(Practitioners = as.integer(Practitioners)) %>% 
+  mutate(`Practitioners per 1,000 pop.` = round(Practitioners/pop_2017*1000, 1)) %>% 
+  mutate(Practitioners = format(Practitioners, big.mark=",")) 
+
+nhwds %>% 
+  flextable() %>% 
+  autofit() %>% 
+  bold(i = 14, j = NULL, bold = TRUE, part = "body") %>% 
+  add_header_lines(values = "Health Workforce, Moonee Valley, 2017") %>% 
+  theme_vanilla() %>%
+  align(i = NULL, j = c(2,3), align = "right", part = "body") %>% 
+  footnote( i = 1, j = 1:2,
+            value = as_paragraph(
+              c("Derived from: AIHW, National Health Workforce Data Set, 2017;\n ABS, Estimated Resident Population, 2017")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+  
+```
+
 
 # Health Status
 
@@ -517,7 +550,7 @@ ggplot(vphs_dental, aes(fct_rev(region), pct, fill = region)) +
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
   labs(title = "Dental health", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 
 ```
 
@@ -546,6 +579,10 @@ ggplot(prop_with_decayed, aes(region, pct, fill = region)) +
        x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2017-19")
 
 ```
+
+## Immunisation
+
+add from vcams data
 
 ## Healthy eating and food security
 
@@ -594,9 +631,41 @@ ggplot(vphs_chrtests, aes(fct_rev(region), pct, fill = region)) +
   geom_text(aes(label = pct, y = 10), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
   labs(title = "Tests for chronic disease", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 
 ```
+
+Data on testing for bowel disease from the Australian Institute of Health and Wellbeing shows that testing for bowel disesae has increased in all SA2 over the last few years.
+
+```{r, fig.width=7, fig.height=5}
+# read using read.csv instead of read_csv
+aihw_chronic_sa2_raw <- read.csv("data_in/aihw-can-114-csv/CSV file Screening Program participation across geographic areas 2014-2015 to 2017-2018.csv") %>% 
+  clean_names()
+
+aihw_chronic_sa2 <- aihw_chronic_sa2_raw %>% 
+  as_tibble() %>% 
+  filter(geography == "SA2") %>% 
+  filter(geographic_area_name %in% c("Ascot Vale", "Essendon - Aberfeldie", "Flemington", "Moonee Ponds",
+                         "Airport West", "Keilor East", "Niddrie - Essendon West", "Strathmore")) %>% 
+  select(program, sex, period, geographic_area_name, age_group, measure_name, value_description, value, release_date) %>% 
+  mutate(value = as.numeric(value)) %>% 
+  mutate(period = str_replace(period, "-20", "-"))
+
+# this is the only one with data at sa2 level
+aihw_bowel <- aihw_chronic_sa2 %>% 
+  filter(program == "Bowel") %>% 
+  filter(value_description == "Rate")
+
+ggplot(aihw_bowel, aes(period, value, fill = period)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~geographic_area_name) + 
+  geom_text(aes(label = value, y = 10), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = "Testing for bowel disease by SA2", subtitle = "Participation rate, 50-64 year olds", 
+       x = NULL, y = "Participation rate", caption = "Source: AIHW, National cancer screening programs participation data, 2020")
+
+```
+
 
 ## Modifiable risk factors
 
@@ -613,7 +682,7 @@ ggplot(vphs_smoking, aes(fct_rev(region), pct, fill = region)) +
   geom_text(aes(label = pct, y = 7), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Smoking status", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
 Smoking levels are higher for men, than for women, though again the confidence interval is quite large.
@@ -633,7 +702,7 @@ smoking_gender %>%
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
-              c("Source: Victorian Population Health Survey, 2017")
+              c("Source: DHHS, Victorian Population Health Survey, 2017")
             ),
             ref_symbols = c(""),
             part = "header")
@@ -661,7 +730,7 @@ ggplot(vphs_alcohol, aes(fct_rev(region), pct, fill = region)) +
   geom_text(aes(label = pct, y = 7), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Alcohol consumption", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
 On and off licence alcohol outlets are generally distributed in the activity centres in Moonee Valley. These are generally in the east of the city.  
@@ -840,7 +909,7 @@ ggplot(vphs_obesity, aes(fct_rev(region), pct, fill = region)) +
   geom_text(aes(label = pct, y = 2), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Consumption of soft drinks and takeaway", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
 
@@ -864,7 +933,7 @@ ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) +
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Physical activity", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
   
 ```
 
@@ -893,7 +962,7 @@ ggplot(vphs_mhw, aes(selections, pct, fill = type)) +
   facet_wrap(~type) + coord_flip() +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") +
   labs(title = "Mental wellbeing, Moonee Valley", 
-       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Victorian Population Health Survey, 2017")
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 
 ```
 
@@ -922,7 +991,7 @@ vphs_mh_gender %>%
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
-              c("Source: Victorian Population Health Survey, 2017")
+              c("Source: DHHS, Victorian Population Health Survey, 2017")
             ),
             ref_symbols = c(""),
             part = "header")
@@ -1064,7 +1133,7 @@ ggplot(death_prem, aes(year, prem_deaths, col = name, label = prem_deaths)) +
   labs(title="Premature deaths age-standardised rate",
        subtitle = "Premature deaths (aged under 75)",
        x = NULL, y = "Premature deaths (per 100,000) ASR", colour = NULL,
-       caption = "Source: MORT Books, Australian Institure of Health and Welfare, 2020") +
+       caption = "Source: AIHW, Mortality over Regions and Time, 2020") +
   scale_color_manual(values = mv2040_cols) +
   theme(legend.position = "bottom") +
   geom_text_repel(data = death_prem %>% filter(year == 2018), show.legend = FALSE)
@@ -1090,7 +1159,7 @@ death_causes_data %>%
   theme_vanilla() %>% 
   footnote( i = 1, j = 1:3,
             value = as_paragraph(
-              c("Source: MORT Books, Australian Institure of Health and Welfare, 2020")
+              c("Source: AIHW, Mortality over Regions and Time, 2020")
             ),
             ref_symbols = c(""),
             part = "header")
@@ -1136,7 +1205,7 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
   scale_colour_manual(values = c("Significantly lower" = "#6A4479", "Not sig. diff." = "#E3A51E", "Significantly higher" = "#31788F")) +
   labs(x = NULL, y = "Percentage", title = "Selected risk factors, disease and tests",
        subtitle = "City of Moonee Valley compared to other LGAs",
-       caption = "Proportion of adults(18+ years). Source: Victorian Population Health Survey, 2017",
+       caption = "Proportion of adults(18+ years). Source: DHHS, Victorian Population Health Survey, 2017",
        colour = "Moonee Valley \ncompared to Victoria", shape = NULL) + 
   guides(size = FALSE, alpha = FALSE) + 
   guides(col = guide_legend(nrow = 3)) +
@@ -1158,7 +1227,7 @@ vphs_mv_joined %>%
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
-              c("Source: Victorian Population Health Survey, 2017")
+              c("Source: DHHS, Victorian Population Health Survey, 2017")
             ),
             ref_symbols = c(""),
             part = "header")
@@ -1177,7 +1246,7 @@ vphs_mv_joined %>%
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
-              c("Source: Victorian Population Health Survey, 2017")
+              c("Source: DHHS, Victorian Population Health Survey, 2017")
             ),
             ref_symbols = c(""),
             part = "header")
@@ -1196,7 +1265,7 @@ vphs_mv_joined %>%
   theme_vanilla() %>%
   footnote( i = 1, j = 1:4,
             value = as_paragraph(
-              c("Source: Victorian Population Health Survey, 2017")
+              c("Source: DHHS, Victorian Population Health Survey, 2017")
             ),
             ref_symbols = c(""),
             part = "header")

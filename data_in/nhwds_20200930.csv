@@ -1,0 +1,28 @@
+SuperWEB2(tm)
+
+"National Health Workforce Dataset"
+"Professions by Year by Workforce Status and Local Government Area 2013"
+"Counting: Number of Practitioners"
+
+Filters:
+"Default Summation","Number of Practitioners"
+"Workforce Status","Employed in Australia working in  registered profession"
+"Local Government Area 2013","Moonee Valley (C)"
+
+"Year","2013","2014","2015","2016","2017",
+"Professions",
+"Chiropractors",29,36,33,32,35,
+"Chinese Medicine Practitioners",29,25,27,34,33,
+"Dental Practitioners",119,125,127,131,130,
+"Medical Practitioners",224,228,237,231,247,
+"Medical Radiation Practitioners",32,42,39,47,40,
+"Nurses and Midwives",582,558,580,536,524,
+"Occupational Therapists",36,33,39,36,40,
+"Optometrists",19,19,22,19,21,
+"Osteopaths",33,38,42,40,46,
+"Pharmacists",105,105,100,103,106,
+"Physiotherapists",89,92,99,97,100,
+"Podiatrists",39,35,41,42,44,
+"Psychologists",105,116,128,138,141,
+"Total",1441,1452,1514,1486,1507,
+
