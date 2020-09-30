@@ -153,6 +153,111 @@ ggplot(age_5yr_nh, aes(fct_rev(area), pct, fill = age_gr2)) +
 
 ```
 
+## Cultural and linguistic diversity
+
+### Indigenous population
+
+At the 2016 Census, there were 430 residents who identified as Aboriginal and/or Torres Strait Islander people. This was 0.4 per cent of the Moonee Valley population at the time. Census data also shows other differences between the Indigenous and non-Indigenous populiation in Moonee Valley:
+
+* a lower median age (28 years) than for the non-Indigenous population (38 years)
+* lower Year 12 completion rate (53 per cent compared to 66 per cent)
+* a higher proportion renting (59 per cent compared to 32 per cent)
+
+```{r, fig.width=5, fig.height=3}
+atsi_pop <- tibble(year = c(2001L, 2006L, 2011L, 2016L),
+  population = c(273L, 324L, 317L, 430L)) %>% 
+  mutate(year = factor(year))
+
+ggplot(atsi_pop, aes(year, population, fill = fair_red, label = population)) +
+  geom_col() + 
+  theme_pubclean() +
+  theme(legend.position = "none") + 
+  scale_y_continuous(limits = c(0, 500)) +
+  geom_text(aes(label = population, vjust = 2), col = "white", fontface = "bold") +
+  labs(title = "Aboriginal and/or Torres Strait Islander population", x = NULL, y = "Population", colour = NULL,
+       caption = "Source: ABS, Census 2016")
+```
+
+### Languages spoken at home
+
+The top languages spoken at home (other than English) by residents of the City of Moonee Valley are Italian, Greek, Vietnamese, Mandarin and Cantonese.
+
+```{r}
+lanp_2016 <- read_csv("data_in/MV_LANP_2016.csv", skip = 10) %>% 
+  clean_names() %>% 
+  select(lang = lanp_4_digit_level, count) %>% 
+  filter(lang != "Total") %>% 
+  filter(!is.na(lang)) 
+
+top_lang <- lanp_2016 %>% 
+  arrange(desc(count)) %>% 
+  mutate(pct = round(count/sum(count)*100,1)) %>% 
+  filter(lang != "Not stated") %>% 
+  head(12) %>% 
+  rename(`Language spoken at home` = lang, Residents = count, Percentage = pct) %>% 
+  mutate(Residents = comma(Residents))
+
+# for next bit
+top_languages <- lanp_2016  %>% 
+  arrange(desc(count))  %>% 
+  filter(lang != "Not stated" & lang != "English") %>% 
+  select(lang) %>% 
+  head(12) %>% 
+  pull()
+
+# for table
+top_lang  %>% 
+  flextable() %>% 
+  autofit() %>% 
+  add_header_lines(values = "Top languages spoken at home, Moonee Valley") %>% 
+  theme_vanilla() %>%
+  align(i = NULL, j = c(2,3), align = "right", part = "body") %>% 
+  footnote( i = 1, j = 1:2,
+            value = as_paragraph(
+              c("Source, ABS, Census 2016")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
+
+### Proficiency in spoken English
+
+Census data shows that for Moonee Valley residents, for the most common languages other than English, those who spoke Hindi, Maltese, and Turkish were the most likely to self-assess that they spoke English 'Very well'.
+
+```{r}
+lanp_engp_2016_raw <- read_csv("data_in/MV_LANP_by_ENGP_2016.csv", skip = 10) %>% 
+  clean_names() %>% 
+  select(lanp = lanp_4_digit_level, engp = engp_proficiency_in_spoken_english, count)
+
+lanp_engp <- lanp_engp_2016_raw %>% 
+  filter(engp != "Not applicable") %>% 
+  mutate(engp = case_when(engp == "Not stated - both language (LANP) and proficiency (ENGP) not stated" ~ "Not stated",
+                          engp == "Not stated - language (LANP) stated, proficiency (ENGP) not stated" ~ "Not stated",
+                          TRUE ~ engp)) %>% 
+  group_by(lanp, engp) %>% 
+  summarise(count = sum(count)) %>% 
+  ungroup() %>% 
+  group_by(lanp) %>% 
+  mutate(total = sum(count)) %>% 
+  ungroup() %>% 
+  arrange(desc(total)) %>% 
+  mutate(pct = round(count/total*100, 1)) %>% 
+  filter(lanp != "Not stated" & lanp != "English") %>% 
+  filter(total > 0) %>% 
+  arrange(desc(total)) %>% 
+  filter(lanp %in% top_languages) %>% 
+  mutate(engp = factor(engp, levels = c("Not stated", "Not at all", "Not well", "Well", "Very well"))) 
+
+ggplot(lanp_engp, aes(reorder(lanp, total), pct, fill = engp)) +
+  geom_col() +
+  theme_pubclean() + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols)) +
+  labs(title = "Self-assessed profiency in spoken English", subtitle = "By language spoken at home (top 12 languages other than English)",
+       caption = "Data source: ABS, Census 2016",
+       x = NULL, y = "Percentage", fill = NULL) +
+  theme(legend.position = "bottom") + guides(fill = guide_legend(reverse=TRUE))
+```
+
 ## Self-reported health
 
 Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. This compares to about 42 per cent for Victoria and the Western Melbourne Area.
@@ -579,10 +684,6 @@ ggplot(prop_with_decayed, aes(region, pct, fill = region)) +
        x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2017-19")
 
 ```
-
-## Immunisation
-
-add from vcams data
 
 ## Healthy eating and food security
 
@@ -1074,7 +1175,7 @@ births_mch %>%
 
 # Aged care
 
-Data from the Australian Institure of Health and Wellbeing shows that in June 2019, there were 1,168 residential aged care places in the City of Moonee Valley. The majority of aged care facilities in Moonee Valley are not-for profit facilities or private facilities. 
+Data from the Australian Institute of Health and Wellbeing shows that in June 2019, there were 1,168 residential aged care places in the City of Moonee Valley. The majority of aged care facilities in Moonee Valley are not-for profit facilities or private facilities. 
 
 
 ```{r, fig.height=4.5, fig.width=7}
@@ -1089,8 +1190,6 @@ aged_care_mv <- aged_care %>%
   st_intersection(mvcc_boundary) %>% 
   st_set_geometry(NULL) %>% 
   select(service_name, important_calc_1_service_name_and_suburb, organisation_type, residential_places)
-
-sum(aged_care_mv$residential_places)
 
 ggplot(aged_care_mv, aes(reorder(service_name, residential_places), residential_places, fill = organisation_type)) + 
   theme_pubclean() +
