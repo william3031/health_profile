@@ -593,6 +593,28 @@ ggplot(cs_safety_mv, aes(year, pct, label = pct, colour = name)) +
   geom_text_repel(show.legend = FALSE)
 ```
 
+Perceptions of safety of walking alone in the local area at night are much lower for females than for males. There is little difference between males and females for perceptions of safety at public transport stops as well as walking alone during the day.
+
+```{r}
+cs_safety_gender <- cs_safety %>% 
+  filter(cat == "Gender") %>% 
+  filter(safety == "'Very safe' or 'safe'") %>% 
+  mutate(name = str_replace(name, "your local", "your \nlocal")) %>% 
+  mutate(name = str_replace(name, "stops and", "stops \nand"))
+
+ggplot(cs_safety_gender, aes(year, pct, label = pct, colour = name)) +
+  theme_pubclean() +
+  geom_point() + geom_line()  + ylim(0, 100) + facet_wrap(~group) +
+  geom_errorbar(aes(ymin = lower, ymax = upper, width=.05), colour = "darkgrey") +
+  labs(title="Community safety by gender",
+       x = NULL, y = "Percentage (with 95% CI)", colour = NULL,
+       caption = "Source: Moonee Valley Community Survey, 2020") +
+  scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
+  theme(legend.position = "bottom") +
+  geom_text_repel(show.legend = FALSE)
+```
+
+
 # Health workforce
 
 Data from the National Health Workforce Data Set shows that there were over 1,500 health professionals working in Moonee Valley in 2017. About one-third of these were nurses and midwives.
@@ -838,7 +860,9 @@ On and off licence alcohol outlets are generally distributed in the activity cen
 
 ![Alcohol venues map](maps/Alcohol map layout.png)
 
-```{r}
+Data from Turning Point shows that there were over 600 alcohol related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males.
+
+```{r, fig.width=7, fig.height=3}
 hosp_adm_alc <- read_csv("data_in/aodstats/alcohol_hosp_admissions.csv", skip = 2) %>% 
   clean_names() %>% 
   filter(map_area == "Moonee Valley") %>% 
@@ -857,11 +881,7 @@ hosp_adm_alc <- read_csv("data_in/aodstats/alcohol_hosp_admissions.csv", skip = 
 
 hosp_adm_alc_gend <- hosp_adm_alc %>% 
   filter(group %in% c("Male", "Female"))
-```
 
-Data from Turning Point shows that there were over 600 alcohol related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males.
-
-```{r, fig.width=7, fig.height=3}
 ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
   geom_point() + geom_line() + 
   theme_pubclean() +
@@ -871,6 +891,40 @@ ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
   labs(title = "Alcohol related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
        caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
 ```
+
+Moonee valley has a higher rate of alcohol related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
+
+```{r, fig.width=7, fig.height=3}
+hosp_adm_alc_comp <- read_csv("data_in/aodstats/alcohol_hosp_admissions_comp.csv", skip = 2) %>% 
+  clean_names() %>% 
+  select(-region) %>% 
+  pivot_longer(-map_area, names_to = "type", values_to = "values") %>% 
+  mutate(yearb = str_sub(type, 7, 8)) %>% 
+  mutate(type2 = "Alcohol hopsitalisations rate per 10,000") %>% 
+  separate(type, c("del","group"), sep = "on_") %>% 
+  select(-del) %>% 
+  mutate(year = paste0("20", yearb, "-06-30")) %>% 
+  mutate(year = ymd(year)) %>% 
+  select(-yearb) %>% 
+  rename(type = type2) %>% 
+  mutate(group = str_to_title(group)) %>% 
+  mutate(group = str_replace(group, "_", "-")) %>% 
+  filter(group == "Rate-total")
+
+
+ggplot(hosp_adm_alc_comp, aes(year, values, group = map_area, label = values)) +
+  geom_line(data = hosp_adm_alc_comp %>% filter(map_area != "Moonee Valley"), colour = "lightgrey") + 
+  geom_line(data = hosp_adm_alc_comp %>% filter(map_area == "Moonee Valley"), colour = fair_red, size = 1) + 
+  geom_point(data = hosp_adm_alc_comp %>% filter(map_area == "Moonee Valley"), colour = fair_red, size = 3) + 
+  geom_text_repel(data = hosp_adm_alc_comp %>% filter(map_area == "Moonee Valley" & year == "2019-06-30"), colour = fair_red) +
+  theme_pubclean() +
+  #geom_text_repel(show.legend = FALSE) +
+  labs(title = "Alcohol related hopsitalisations per 10,000 population",
+       subtitle = "Moonee Valley compared to other North West Region LGAs",
+       x = NULL, y = "Admissions per 10,000", colour = NULL,
+       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+```
+
 
 ### Drugs
 
@@ -905,6 +959,40 @@ ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
   scale_colour_manual(values = mv2040_cols) + 
   geom_text_repel(show.legend = FALSE) +
   labs(title = "Illicit drugs related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
+       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+```
+
+Moonee valley has a higher rate of illicit drugs related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
+
+```{r, fig.width=7, fig.height=3}
+hosp_adm_drugs_comp <- read_csv("data_in/aodstats/illicit_drugs_hosp_admissions_comp.csv", skip = 2) %>% 
+  clean_names() %>% 
+  select(-region) %>% 
+  pivot_longer(-map_area, names_to = "type", values_to = "values") %>% 
+  mutate(yearb = str_sub(type, 7, 8)) %>% 
+  mutate(type2 = "Illicit drugs hopsitalisations rate per 10,000") %>% 
+  separate(type, c("del","group"), sep = "on_") %>% 
+  select(-del) %>% 
+  mutate(year = paste0("20", yearb, "-06-30")) %>% 
+  mutate(year = ymd(year)) %>% 
+  select(-yearb) %>% 
+  rename(type = type2) %>% 
+  mutate(group = str_to_title(group)) %>% 
+  mutate(group = str_replace(group, "_", "-")) %>% 
+  filter(group == "Rate-total")
+
+
+ggplot(hosp_adm_drugs_comp, aes(year, values, group = map_area, label = values)) +
+  geom_line(data = hosp_adm_drugs_comp %>% filter(map_area != "Moonee Valley"), colour = "lightgrey") + 
+  geom_line(data = hosp_adm_drugs_comp %>% filter(map_area == "Moonee Valley"), colour = fair_red, size = 1) + 
+  geom_point(data = hosp_adm_drugs_comp %>% filter(map_area == "Moonee Valley"), colour = fair_red, size = 3) + 
+  geom_text_repel(data = hosp_adm_drugs_comp %>% filter(map_area == "Moonee Valley" & year == "2019-06-30"),
+                   colour = fair_red, alpha = 0.9) +
+  theme_pubclean() +
+  #geom_text_repel(show.legend = FALSE) +
+  labs(title = "Illicit drugs related hopsitalisations per 10,000 population",
+       subtitle = "Moonee Valley compared to other North West Region LGAs",
+       x = NULL, y = "Admissions per 10,000", colour = NULL,
        caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
 ```
 
@@ -1077,25 +1165,37 @@ vphs_ggplot_function(dataset = vphs_anx, yval = 2, title_text = "Proportion of a
 
 Females in Moonee Valley were more likely to seek professional help for mental health problems than males.
 
-```{r}
-# professional help for a mental health problem within the last year
-vphs_mh_gender <- tibble(Gender = c("Males","Females"),
-       Percentage = c(18, 21.1),
-       `Lower limit` = c(12.1, 14.5),
-       `Upper limit` = c(26, 29.7)
-)
+```{r, fig.width=7, fig.height=4}
+# Feeling of life being worthwhile
+vphs_mh_gender_life <- tibble(gender = c("Males","Females"),
+       pct = c(33.4, 26.8),
+       ll = c(26.4, 20.1),
+       ul = c(41.2, 34.7),
+       indicator = "Feeling of life being worthwhile")
 
-vphs_mh_gender %>% 
-  flextable() %>% 
-  autofit() %>% 
-  add_header_lines(values = "Adults who sought rofessional help for a mental health problem within the last year by gender, Moonee Valley") %>% 
-  theme_vanilla() %>%
-  footnote( i = 1, j = 1:4,
-            value = as_paragraph(
-              c("Source: DHHS, Victorian Population Health Survey, 2017")
-            ),
-            ref_symbols = c(""),
-            part = "header")
+# professional help for a mental health problem within the last year
+vphs_mh_gender_help <- tibble(gender = c("Males","Females"),
+       pct = c(18, 21.1),
+       ll = c(12.1, 14.5),
+       ul = c(26, 29.7),
+       indicator = "Adults who sought professional \nhelp for a mental health problem \nwithin the last year")
+
+# diagnosed by anxiety or depression
+vphs_mh_gender_anx <- tibble(gender = c("Males","Females"),
+       pct = c(36.6, 24.5),
+       ll = c(28.4, 17.6),
+       ul = c(45, 32.9),
+       indicator = "Doctor diagnosed anxiety \nor depression")
+
+vphs_mh_gender <- bind_rows(vphs_mh_gender_life, vphs_mh_gender_help, vphs_mh_gender_anx)
+
+ggplot(vphs_mh_gender, aes(gender, pct, fill = gender)) + 
+  theme_pubclean() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~indicator) + 
+  geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") +
+  labs(title = "Seeking help for anxiety and depression by gender", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
 
