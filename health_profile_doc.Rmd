@@ -32,7 +32,7 @@ Some sort of infographic like the previous health tracker
 
 # Introduction
 
-within the document, interleave with diagrams from https://www.aihw.gov.au/reports/australias-health/australias-health-2016/contents/chapter-3-leading-causes-of-ill-health
+within the document, interleave with diagrams from https://www.aihw.gov.au/reports-data/australias-health
 
 \pagebreak
 
@@ -50,14 +50,14 @@ mv_pop_hh <- pop_hh_raw %>%
 
 The population of the City of Moonee Valley is forecast to increase from about 130,000 in 2019, to around 170,000 in 2040.
 
-```{r}
+```{r, fig.width=7, fig.height=3}
 ggplot(mv_pop_hh, aes(year, number, colour = data_type)) +
   geom_point() + geom_line() + 
   theme_pubclean() +
   scale_colour_manual(values = mv2040_cols) +
-  theme(legend.position = "bottom") + 
+  theme(legend.position = c(0.8, 0.15)) + guides(colour = guide_legend(nrow = 1)) + 
   scale_y_continuous(labels = comma, limits = c(0, 200000)) + 
-  labs(title = "Forecast households and population", x = NULL, y = NULL, colour = NULL,
+  labs(title = "Forecast households and population, Moonee Valley", x = NULL, y = NULL, colour = NULL,
        caption = "Source: .id consulting, Moonee Valley Population Forecasts, 2017")
 ```
 
@@ -109,13 +109,36 @@ pp_mv <- pp_nh_data("City of Moonee Valley") %>%
 
 ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
   geom_bar(stat = "identity", width = 1) + 
-  theme_pubclean() + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   scale_y_continuous(breaks=c(-4, -2, 0, 2, 4), labels=c("4%", "2%", "0%", "2%", "4%")) + 
   coord_flip() + 
   scale_fill_manual(values = mv2040_cols) + 
-  labs(x = NULL, y = NULL, fill = NULL, title = "City of Moonee Valley forecast population structure", subtitle = "By year (at 30 June)", caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
+  labs(x = NULL, y = "Percentage", fill = NULL,
+       title = "City of Moonee Valley forecast population structure", subtitle = "Proportion of population by year (at 30 June)",
+       caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
 ```
+
+This will see population increases in all age groups and will increase the need for service provision to meet the needs of all these people.
+
+```{r}
+# with numbers
+pp_mv2 <- pp_mv %>% 
+  mutate(number_label = if_else(gender == "Male", number, -number))
+
+ggplot(pp_mv2, aes(age_grp, number_label, fill = gender)) +
+  geom_bar(stat = "identity", width = 1) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  scale_y_continuous(breaks=c(-6000, -3000, 0, 3000, 6000), labels=c("6,000", "3,000", "0", "3,000", "6,000")) + 
+  coord_flip() + 
+  scale_fill_manual(values = mv2040_cols) + 
+  labs(x = NULL, y = "Population", fill = NULL, title = "City of Moonee Valley forecast population structure",
+       subtitle = "Population by year (at 30 June)",
+       caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
+  facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
+```
+
+
 
 By neighbourhood, we can see that the highest proportions of those aged 65 years and over are in Milleara and Avondale Heights. Aberfeldie and Flemington have the highest proportions of young people.
 
@@ -163,7 +186,7 @@ At the 2016 Census, there were 430 residents who identified as Aboriginal and/or
 * lower Year 12 completion rate (53 per cent compared to 66 per cent)
 * a higher proportion renting (59 per cent compared to 32 per cent)
 
-```{r, fig.width=5, fig.height=3}
+```{r, fig.width=5, fig.height=2}
 atsi_pop <- tibble(year = c(2001L, 2006L, 2011L, 2016L),
   population = c(273L, 324L, 317L, 430L)) %>% 
   mutate(year = factor(year))
@@ -173,7 +196,7 @@ ggplot(atsi_pop, aes(year, population, fill = fair_red, label = population)) +
   theme_pubclean() +
   theme(legend.position = "none") + 
   scale_y_continuous(limits = c(0, 500)) +
-  geom_text(aes(label = population, vjust = 2), col = "white", fontface = "bold") +
+  geom_text(aes(label = population, vjust = 1.2), col = "white", fontface = "bold") +
   labs(title = "Aboriginal and/or Torres Strait Islander population", x = NULL, y = "Population", colour = NULL,
        caption = "Source: ABS, Census 2016")
 ```
@@ -219,6 +242,8 @@ top_lang  %>%
             ref_symbols = c(""),
             part = "header")
 ```
+
+\pagebreak
 
 ### Proficiency in spoken English
 
@@ -296,7 +321,7 @@ vphs_srh_gender <- tibble(
   mutate(selection = factor(selection, levels = c("Excellent/Very good","Good", "Fair/Poor")))
 
 ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~gender, ncol = 3) +
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
@@ -304,9 +329,7 @@ ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) +
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
-## Long term conditions by age and sex
-
-add prevalance from national health survey with mv pop
+\pagebreak
 
 # Environmental factors
 
@@ -343,7 +366,7 @@ Data from the Socio-Economic Indexes for Areas (SEIFA) Index of Relative Socio-e
 ```{r, fig.height= 6, fig.width=7}
 ggplot(irsd_nh, aes(decile, prop)) +
   geom_col(fill = "#E55048") + facet_wrap(~nh, nrow =4) + theme(legend.position="none") +
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   labs(title = "SEIFA Index of Relative Socio-economic Disadvantage (IRSD)",
        subtitle = "By neighbourhood", caption = "Data source: ABS, 2016 Census",
        x = "SEIFA IRSD decile (1 = most disadvantaged, 10 = least disadvantaged)", y = "Percentage of neighbourhood population") + 
@@ -422,6 +445,8 @@ The Heat Vulnerability Index measures the impact of the Urban Heat Island effect
 
 * See what Evie has done. Otherwise, just use the ones from MV2040
 
+\pagebreak
+
 # Gender inequality
 
 * also from this https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FGender%20Equality%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Gender%20Equality%20Moonee%20Valley.pdf
@@ -497,10 +522,9 @@ ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) +
 
 ```
 
+\pagebreak
 
-
-
-## Unemployment
+# Unemployment
 
 The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne.
 
@@ -530,11 +554,13 @@ salm_sa2 <- salm_raw %>%
 
 ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
   geom_point() + geom_line() + facet_wrap(~region) +
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   theme(legend.position = "none") + 
   labs(title = "Unemployment Rate (Statistical Area Level 2)", x = NULL, y = "Unemployment rate (%)", colour = NULL,
        caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
 ```
+
+\pagebreak
 
 # Affordable housing
 
@@ -562,11 +588,11 @@ ggplot(mv_affordable, aes(month, values, colour = bedrooms, label = values)) +
   scale_color_manual(values = mv2040_cols) +
   theme(legend.position = c(0.9, 0.8)) + 
   labs(title = "Affordable lettings, City of Moonee Valley",
-       x = NULL, y = "Dwellings", colour = "Bedrooms",
+       x = NULL, y = "Dwellings", colour = NULL,
        caption = "Source: Rental Report, Department of Health and Human Services, 2020")
 ```
 
-* add the prices as well by suburb and the amounts perhaps
+\pagebreak
 
 # Community Safety
 
@@ -585,7 +611,7 @@ ggplot(cs_safety_mv, aes(year, pct, label = pct, colour = name)) +
   theme_pubclean() +
   geom_point() + geom_line()  + ylim(0, 100) + 
   geom_errorbar(aes(ymin = lower, ymax = upper, width=.05), colour = "darkgrey") +
-  labs(title="Community safety",
+  labs(title="Perception of community safety", subtitle = "Feeling 'very safe' or 'safe'",
        x = NULL, y = "Percentage (with 95% CI)", colour = NULL,
        caption = "Source: Moonee Valley Community Survey, 2020") +
   scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
@@ -603,10 +629,10 @@ cs_safety_gender <- cs_safety %>%
   mutate(name = str_replace(name, "stops and", "stops \nand"))
 
 ggplot(cs_safety_gender, aes(year, pct, label = pct, colour = name)) +
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_point() + geom_line()  + ylim(0, 100) + facet_wrap(~group) +
   geom_errorbar(aes(ymin = lower, ymax = upper, width=.05), colour = "darkgrey") +
-  labs(title="Community safety by gender",
+  labs(title="Perception of community safety by gender", subtitle = "Feeling 'very safe' or 'safe'",
        x = NULL, y = "Percentage (with 95% CI)", colour = NULL,
        caption = "Source: Moonee Valley Community Survey, 2020") +
   scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
@@ -614,6 +640,7 @@ ggplot(cs_safety_gender, aes(year, pct, label = pct, colour = name)) +
   geom_text_repel(show.legend = FALSE)
 ```
 
+\pagebreak
 
 # Health workforce
 
@@ -624,7 +651,7 @@ pop_2017 <- 125411
 
 nhwds <- read_csv("data_in/nhwds_20200930.csv", skip = 11) %>% 
   filter(Year != "Professions") %>% 
-  select(Professions = Year, Practitioners =  `2017`) %>% 
+  select(Profession = Year, Practitioners =  `2017`) %>% 
   mutate(Practitioners = as.integer(Practitioners)) %>% 
   mutate(`Practitioners per 1,000 pop.` = round(Practitioners/pop_2017*1000, 1)) %>% 
   mutate(Practitioners = format(Practitioners, big.mark=",")) 
@@ -645,6 +672,7 @@ nhwds %>%
   
 ```
 
+\pagebreak
 
 # Health Status
 
@@ -671,7 +699,7 @@ vphs_dental <- bind_rows(vphs_srdhs, vphs_srgd, vphs_addbc) %>%
                                                     "Delayed visiting \ndental professional \nbecause of cost")))
   
 ggplot(vphs_dental, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + 
   facet_wrap(~selections, ncol = 3) + coord_flip() + 
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
@@ -697,13 +725,13 @@ prop_with_decayed <- tibble(type = "Proportion with at least one decayed tooth",
   mutate(age_group = factor(age_group, levels = c("0 to 5 years", "6 years", "12 years")))
 
 ggplot(prop_with_decayed, aes(region, pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + facet_wrap(~age_group, ncol = 3) +
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
-  labs(title = "Proportion of children presenting with at least one decayed tooth", 
+  labs(title = "Proportion of children presenting with \nat least one decayed tooth", 
        subtitle = "Attending public dental services, 2017",
-       x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2017-19")
+       x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2019")
 
 ```
 
@@ -749,7 +777,7 @@ vphs_mamm <- read_csv("data_in/vphs/vphs_mamm.csv") %>%
 vphs_chrtests <- bind_rows(vphs_blood, vphs_fobt, vphs_bowel, vphs_mamm)
 
 ggplot(vphs_chrtests, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + coord_flip() + 
   geom_text(aes(label = pct, y = 10), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
@@ -777,10 +805,11 @@ aihw_chronic_sa2 <- aihw_chronic_sa2_raw %>%
 # this is the only one with data at sa2 level
 aihw_bowel <- aihw_chronic_sa2 %>% 
   filter(program == "Bowel") %>% 
-  filter(value_description == "Rate")
+  filter(value_description == "Rate") %>% 
+  mutate(period = paste0(str_sub(period, 1,4), "-", str_sub(period, -2, -1)))
 
 ggplot(aihw_bowel, aes(period, value, fill = period)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + facet_wrap(~geographic_area_name) + 
   geom_text(aes(label = value, y = 10), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
@@ -800,7 +829,7 @@ Data from the Victorian Population Health Survey 2017 shows that smoking levels 
 vphs_smoking <- read_csv("data_in/vphs/vphs_smoking.csv")
 
 ggplot(vphs_smoking, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
   geom_text(aes(label = pct, y = 7), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
@@ -810,25 +839,21 @@ ggplot(vphs_smoking, aes(fct_rev(region), pct, fill = region)) +
 
 Smoking levels are higher for men, than for women, though again the confidence interval is quite large.
 
-```{r}
+```{r, fig.height=2, fig.width=7}
 # Current smoker (daily + occasional) by age
-smoking_gender <- tibble(
-            Gender = c("Women", "Men"),
-               Percentage = c(14.2, 17),
-                `Lower limit` = c(8.8, 11.2),
-                `Upper limit` = c(22.1, 24.9))
+vphs_smoking_gender <- tibble(
+            gender = c("Females", "Males"),
+               pct = c(14.2, 17),
+                ll = c(8.8, 11.2),
+                ul = c(22.1, 24.9))
 
-smoking_gender %>% 
-  flextable() %>% 
-  autofit() %>% 
-  add_header_lines(values = "Current smokers (daily and occasional) by gender, Moonee Valley") %>% 
-  theme_vanilla() %>%
-  footnote( i = 1, j = 1:4,
-            value = as_paragraph(
-              c("Source: DHHS, Victorian Population Health Survey, 2017")
-            ),
-            ref_symbols = c(""),
-            part = "header")
+ggplot(vphs_smoking_gender, aes(fct_rev(gender), pct, fill = gender)) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + coord_flip() +
+  geom_text(aes(label = pct, y = 1), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") +
+  labs(title = "Current smokers (daily and occasional) by gender, Moonee Valley", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
 
@@ -848,7 +873,7 @@ vphs_alcohol <- tibble(
 )
 
 ggplot(vphs_alcohol, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
   geom_text(aes(label = pct, y = 7), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
@@ -889,7 +914,7 @@ ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
   scale_colour_manual(values = mv2040_cols) + 
   geom_text_repel(show.legend = FALSE) +
   labs(title = "Alcohol related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
-       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+       caption = "Source: Turning Point, AODStats, , 2020")
 ```
 
 Moonee valley has a higher rate of alcohol related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
@@ -922,7 +947,7 @@ ggplot(hosp_adm_alc_comp, aes(year, values, group = map_area, label = values)) +
   labs(title = "Alcohol related hopsitalisations per 10,000 population",
        subtitle = "Moonee Valley compared to other North West Region LGAs",
        x = NULL, y = "Admissions per 10,000", colour = NULL,
-       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+       caption = "Source: Turning Point, AODStats, , 2020")
 ```
 
 
@@ -959,7 +984,7 @@ ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
   scale_colour_manual(values = mv2040_cols) + 
   geom_text_repel(show.legend = FALSE) +
   labs(title = "Illicit drugs related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
-       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+       caption = "Source: Turning Point, AODStats, , 2020")
 ```
 
 Moonee valley has a higher rate of illicit drugs related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
@@ -993,12 +1018,12 @@ ggplot(hosp_adm_drugs_comp, aes(year, values, group = map_area, label = values))
   labs(title = "Illicit drugs related hopsitalisations per 10,000 population",
        subtitle = "Moonee Valley compared to other North West Region LGAs",
        x = NULL, y = "Admissions per 10,000", colour = NULL,
-       caption = "Source: AODStats, Turning Point, Eastern Health, 2020")
+       caption = "Source: Turning Point, AODStats, , 2020")
 ```
 
 ### Gambling
 
-Data from the Victorian Responsible Gaming Foundation shows that over $77.6 million was spent on pokies in Moonee Valley in 2018-19.
+Data from the Victorian Responsible Gambling Foundation shows that over $77.6 million was spent on pokies in Moonee Valley in 2018-19.
 
 ![pokies chart](images/gambling-in-victoria-moonee-valley.png)
 
@@ -1055,7 +1080,7 @@ pokies_venues <- pokies_venues_raw %>%
   left_join(pokies_venues_order, by = "venue")
 
 ggplot(pokies_venues, aes(reorder(venue, order), values, fill = category)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + coord_flip() + facet_wrap(~category, scales = "free_x") +
   scale_fill_manual(values = mv2040_cols) +
   geom_text(aes(label = values, hjust = 1.5), col = "white", fontface = "bold") +
@@ -1093,7 +1118,7 @@ vphs_sugardr <- read_csv("data_in/vphs/vphs_sugardr.csv") %>%  # sugar sweetened
 vphs_obesity <- bind_rows(vphs_takeaway, vphs_sugardr)
 
 ggplot(vphs_obesity, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
   geom_text(aes(label = pct, y = 2), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
@@ -1117,7 +1142,7 @@ vphs_sitting <- read_csv("data_in/vphs/vphs_sitting.csv") %>%
 vphs_phys_act <- bind_rows(vphs_phys, vphs_sitting) 
 
 ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~selections, ncol = 3) + 
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
@@ -1145,7 +1170,7 @@ vphs_mhw <- bind_rows(vphs_lifesat, vphs_worthwhile) %>%
   mutate(selections = factor(selections, levels = c("Low or medium (0-6)", "High (7-8)", "Very high (9-10)")))
 
 ggplot(vphs_mhw, aes(selections, pct, fill = type)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") + 
   geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) +
   facet_wrap(~type) + coord_flip() +
@@ -1190,7 +1215,7 @@ vphs_mh_gender_anx <- tibble(gender = c("Males","Females"),
 vphs_mh_gender <- bind_rows(vphs_mh_gender_life, vphs_mh_gender_help, vphs_mh_gender_anx)
 
 ggplot(vphs_mh_gender, aes(gender, pct, fill = gender)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~indicator) + 
   geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") +
@@ -1198,46 +1223,46 @@ ggplot(vphs_mh_gender, aes(gender, pct, fill = gender)) +
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ```
 
+\pagebreak
 
 # Sexual and reporductive health
 
 perhaps from the 2015 health dataset https://www2.health.vic.gov.au/about/reporting-planning-data/gis-and-planning-products/geographical-profiles
+
+\pagebreak
 
 # Family violence
 
 * and more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FViolence%20Against%20Women%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Violence%20Against%20Women%20Moonee%20Valley.pdf
 
 ```{r}
-fam_violence_raw <- read_excel("data_in/Victoria Police Data Tables 2018-19.xlsx", sheet = "Table 3", range = "C14:H29") %>% 
+fam_violence_raw <- read_excel("data_in/Data_Tables_LGA_Family_Incidents_Year_Ending_June_2020.xlsx", sheet = "Table 01") %>% 
   clean_names()
 
 fam_vio <- fam_violence_raw %>%
-  mutate(local_government_area = str_replace(local_government_area, "Total", "North West Metro")) %>% 
-  pivot_longer(-local_government_area, names_to = "year", values_to = "rate") %>% 
-  mutate(year = str_remove(year, "x")) %>% 
-  mutate(year2 = str_sub(year, 1, 4)) %>% 
-  mutate(year2 = paste0(year2, "-06-30")) %>% 
-  mutate(year = ymd(year2)) %>% 
-  select(-year2) %>% 
-  rename(lga = local_government_area) 
-
-fam_vio_comp <- fam_vio %>% 
-  filter(lga %in% c("North West Metro", "Moonee Valley"))
-  
+  filter(police_region == "1 North West Metro") %>% 
+  filter(local_government_area %in% c("Moonee Valley", "Total")) %>% 
+  mutate(local_government_area = if_else(local_government_area == "Total", "North West Metro", local_government_area)) %>% 
+  rename(lga = local_government_area) %>% 
+  mutate(rate_per_100_000_population = round(rate_per_100_000_population, 1))
 ```
 
+Data from the Crime Statistics Agency shows that family violence rates in Moonee Valley are lower when compared with the municipalities in the North West Metro region.
+
 ```{r}
-ggplot(fam_vio_comp, aes(year, rate, colour = lga, label = rate)) + 
+ggplot(fam_vio, aes(year, rate_per_100_000_population, colour = lga, label = rate_per_100_000_population)) + 
   theme_pubclean() +
   geom_line() + geom_point()  +
   scale_colour_manual(values = mv2040_cols) + 
   scale_y_continuous(labels = comma, limits = c(0, 1300)) + 
   labs(x = NULL, y = "Rate per 100,000 population", title = "Family incident rate",
-       subtitle = "City of Moonee Valley compared to other LGAs in the North West Metro region",
+       subtitle = "Incidents per 100,000 population at 30 June",
        caption = "Source: Crime Statistics Agency, 2020", colour = NULL) +
   theme(legend.position = "bottom") +
   geom_text_repel(show.legend = FALSE)
 ```
+
+\pagebreak
 
 # Births
 
@@ -1272,6 +1297,7 @@ births_mch %>%
 
 ```
 
+\pagebreak
 
 # Aged care
 
@@ -1294,9 +1320,9 @@ aged_care_mv <- aged_care %>%
 ggplot(aged_care_mv, aes(reorder(service_name, residential_places), residential_places, fill = organisation_type)) + 
   theme_pubclean() +
   geom_col() + geom_text(aes(label = residential_places, y = 10), col = "white", fontface = "bold") + coord_flip() +
-  scale_fill_manual(values = c("Government" = "#31788F", "Private" = "#E55048", "Not-for-profit" = "#4EA546")) + 
+  scale_fill_manual(values = mv2040_cols) + 
   labs(title = "Aged care places", subtitle =  "Moonee Valley (30 June 2019)", fill = "Type",
-       x = NULL, y = "Places", caption = "Source: Australian Institute of Health and Wellbeing, 2020") + 
+       x = NULL, y = "Places", caption = "Source: AIHW, Aged Care Service List, 2020") + 
   theme(legend.position = c(0.8, 0.2)) +  guides(fill = guide_legend(nrow = 3))
 ```
 
@@ -1327,7 +1353,7 @@ death_causes <- read_excel("data_in/death_data_aihw.xlsx", sheet = "deaths_clean
 
 ```{r}
 ggplot(death_prem, aes(year, prem_deaths, col = name, label = prem_deaths)) +
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_point() + geom_line() + facet_wrap(~gender) + ylim(0, 300) + 
   labs(title="Premature deaths age-standardised rate",
        subtitle = "Premature deaths (aged under 75)",
@@ -1364,10 +1390,42 @@ death_causes_data %>%
             part = "header")
 ```
 
-# To add (possibly)
-* ahpc
-* vichealth indicators
-* vcams
+\pagebreak
+
+# References
+Australian Bureau of Statistics, 2016, *Census of Population and Housing, 2016*, Australian Government, Canberra.
+
+Australian Institute of Health and Wellbeing, 2020, 'Aged Care Service List', Department of Health, Australian Government, Canberra, https://hwd.health.gov.au/datatool.html, accessed 22 September 2020.
+
+Australian Institute of Health and Wellbeing, 2020, 'Mortality Over Regions and Time', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/life-expectancy-death/mort-books/contents/mort-books, accessed 22 September 2020.
+
+Australian Institute of Health and Wellbeing, 2020, 'National Health Workforce Data Set', Department of Health, Australian Government, Canberra, https://www.gen-agedcaredata.gov.au/resources/access-data/2019/september/aged-care-service-list-30-june-2019, accessed 22 September 2020.
+
+Australian Institute of Health and Wellbeing, 2020, 'National cancer screening programs participation data', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/cancer-screening/national-cancer-screening-programs-participation/contents/summary, accessed 22 September 2020.
+
+Crime Statistics Agency, 2020, 'Latest Victorian Crime Data', Victorian Government, Melbourne, https://www.crimestatistics.vic.gov.au/crime-statistics/latest-victorian-crime-data, accessed 22 September 2020.
+
+Department of Education, Skills and Employment, 2020, 'Small Area Labour Markets', Australian Government, Canberra, https://www.employment.gov.au/small-area-labour-markets-publication-0, accessed 22 September 2020.
+
+Department of Environment, Land, Water and Planning, 2020, *Heat Vulnerabilty Index*, Victorian Government, Melbourne.
+
+Dental Health Services Victoria, 2020, *City of Moonee Valley Oral Health Profile*, Department of Health and Human Services, Victorian Government, Melbourne.
+
+Department of Health and Human Services, 2020, 'Rental Report', Victorian Government, Melbourne, https://www.dhhs.vic.gov.au/publications/rental-report, accessed 22 September 2020.
+
+Department of Health and Human Services, 2017, *Victorian Population Health Survey 2017*, Victorian Government, Melbourne.
+
+.id consulting, *Moonee Valley Population Forecasts*, December 2017.
+
+Moonee Valley City Council, 2020, *Moonee Valley Community Survey*, MVCC, Moonee Ponds.
+
+Turning Point, 2020, 'AODStats', Eastern Health, https://aodstats.org.au/index.php, accessed 22 September 2020.
+
+Victorian Commission for Gambling and Liquor Regulation, 'Gambling data', Victorian Government, Melbourne, https://www.vcglr.vic.gov.au/gambling-data, accessed 22 September 2020.
+
+Victorian Commission for Gambling and Liquor Regulation, 'Liquor data', Victorian Government, Melbourne, https://www.vcglr.vic.gov.au/liquor-data, accessed 22 September 2020.
+
+Victorian Responsible Gambling Foundation, 2020, 'Pokies across Victoria', Victorian Government, Melbourne, https://responsiblegambling.vic.gov.au/resources/gambling-victoria/pokies-across-victoria/moonee-valley/, accessed 22 September 2020.
 
 \pagebreak
 
@@ -1396,7 +1454,7 @@ vphs_mv_joined <- read_csv("data_out/vphs_comparison_mv.csv")
 
 ```{r, fig.width=7, fig.height=7}
 ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) + 
-  theme_pubclean() +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
   geom_point(data = vphs_mv, aes(fct_rev(indicator), percentage, col = comparison, alpha = 0.5, size = 0.05)) +
   geom_point(data = vphs_vic, aes(fct_rev(indicator), percentage, shape = lga)) +
