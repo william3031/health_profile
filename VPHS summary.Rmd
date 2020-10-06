@@ -1,8 +1,6 @@
 ---
 title: "Victorian Population Health Survey 2017 summary"
-output:
-  html_document:
-    df_print: paged
+output: word_document
 ---
 
 # Introduction
@@ -20,7 +18,7 @@ knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, fig.width = 7)
 
 ```{r}
 # top half
-vphs_snap1_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A4:GI52") %>% 
+vphs_snap1_raw <- read_excel("data_in/vphs/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A4:GI52") %>% 
   clean_names() %>% 
   remove_empty() %>% 
   mutate(x2 = if_else(is.na(x2), "Victoria", x2)) %>% 
@@ -29,7 +27,7 @@ vphs_snap1_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 
   select(-starts_with("x"))
 
 # bottom half
-vphs_snap2_raw <- read_excel("data_in/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A56:GI89") %>% 
+vphs_snap2_raw <- read_excel("data_in/vphs/Victorian Population Health Survey (VPHS) 2017 Quick statistics for local government areas and time series data.xlsx", sheet = "LGA snapshot", range = "A56:GI89") %>% 
   clean_names() %>% 
   remove_empty() %>% 
   mutate(x2 = if_else(is.na(x2), "Victoria", x2)) %>% 
@@ -173,7 +171,7 @@ vphs_mv_joined <- vphs_mv_point_est %>%
 
 # Comparison against other local government areas
 
-```{r, fig.width=7, fig.height=7}
+```{r, fig.width=8, fig.height=9}
 ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) + 
   theme_pubclean() +
   geom_point(colour = "grey", alpha = 0.75) + coord_flip() +
@@ -191,6 +189,7 @@ ggplot(vphs_comparison, aes(fct_rev(indicator), percentage)) +
   theme(legend.text = element_text(size=9)) +
   facet_grid(rows = vars(type), scales = "free_y", space = "free_y")
 ```
+
 \pagebreak
 
 # Data for Moonee Valley
@@ -219,6 +218,8 @@ vphs_mv_joined %>%
   autofit() %>% 
   theme_vanilla()
 ```
+
+\pagebreak
 
 ## Screening tests and treatment
 

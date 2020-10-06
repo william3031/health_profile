@@ -1227,7 +1227,46 @@ ggplot(vphs_mh_gender, aes(gender, pct, fill = gender)) +
 
 # Sexual and reporductive health
 
-perhaps from the 2015 health dataset https://www2.health.vic.gov.au/about/reporting-planning-data/gis-and-planning-products/geographical-profiles
+```{r}
+sex_reprod <- read_excel("data_in/sexual_reproductive_health.xlsx", sheet = "Sheet1") %>% 
+  clean_names() %>% 
+  pivot_longer(-lga, names_to = "indicator", values_to = "value") %>% 
+  mutate(males = str_detect(indicator, "_males")) %>% 
+  mutate(females = str_detect(indicator, "_females")) %>% 
+  mutate(gender = case_when(males == TRUE ~ "Male",
+                            females == TRUE ~ "Female",
+                            TRUE ~ NA_character_)) %>% 
+  mutate(gender = case_when(indicator == "syphillis_rate_per_10_000" ~ "Persons",
+                   indicator %in% c("cervical_cancer_screening_rates_percent", "teen_birth_rates_per_1000") ~ "Female",
+                   TRUE ~ gender)) %>% 
+  select(-males, -females) %>% 
+  mutate(indicator = str_remove(indicator, "_males")) %>% 
+  mutate(indicator = str_remove(indicator, "_females")) %>% 
+  mutate(indicator = str_replace(indicator, "_rate_per_10_000", "")) %>% 
+  mutate(indicator = str_replace(indicator, "_per_1000", " (per 1,000)")) %>% 
+  mutate(indicator = str_replace(indicator, "_percent", " (%)")) %>% 
+  mutate(indicator = str_replace(indicator, "hiv", "HIV")) %>% 
+  mutate(indicator = str_replace(indicator, "hep_b", "Hepatitis B")) %>% 
+  mutate(indicator = str_replace_all(indicator, "_", " ")) %>% 
+  filter(lga %in% c("Moonee Valley", "Metro West")) %>% 
+  mutate(gender = factor(gender))
+
+# first group
+sex_reprod1 <- sex_reprod %>% 
+  filter(indicator %in% c("chlamydia", "gonorrhoea", "Hepatitis B"))
+```
+
+Rates of chlamydia, gonorrhoea, and hepatitis B are lower in Moonee Valley than for the Metro West region, and are lower for females than males.
+
+```{r, fig.width=7, fig.height=3}
+ggplot(sex_reprod1, aes(lga, value, fill = gender)) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col(position = position_dodge2()) + facet_wrap(~indicator) + 
+  theme(legend.position = "bottom") + scale_fill_manual(values = mv2040_cols) + 
+  labs(x = NULL, y = "Rate per 10,000 population", caption = "Source: Women's Health West, Women's Health Atlas, 2019",
+       fill = NULL, title = "Selected sexual and reproductive health indicators, 2018")
+```
+
 
 \pagebreak
 
@@ -1296,6 +1335,64 @@ births_mch %>%
             part = "header")
 
 ```
+\\ 
+
+The teenage birth rate in Moonee Valley is lower than the rate for the Metro West region. The rate was 1.83 per 1,000 population compared to 7.6 per 1,000.
+
+```{r, fig.width=7, fig.height=2}
+teen_birth <- sex_reprod %>% 
+  filter(indicator == "teen birth rates (per 1,000)")
+
+ggplot(teen_birth, aes(lga, value, fill = fct_rev(lga))) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col(position = position_dodge2()) +
+  theme(legend.position = "none") + scale_fill_manual(values = mv2040_cols) + 
+  geom_text(aes(label = value, y = 0.5), col = "white", fontface = "bold") + coord_flip() +
+  labs(x = NULL, y = "Rate per 1,000 population", caption = "Source: Women's Health West, Women's Health Atlas, 2019",
+       fill = NULL, title = "Teenage birth rate, 2018", subtitle = "Aggregate two year rate")
+```
+
+# Early childhood development
+
+```{r}
+#aedc
+aedc_col_names = c("code", "name", "valid_scores_2009", "valid_scores_2012", "valid_scores_2015", "valid_scores_2018", "dev_vul_n_2009", "dev_vul_pc_2009", "dev_vul_n_2012", "dev_vul_pc_2012", "dev_vul_n_2015", "dev_vul_pc_2015", "dev_vul_n_2018", "dev_vul_pc_2018")
+
+aedc_sa2s <- c("Airport West / Essendon Airport", "Keilor", "Keilor East", "Niddrie - Essendon West", "Strathmore", "Ascot Vale", "Essendon - Aberfeldie", "Flemington", "Moonee Ponds")
+
+aedc_data_lga <- read_excel("data_in/AEDC data/LGA 2009-18.xlsx", sheet = "LGA Two or more",
+                            range = "B191:O191", col_names = aedc_col_names) %>% 
+  select(name, dev_vul_pc_2009, dev_vul_pc_2012, dev_vul_pc_2015, dev_vul_pc_2018)
+
+aedc_data_sa2 <- read_excel("data_in/AEDC data/SA2 2009-18.xlsx", sheet = "SA2 Two or more",
+                            range = "B667:O1179", col_names = aedc_col_names) %>% 
+  filter(name %in% aedc_sa2s) %>% 
+  select(name, dev_vul_pc_2009, dev_vul_pc_2012, dev_vul_pc_2015, dev_vul_pc_2018) %>% 
+  mutate_at(vars(starts_with("dev_vul")),funs(as.numeric))
+
+aedc_merge <- bind_rows(aedc_data_lga, aedc_data_sa2) %>% 
+  gather(indicator, pct, -name) %>% 
+  mutate(year = str_sub(indicator, -4, -1)) %>% 
+  mutate(indicator = "Developmentally vulnerable - two or more domains %") %>% 
+  mutate(name = str_replace(name, " / Essendon Airport", "")) %>% 
+  select(name, indicator, year, pct) %>% 
+  mutate_if(is.numeric, round, 1)  %>% 
+  filter(name != "Keilor")
+ 
+```
+
+Data from the Australian Early Development Census shows that about seven per cent of children were developmentally vulnerable in two or more domains in 2018. This was lower than the figure in 2015. There seems to be a lot of variation in the data at the SA2 level.
+
+```{r}
+ggplot(aedc_merge, aes(year, pct, fill = year)) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col() + facet_wrap(~name) + 
+  geom_text(aes(label = pct, y = 2), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = "Children developmentally vulnerable in two or more domains", subtitle = "by Statistical Area Level 2 (SA2)",
+       x = NULL, y = "Percentage", caption = "Source: Australian Early Development Census, 2019")
+```
+
 
 \pagebreak
 
@@ -1395,6 +1492,8 @@ death_causes_data %>%
 # References
 Australian Bureau of Statistics, 2016, *Census of Population and Housing, 2016*, Australian Government, Canberra.
 
+Australian Early Development Census, 2019, 'Additional Data Products', Australian Government, Canberra, https://www.aedc.gov.au/data/downloads, accessed 22 September 2019.
+
 Australian Institute of Health and Wellbeing, 2020, 'Aged Care Service List', Department of Health, Australian Government, Canberra, https://hwd.health.gov.au/datatool.html, accessed 22 September 2020.
 
 Australian Institute of Health and Wellbeing, 2020, 'Mortality Over Regions and Time', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/life-expectancy-death/mort-books/contents/mort-books, accessed 22 September 2020.
@@ -1426,6 +1525,8 @@ Victorian Commission for Gambling and Liquor Regulation, 'Gambling data', Victor
 Victorian Commission for Gambling and Liquor Regulation, 'Liquor data', Victorian Government, Melbourne, https://www.vcglr.vic.gov.au/liquor-data, accessed 22 September 2020.
 
 Victorian Responsible Gambling Foundation, 2020, 'Pokies across Victoria', Victorian Government, Melbourne, https://responsiblegambling.vic.gov.au/resources/gambling-victoria/pokies-across-victoria/moonee-valley/, accessed 22 September 2020.
+
+Women's Health West, 2019, 'Women's Health Atlas', https://victorianwomenshealthatlas.net.au, accessed 22 September 2020.
 
 \pagebreak
 
