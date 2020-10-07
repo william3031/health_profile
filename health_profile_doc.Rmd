@@ -116,7 +116,7 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
   scale_fill_manual(values = mv2040_cols) + 
   labs(x = NULL, y = "Percentage", fill = NULL,
        title = "The proportion of older adults in Moonee Valley will increase",
-       subtitle = "Forecast population by year 2020 and 2040  (at 30 June)",
+       subtitle = "Forecast population (prop) by year 2020 and 2040  (at 30 June)",
        caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
 ```
@@ -134,7 +134,7 @@ ggplot(pp_mv2, aes(age_grp, number_label, fill = gender)) +
   scale_y_continuous(breaks=c(-6000, -3000, 0, 3000, 6000), labels=c("6,000", "3,000", "0", "3,000", "6,000")) + 
   coord_flip() + 
   scale_fill_manual(values = mv2040_cols) + 
-  labs(x = NULL, y = "Population", fill = NULL, title = "There will be more people at all age groups",
+  labs(x = NULL, y = "Population", fill = NULL, title = "There will be more people in all age groups",
        subtitle = "Forecast population by year 2020 and 2040 (at 30 June)",
        caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
@@ -177,6 +177,37 @@ ggplot(age_5yr_nh, aes(fct_rev(area), pct, fill = age_gr2)) +
        x = NULL, y = "Percentage of neighbourhood population", fill = "Age group") +
   theme(legend.position = "bottom")
 
+```
+
+```{r}
+age_5yr_nh_2040 <- age_5yr_raw %>% 
+  filter(str_detect(area, "Neighbourhood")) %>% 
+  mutate(area = str_remove(area, " Neighbourhood")) %>% 
+  mutate(area = str_replace(area, "/-", "/-\n")) %>% 
+  select(-gender) %>% 
+  mutate(age_gr2 = case_when(age_group %in% c("0-4 years", "5-9 years ", "10-14 years", "15-19 years ", "20-24 years") ~ "0-24",
+                             age_group %in% c("65-69 years", "70-74 years", "75-79 years",
+                                              "80-84 years", "85 years and over") ~ "65+",
+                             TRUE ~ "25-64")) %>% 
+  filter(year == 2040) %>% 
+  group_by(area, age_gr2) %>% 
+  summarise(number = sum(number)) %>% 
+  ungroup() %>% 
+  group_by(area) %>% 
+  mutate(pct = round(number/sum(number)*100,1))
+
+ggplot(age_5yr_nh_2040, aes(fct_rev(area), pct, fill = age_gr2)) +
+  geom_col(position = position_stack(reverse = TRUE))  + theme(legend.position="none") +
+  theme_pubclean() + coord_flip() +
+  scale_fill_manual(values = mv2040_cols) +
+  geom_text(data = age_5yr_nh_2040 %>% filter(age_gr2 == "0-24"), aes(label = pct, y = 5), col = "white", fontface = "bold") +
+  geom_text(data = age_5yr_nh_2040 %>% filter(age_gr2 == "25-64"), aes(label = pct, y = 50), col = "white", fontface = "bold") +
+  geom_text(data = age_5yr_nh_2040 %>% filter(age_gr2 == "65+"), aes(label = pct, y = 95), col = "white", fontface = "bold") +
+  labs(title = "The population will age in all neighbourhoods",
+       subtitle = "Estimated population 30 June 2040 by age and neighbourhood",
+       caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017",
+       x = NULL, y = "Percentage of neighbourhood population", fill = "Age group") +
+  theme(legend.position = "bottom")
 ```
 
 ## Cultural and linguistic diversity
@@ -374,7 +405,7 @@ ggplot(irsd_nh, aes(decile, prop)) +
   geom_col(fill = "#E55048") + facet_wrap(~nh, nrow =4) + theme(legend.position="none") +
   theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
   labs(title = "Disadvantage is concentrated in certain neighbourhoods",
-       subtitle = "SEIFA Index of Relative Socio-economic Disadvantage (IRSD) by neighbourhood", caption = "Data source: ABS, 2016 Census",
+       subtitle = "SEIFA Index of Relative Socio-economic Disadvantage (IRSD) by neighbourhood", caption = "Data source: ABS, Census 2016",
        x = "SEIFA IRSD decile (1 = most disadvantaged, 10 = least disadvantaged)", y = "Percentage of neighbourhood population") + 
   scale_x_continuous(breaks=c(seq(1,10,1))) + scale_y_continuous(labels = percent)
 ```
@@ -514,7 +545,7 @@ census_ineq <- bind_rows(census_wk_inc, census_unpwork, census_lfp) %>%
   select(-count)
 ```
 
-Data from the 2016 Census shows that females do more unpaid work (housework), while having lower incomes and being less likely to be in the labour force.
+Data from the 2016 Census shows that females do more unpaid work (housework), while having lower incomes and being less likely to be in the labour force. The labour force participation rate is the proportion of the population aged 15 years and over that are in the labour force (i.e. either in work, or looking for work).
 
 ```{r, fig.height=3, fig.width=7}
 ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) + 
@@ -523,7 +554,7 @@ ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) +
   geom_text(aes(label = pct, y = 3), col = "white", fontface = "bold", position = position_dodge(width = 1)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = c(0.8, 0.85)) + coord_flip() +
   labs(title = "Women face labour force & unpaid work inequality", fill = NULL,
-       x = NULL, y = "Percentage", caption = "Source: ABS, 2016 Census") +
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") +
   guides(fill = guide_legend(nrow = 1))
 
 ```
@@ -741,7 +772,7 @@ ggplot(prop_with_decayed, aes(region, pct, fill = region)) +
   geom_text(aes(label = pct, y = 5), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
   labs(title = "Moonee Valley children have fewer decayed teeth",
-      subtitle = "Proportion of children presenting with at least one decayed tooth, 2017", 
+      subtitle = "Children presenting with at least one decayed tooth, 2017", 
        x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2019")
 
 ```
@@ -1103,7 +1134,7 @@ ggplot(pokies_venues, aes(reorder(venue, order), values, fill = category)) +
   scale_fill_manual(values = mv2040_cols) +
   geom_text(aes(label = values, hjust = 1.5), col = "white", fontface = "bold") +
   theme(legend.position = "none") +
-  labs(title = "Electronic Gaming Machines venues in Moonee Valley", subtitle = "Year to 30 June 2019",
+  labs(title = "Many millions lost at the pokies", subtitle = "Year to 30 June 2019",
        x = NULL, y = NULL,
        caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
 ```
@@ -1360,7 +1391,8 @@ births_mch %>%
             part = "header")
 
 ```
-\\ 
+
+\  
 
 The teenage birth rate in Moonee Valley is lower than the rate for the Metro West region. The rate was 1.83 per 1,000 population compared to 7.6 per 1,000.
 
