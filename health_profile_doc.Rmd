@@ -8,7 +8,7 @@ output:
 ```{r, include = FALSE}
 # libraries
 pacman::p_load(tidyverse, janitor, readxl, ggpubr, flextable, officer, officedown, scales, glue, sf,
-               cartography, captioner, lubridate, ggrepel, cowplot)
+               cartography, captioner, lubridate, ggrepel, tidytext)
 
 #knit options - turns off everything
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE, fig.width = 7)
@@ -236,6 +236,8 @@ ggplot(atsi_pop, aes(year, population, fill = fair_red, label = population)) +
        caption = "Source: ABS, Census 2016")
 ```
 
+\pagebreak
+
 ### Languages spoken at home
 
 The top languages spoken at home (other than English) by residents of the City of Moonee Valley are Italian, Greek, Vietnamese, Mandarin and Cantonese.
@@ -373,6 +375,45 @@ ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) +
 ## Socio-economic disadvantage
 
 ```{r}
+# 2016 seifa irsd by lga - export from abs.stat
+irsd_lga_raw <- read_csv("data_in/SEIFA2016IRSD_LGA.csv") %>% 
+  clean_names()
+
+seifa_all_scores <- irsd_lga_raw %>% 
+  filter(measure == "Score") %>% 
+  filter(time == 2016) %>% 
+  select(lga = local_government_areas_2016, seifaindextype, index_type, value) %>% 
+  mutate(mv = lga == "Moonee Valley (C)") %>% 
+  arrange(seifaindextype, value) %>% 
+  mutate(order = row_number()) %>% 
+  mutate(text2 = glue("{lga}, {value}")) %>% 
+  mutate(index_type = if_else(index_type == "Index of Relative Socio-economic Advantage and Disadvantage",
+                              "Index of Relative Socio-economic\n Advantage and Disadvantage", index_type))
+```
+
+Data from the various Socio-Economic Indexes for Areas (SEIFA) indices show that overall Moonee Valley is fairly well advantaged. Scores in all indices are distributed with a national mean of 1,000 and a standard deviation of 100. Moonee Valley has an average score on the Index of Economic Resources (1,000), while it has an above average score on the Index of Education and Occupation (1,059), Index of Relative Socio-Economic Disadvantage (1,035), as well as the Index of Relative Socio-Economic Advantage and Disadvantage (1,046).
+
+```{r, fig.width=7, fig.height=5}
+ggplot(seifa_all_scores, aes(order, value, fill = mv)) +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col() + 
+  geom_text_repel(data = seifa_all_scores %>% filter(mv == TRUE),
+                  aes(label = text2), colour = "black", fontface = "bold", nudge_y = 50, nudge_x = -50, vjust = 0) +
+  facet_wrap(~index_type, scales = "free_x") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  theme(legend.position = "none") + scale_fill_manual(values = rev(mv2040_cols[1:2])) + 
+  labs(title = "Overall, Moonee Valley is quite advantaged",
+       subtitle = "Socio-Economic Indexes for Areas (SEIFA) indices, Victoria, 2016",
+       x = NULL, y = "Index scores", 
+       caption = "ABS, Census 2016")
+```
+
+
+
+
+```{r}
 irsd_raw <- read_csv("data_in/SEIFA2016IRSD.csv") %>%
   clean_names() %>%
   rename(sa1 = sa1_7digit_code_2016, nh = neighbourhood, pop = usual_resident_population) %>%
@@ -398,7 +439,7 @@ irsd_nh <- irsd_raw %>%
 #   filter(!is.na(decile))
 ```
 
-Data from the Socio-Economic Indexes for Areas (SEIFA) Index of Relative Socio-economic Disadvantage (IRSD) shows that there is great economic diversity in Moonee Valley households. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods.
+However, the SEIFA Index of Relative Socio-economic Disadvantage (IRSD) also shows that there is great economic diversity in Moonee Valley households. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods. Some of the areas in Flemington and Ascot vale are some of the most disadvantaged in Victoria.
 
 ```{r, fig.height= 6, fig.width=7}
 ggplot(irsd_nh, aes(decile, prop)) +
@@ -501,8 +542,8 @@ census_wk_inc <- read_csv("data_in/census/2016Census_G17A_VIC_LGA.csv") %>%
   filter(str_ends(cat, "tot")) %>% 
   filter(cat != "tot") %>% 
   mutate(cat = str_remove(cat, "_tot")) %>% 
-  mutate(cat2 = case_when(cat %in% c("1250_1499", "1500_1749", "1750_1999", "2000_2999", "3000_more") ~ "Weekly income greater than $1250 pw",
-                          TRUE ~ "Weekly income less than $1250 pw")) %>% 
+  mutate(cat2 = case_when(cat %in% c("1250_1499", "1500_1749", "1750_1999", "2000_2999", "3000_more") ~ "Weekly income greater than $1250",
+                          TRUE ~ "Weekly income less than $1250")) %>% 
   group_by(gender, cat2) %>% 
   summarise(count = sum(count)) %>% 
   mutate(pct = round(count/sum(count)*100,1)) %>% 
@@ -541,7 +582,7 @@ census_lfp <- read_csv("data_in/census/2016Census_G40_VIC_LGA.csv") %>%
   rename(pct = count)
 
 census_ineq <- bind_rows(census_wk_inc, census_unpwork, census_lfp) %>% 
-  filter(!cat2 %in% c("Weekly income less than $1250 pw", "Did fewer than 15 hours of unpaid work/week")) %>% 
+  filter(!cat2 %in% c("Weekly income less than $1250", "Did fewer than 15 hours of unpaid work/week")) %>% 
   select(-count)
 ```
 
@@ -597,6 +638,29 @@ ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
   labs(title = "Higher unemployment in Flemington and Ascot Vale",
        subtitle = "Unemployment Rate (Statistical Area Level 2)", x = NULL, y = "Unemployment rate (%)", colour = NULL,
        caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+```
+
+
+```{r, fig.width=7, fig.height=4}
+# victorian data read in from other file - based on econ tracker
+
+# get the latest week from the other file 
+latest_week <- "19 September"
+
+weekly_jobs_data <- read_csv("data_in/jobs_wages_by_age_data.csv") %>%
+  mutate(age_group = factor(age_group, levels = c("Under 20", "20-29", "30-39", "40-49", "50-59", "60-69", "70 and over", "All ages"))) %>% 
+  filter(type == "Jobs")
+
+ggplot(weekly_jobs_data, aes(age_group, latest_week, fill = sex)) +
+  theme_pubclean() +
+  geom_col(position = position_dodge2(width = 0.9)) + ylim(min(weekly_jobs_data$latest_week)-2, 0) +
+  theme(legend.position = c(0.5, 0.1)) + scale_fill_manual(values = mv2040_cols) + 
+  geom_text(aes(label = latest_week, vjust = 1.5), col = "black", fontface = "bold", position = position_dodge2(width = 0.9)) +
+  labs(x = "Age group", y = "Change (%)",
+       title = "Women and young people have seen greater job losses\n since the start of the pandemic",
+       subtitle = glue("Change (%) in jobs in Victoria, 14 March to {latest_week}, 2020"), fill = NULL,
+       caption = "ABS, Weekly Payroll Jobs and Wages in Australia, 2020") +
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 \pagebreak
@@ -1552,6 +1616,8 @@ death_causes_data %>%
 
 # References
 Australian Bureau of Statistics, 2016, *Census of Population and Housing, 2016*, Australian Government, Canberra.
+
+Australian Bureau of Statistics, 2020, 'Weekly Payroll Jobs and Wages in Australia', 7 October, Australian Government, Canberra. https://www.abs.gov.au/statistics/labour/earnings-and-work-hours/weekly-payroll-jobs-and-wages-australia/latest-release, accessed 7 October 2019.
 
 Australian Early Development Census, 2019, 'Additional Data Products', Australian Government, Canberra, https://www.aedc.gov.au/data/downloads, accessed 22 September 2019.
 
