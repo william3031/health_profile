@@ -391,7 +391,7 @@ seifa_all_scores <- irsd_lga_raw %>%
                               "Index of Relative Socio-economic\n Advantage and Disadvantage", index_type))
 ```
 
-Data from the various Socio-Economic Indexes for Areas (SEIFA) indices show that overall Moonee Valley is fairly well advantaged. Scores in all indices are distributed with a national mean of 1,000 and a standard deviation of 100. Moonee Valley has an average score on the Index of Economic Resources (1,000), while it has an above average score on the Index of Education and Occupation (1,059), Index of Relative Socio-Economic Disadvantage (1,035), as well as the Index of Relative Socio-Economic Advantage and Disadvantage (1,046).
+Data from the various Socio-Economic Indexes for Areas (SEIFA) indices show that overall Moonee Valley is fairly well advantaged when we compare it to other local government areas in Victoria. Scores in all indices are distributed with a national mean of 1,000 and a standard deviation of 100. Moonee Valley has an average score on the Index of Economic Resources (1,000), while it has an above average score on the Index of Education and Occupation (1,059), Index of Relative Socio-Economic Disadvantage (1,035), as well as the Index of Relative Socio-Economic Advantage and Disadvantage (1,046).
 
 ```{r, fig.width=7, fig.height=5}
 ggplot(seifa_all_scores, aes(order, value, fill = mv)) +
@@ -405,7 +405,7 @@ ggplot(seifa_all_scores, aes(order, value, fill = mv)) +
         axis.ticks.x=element_blank()) +
   theme(legend.position = "none") + scale_fill_manual(values = rev(mv2040_cols[1:2])) + 
   labs(title = "Overall, Moonee Valley is quite advantaged",
-       subtitle = "Socio-Economic Indexes for Areas (SEIFA) indices, Victoria, 2016",
+       subtitle = "Socio-Economic Indexes for Areas (SEIFA) indices, LGAs in Victoria, 2016",
        x = NULL, y = "Index scores", 
        caption = "ABS, Census 2016")
 ```
@@ -439,7 +439,7 @@ irsd_nh <- irsd_raw %>%
 #   filter(!is.na(decile))
 ```
 
-However, the SEIFA Index of Relative Socio-economic Disadvantage (IRSD) also shows that there is great economic diversity in Moonee Valley households. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods. Some of the areas in Flemington and Ascot vale are some of the most disadvantaged in Victoria.
+However, the SEIFA Index of Relative Socio-economic Disadvantage (IRSD) also shows that there is great economic diversity in Moonee Valley households. Here the scores are split in to deciles. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara with many area in the most disadvantaged deciles. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods with all of the population in the least disadvantaged deciles. Some of the areas in Flemington and Ascot vale are some of the most disadvantaged in Victoria.
 
 ```{r, fig.height= 6, fig.width=7}
 ggplot(irsd_nh, aes(decile, prop)) +
