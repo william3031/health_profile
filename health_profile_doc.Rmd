@@ -123,7 +123,7 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
 
 This will see population increases in all age groups and will increase the need for service provision to meet the needs of all these people.
 
-```{r}
+```{r, fig.height=4.25, fig.width=7}
 # with numbers
 pp_mv2 <- pp_mv %>% 
   mutate(number_label = if_else(gender == "Male", number, -number))
@@ -286,7 +286,7 @@ top_lang  %>%
 
 Census data shows that for Moonee Valley residents, for the most common languages other than English, those who spoke Hindi, Maltese, and Turkish were the most likely to self-assess that they spoke English 'Very well'.
 
-```{r}
+```{r, fig.height=4.25, fig.width=7}
 lanp_engp_2016_raw <- read_csv("data_in/MV_LANP_by_ENGP_2016.csv", skip = 10) %>% 
   clean_names() %>% 
   select(lanp = lanp_4_digit_level, engp = engp_proficiency_in_spoken_english, count)
@@ -1022,9 +1022,9 @@ ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
   theme(legend.position = "bottom") + 
   scale_colour_manual(values = mv2040_cols) + 
   geom_text_repel(show.legend = FALSE) +
-  labs(title = "Males are more likely to be hosiptalised for alcohol",
-       subtitle = "Alcohol related hopsitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
-       caption = "Source: Turning Point, AODStats, , 2020")
+  labs(title = "Males are more likely to be hospitalised for alcohol",
+       subtitle = "Alcohol related hospitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
+       caption = "Source: Turning Point, AODStats, 2020")
 ```
 
 Moonee valley has a higher rate of alcohol related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
@@ -1055,9 +1055,9 @@ ggplot(hosp_adm_alc_comp, aes(year, values, group = map_area, label = values)) +
   theme_pubclean() +
   #geom_text_repel(show.legend = FALSE) +
   labs(title = "Moonee Valley compared to other North West Region LGAs",
-       subtitle = "Alcohol related hopsitalisations per 10,000 population",
+       subtitle = "Alcohol related hospitalisations per 10,000 population",
        x = NULL, y = "Admissions per 10,000", colour = NULL,
-       caption = "Source: Turning Point, AODStats, , 2020")
+       caption = "Source: Turning Point, AODStats, 2020")
 ```
 
 
@@ -1093,10 +1093,10 @@ ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
   theme(legend.position = "bottom") + 
   scale_colour_manual(values = mv2040_cols) + 
   geom_text_repel(show.legend = FALSE) +
-  labs(title = "Males are more likely to be hosiptalised for illicit drugs",
-       subtitle = "Illicit drugs related hopsitalisations by gender, Moonee Valley",
+  labs(title = "Males are more likely to be hospitalised for illicit drugs",
+       subtitle = "Illicit drugs related hospitalisations by gender, Moonee Valley",
        x = NULL, y = "Admissions", colour = NULL,
-       caption = "Source: Turning Point, AODStats, , 2020")
+       caption = "Source: Turning Point, AODStats, 2020")
 ```
 
 Moonee valley has a higher rate of illicit drugs related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
@@ -1130,7 +1130,7 @@ ggplot(hosp_adm_drugs_comp, aes(year, values, group = map_area, label = values))
   labs(title = "Moonee Valley compared to other North West Region LGAs",
        subtitle = "Illicit drugs related hopsitalisations per 10,000 population",
        x = NULL, y = "Admissions per 10,000", colour = NULL,
-       caption = "Source: Turning Point, AODStats, , 2020")
+       caption = "Source: Turning Point, AODStats, 2020")
 ```
 
 ### Gambling
