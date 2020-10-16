@@ -60,6 +60,7 @@ ggplot(mv_pop_hh, aes(year, number, colour = data_type)) +
   labs(title = "Moonee Valley's population is growing", 
        subtitle = "Forecast households and population, 2016-2041", x = NULL, y = NULL, colour = NULL,
        caption = "Source: .id consulting, Moonee Valley Population Forecasts, 2017")
+ggsave("graphs_out/forecast_pop.eps") # eps for illustrator 
 ```
 
 ## Age breakdown
@@ -119,6 +120,7 @@ ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
        subtitle = "Forecast population (prop) by year 2020 and 2040  (at 30 June)",
        caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
+ggsave("graphs_out/pop_pyr_pct.eps") # eps for illustrator 
 ```
 
 This will see population increases in all age groups and will increase the need for service provision to meet the needs of all these people.
@@ -138,6 +140,7 @@ ggplot(pp_mv2, aes(age_grp, number_label, fill = gender)) +
        subtitle = "Forecast population by year 2020 and 2040 (at 30 June)",
        caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
+ggsave("graphs_out/pop_pyr_nums.eps") # eps for illustrator 
 ```
 
 
@@ -176,6 +179,7 @@ ggplot(age_5yr_nh, aes(fct_rev(area), pct, fill = age_gr2)) +
        caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017",
        x = NULL, y = "Percentage of neighbourhood population", fill = "Age group") +
   theme(legend.position = "bottom")
+ggsave("graphs_out/pop_age_nhood_2020.eps") # eps for illustrator 
 
 ```
 
@@ -208,6 +212,7 @@ ggplot(age_5yr_nh_2040, aes(fct_rev(area), pct, fill = age_gr2)) +
        caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017",
        x = NULL, y = "Percentage of neighbourhood population", fill = "Age group") +
   theme(legend.position = "bottom")
+ggsave("graphs_out/pop_age_nhood_2040.eps") # eps for illustrator 
 ```
 
 ## Cultural and linguistic diversity
@@ -234,6 +239,7 @@ ggplot(atsi_pop, aes(year, population, fill = fair_red, label = population)) +
   labs(title = "The indigenous population has increased recently", 
        subtitle = "Aboriginal and/or Torres Strait Islander population", x = NULL, y = "Population", colour = NULL,
        caption = "Source: ABS, Census 2016")
+ggsave("graphs_out/pop_indigenous.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -319,6 +325,7 @@ ggplot(lanp_engp, aes(reorder(lanp, total), pct, fill = engp)) +
        caption = "Data source: ABS, Census 2016",
        x = NULL, y = "Percentage", fill = NULL) +
   theme(legend.position = "bottom") + guides(fill = guide_legend(reverse=TRUE))
+ggsave("graphs_out/self_assessed_eng.eps") # eps for illustrator 
 ```
 
 ## Self-reported health
@@ -344,6 +351,7 @@ vphs_srhealth <- read_csv("data_in/vphs/vphs_srhealth.csv") %>%  # anxiety or de
 
 vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Moonee Valley's population reports better health levels",
                      subtitle_text = "Self-reported health (Excellent or very good health status)")
+ggsave("graphs_out/health_status.eps") # eps for illustrator 
 ```
 
 The same data shows that women in Moonee Valley were more likely to self-report higher levels of health than males.
@@ -366,6 +374,7 @@ ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) +
   labs(title = "Women report better health levels than men", 
        subtitle = "Self-reported health status by gender, Moonee Valley", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
+ggsave("graphs_out/health_status_gender.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -408,6 +417,7 @@ ggplot(seifa_all_scores, aes(order, value, fill = mv)) +
        subtitle = "Socio-Economic Indexes for Areas (SEIFA) indices, LGAs in Victoria, 2016",
        x = NULL, y = "Index scores", 
        caption = "ABS, Census 2016")
+ggsave("graphs_out/seifa_indices.eps") # eps for illustrator 
 ```
 
 
@@ -449,6 +459,7 @@ ggplot(irsd_nh, aes(decile, prop)) +
        subtitle = "SEIFA Index of Relative Socio-economic Disadvantage (IRSD) by neighbourhood", caption = "Data source: ABS, Census 2016",
        x = "SEIFA IRSD decile (1 = most disadvantaged, 10 = least disadvantaged)", y = "Percentage of neighbourhood population") + 
   scale_x_continuous(breaks=c(seq(1,10,1))) + scale_y_continuous(labels = percent)
+ggsave("graphs_out/seifa_nhood.eps") # eps for illustrator 
 ```
 
 This disparity is shown on the map below. The greatest concentrations of disadvantage are one the public housing estates in Flemington and Ascot Vale.
@@ -597,7 +608,7 @@ ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) +
   labs(title = "Women face labour force & unpaid work inequality", fill = NULL,
        x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") +
   guides(fill = guide_legend(nrow = 1))
-
+ggsave("graphs_out/gender_inequality.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -622,6 +633,7 @@ ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
   labs(title = "Moonee Valley's unemployment rate is generally low",
        x = NULL, y = "Unemployment rate (%)", colour = NULL,
        caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+ggsave("graphs_out/unemployment_rate.eps") # eps for illustrator 
 ```
 
 The unemployment rate is highest in the Flemington and Ascot Vale Statistical Area Level 2 (SA2) geographical areas.
@@ -638,6 +650,7 @@ ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
   labs(title = "Higher unemployment in Flemington and Ascot Vale",
        subtitle = "Unemployment Rate (Statistical Area Level 2)", x = NULL, y = "Unemployment rate (%)", colour = NULL,
        caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+ggsave("graphs_out/unemployment_sa2.eps") # eps for illustrator 
 ```
 
 
@@ -661,6 +674,7 @@ ggplot(weekly_jobs_data, aes(age_group, latest_week, fill = sex)) +
        subtitle = glue("Change (%) in jobs in Victoria, 14 March to {latest_week}, 2020"), fill = NULL,
        caption = "ABS, Weekly Payroll Jobs and Wages in Australia, 2020") +
   guides(fill = guide_legend(nrow = 1))
+ggsave("graphs_out/change_jobs_age_gender.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -694,6 +708,7 @@ ggplot(mv_affordable, aes(month, values, colour = bedrooms, label = values)) +
        subtitle = "Affordable lettings, City of Moonee Valley",
        x = NULL, y = "Dwellings", colour = NULL,
        caption = "Source: Rental Report, Department of Health and Human Services, 2020")
+ggsave("graphs_out/affordable_rentals.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -722,6 +737,7 @@ ggplot(cs_safety_mv, aes(year, pct, label = pct, colour = name)) +
   scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
   theme(legend.position = "bottom") +
   geom_text_repel(show.legend = FALSE)
+ggsave("graphs_out/perception_safety.eps") # eps for illustrator 
 ```
 
 Perceptions of safety of walking alone in the local area at night are much lower for females than for males. There is little difference between males and females for perceptions of safety at public transport stops as well as walking alone during the day.
@@ -744,6 +760,7 @@ ggplot(cs_safety_gender, aes(year, pct, label = pct, colour = name)) +
   scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
   theme(legend.position = "bottom") +
   geom_text_repel(show.legend = FALSE)
+ggsave("graphs_out/perception_safety_gender.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -812,7 +829,7 @@ ggplot(vphs_dental, aes(fct_rev(region), pct, fill = region)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
   labs(title = "Moonee Valley residents report good dental health", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
-
+ggsave("graphs_out/dental_health.eps") # eps for illustrator 
 ```
 
 Data from Dental Health Services Victoria shows that children in Moonee Valley are also less likely to present at public health dental services with a decayed tooth when compared to Victoria at all age groups.
@@ -838,7 +855,7 @@ ggplot(prop_with_decayed, aes(region, pct, fill = region)) +
   labs(title = "Moonee Valley children have fewer decayed teeth",
       subtitle = "Children presenting with at least one decayed tooth, 2017", 
        x = NULL, y = "Percentage", caption = "Source: Dental Health Services Victoria, 2019")
-
+ggsave("graphs_out/dental_health_gender.eps") # eps for illustrator 
 ```
 
 ## Healthy eating and food security
@@ -853,6 +870,7 @@ vphs_fvi <- read_csv("data_in/vphs/vphs_fvi.csv") %>%  # self reported dental he
 
 vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Large variations in fruit and vegetable consumption",
                      subtitle_text = "Consumed two serves of fruit and five serves of vegetables per day")
+ggsave("graphs_out/fruit_veg.eps") # eps for illustrator 
 ```
 
 
@@ -889,7 +907,7 @@ ggplot(vphs_chrtests, aes(fct_rev(region), pct, fill = region)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
   labs(title = "Lower rates of testing for chronic disease", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
-
+ggsave("graphs_out/tests_chronic_disease.eps") # eps for illustrator 
 ```
 
 Data on testing for bowel disease from the Australian Institute of Health and Wellbeing shows that testing for bowel disesae has increased in all SA2 over the last few years.
@@ -922,7 +940,7 @@ ggplot(aihw_bowel, aes(period, value, fill = period)) +
   labs(title = "Highest bowel disease testing levels in Strathmore",
        subtitle = "Testing for bowel disease by SA2. Participation rate, 50-64 year olds", 
        x = NULL, y = "Participation rate", caption = "Source: AIHW, National cancer screening programs participation data, 2020")
-
+ggsave("graphs_out/bowel_disease_test_nh.eps") # eps for illustrator 
 ```
 
 
@@ -943,6 +961,7 @@ ggplot(vphs_smoking, aes(fct_rev(region), pct, fill = region)) +
   labs(title = "Few Moonee Valley residents smoke",
        subtitle = "Smoking status", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
+ggsave("graphs_out/smoking.eps") # eps for illustrator 
 ```
 
 Smoking levels are higher for men, than for women, though again the confidence interval is quite large.
@@ -963,6 +982,7 @@ ggplot(vphs_smoking_gender, aes(fct_rev(gender), pct, fill = gender)) +
   labs(title = "Males are more likely to smoke than females",
        subtitle = "Current smokers (daily and occasional) by gender, Moonee Valley", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
+ggsave("graphs_out/smoking_gender.eps") # eps for illustrator 
 ```
 
 
@@ -988,6 +1008,7 @@ ggplot(vphs_alcohol, aes(fct_rev(region), pct, fill = region)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Higher levels of alcohol consumption", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
+ggsave("graphs_out/alcohol.eps") # eps for illustrator 
 ```
 
 On and off licence alcohol outlets are generally distributed in the activity centres in Moonee Valley. These are generally in the east of the city.  
@@ -1025,6 +1046,7 @@ ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
   labs(title = "Males are more likely to be hospitalised for alcohol",
        subtitle = "Alcohol related hospitalisations by gender, Moonee Valley", x = NULL, y = "Admissions", colour = NULL,
        caption = "Source: Turning Point, AODStats, 2020")
+ggsave("graphs_out/alcohol_hospitalisation_gender.eps") # eps for illustrator 
 ```
 
 Moonee valley has a higher rate of alcohol related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
@@ -1058,6 +1080,7 @@ ggplot(hosp_adm_alc_comp, aes(year, values, group = map_area, label = values)) +
        subtitle = "Alcohol related hospitalisations per 10,000 population",
        x = NULL, y = "Admissions per 10,000", colour = NULL,
        caption = "Source: Turning Point, AODStats, 2020")
+ggsave("graphs_out/alcohol_hospitalisation_lgas.eps") # eps for illustrator 
 ```
 
 
@@ -1097,6 +1120,7 @@ ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
        subtitle = "Illicit drugs related hospitalisations by gender, Moonee Valley",
        x = NULL, y = "Admissions", colour = NULL,
        caption = "Source: Turning Point, AODStats, 2020")
+ggsave("graphs_out/drugs_hospitalisation_gender.eps") # eps for illustrator 
 ```
 
 Moonee valley has a higher rate of illicit drugs related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
@@ -1131,6 +1155,7 @@ ggplot(hosp_adm_drugs_comp, aes(year, values, group = map_area, label = values))
        subtitle = "Illicit drugs related hopsitalisations per 10,000 population",
        x = NULL, y = "Admissions per 10,000", colour = NULL,
        caption = "Source: Turning Point, AODStats, 2020")
+ggsave("graphs_out/drugs_hospitalisation_lga.eps") # eps for illustrator 
 ```
 
 ### Gambling
@@ -1163,6 +1188,7 @@ ggplot(pokies_time, aes(year, exp_m, colour = "#E55048", label = exp_m)) +
        subtitle = "Expenditure ($ millions)Electronic Gaming Machines in Moonee Valley, year to 30 June",
        x = NULL, y = "Expenditure ($ millions)", colour = NULL,
        caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
+ggsave("graphs_out/pokies_losses.eps") # eps for illustrator 
 ```
 
 Nearly $19 million was lost at the Skyways Taverner in the year to 30 June 2019, one of the highest in Victoria.
@@ -1201,6 +1227,7 @@ ggplot(pokies_venues, aes(reorder(venue, order), values, fill = category)) +
   labs(title = "Many millions lost at the pokies", subtitle = "Year to 30 June 2019",
        x = NULL, y = NULL,
        caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
+ggsave("graphs_out/pokies_egms.eps") # eps for illustrator 
 ```
 
 
@@ -1217,6 +1244,7 @@ vphs_obese <- read_csv("data_in/vphs/vphs_obese.csv") # overweight (pre-obese or
 
 vphs_ggplot_function(dataset = vphs_obese, yval = 2, title_text = "About half of the adult population who are overweight",
                      subtitle_text = "Pre-obese or obese based on BMI")
+ggsave("graphs_out/obesity.eps") # eps for illustrator 
 ```
 
 Residents in Moonee Valley have lower consumption of sugar-sweetened beverages though; 6.4 per cent of residents consume these drinks daily.
@@ -1238,6 +1266,7 @@ ggplot(vphs_obesity, aes(fct_rev(region), pct, fill = region)) +
   labs(title = "Lower soft drink and takeaway consumption in Moonee Valley",
        subtitle = "Consumption of soft drinks and takeaway", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
+ggsave("graphs_out/soft_drink_takeaway.eps") # eps for illustrator 
 ```
 
 
@@ -1262,7 +1291,7 @@ ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
   labs(title = "Higher levels of physical activity in Moonee Valley", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
-  
+ ggsave("graphs_out/physical_activity.eps") # eps for illustrator  
 ```
 
 
@@ -1292,7 +1321,7 @@ ggplot(vphs_mhw, aes(selections, pct, fill = type)) +
   labs(title = "About one in five have low life satisfaction",
        subtitle = "Mental wellbeing, Moonee Valley", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
-
+ggsave("graphs_out/mental_wellbeing.eps") # eps for illustrator 
 ```
 
 Data from the Victorian Population Health Survey 2017 shows that about 30 per cent of Moonee Valley residents had ever been diagnosed with anxiety of depression. This compares with 25 per cent for Western Melbourne.
@@ -1302,6 +1331,7 @@ vphs_anx <- read_csv("data_in/vphs/vphs_anx.csv") # anxiety or depression
 
 vphs_ggplot_function(dataset = vphs_anx, yval = 2, title_text = "Higher levels of anxiety or depression") +
   labs(subtitle = "Proportion of adults ever diagnosed with anxiety or depression")
+ggsave("graphs_out/anxiety_depression.eps") # eps for illustrator 
 ```
 
 Females in Moonee Valley were more likely to seek professional help for mental health problems than males.
@@ -1338,6 +1368,7 @@ ggplot(vphs_mh_gender, aes(gender, pct, fill = gender)) +
   labs(title = "Males more likely to have mental health issues, but less likely to seek help",
       subtitle = "Seeking help for anxiety and depression by gender", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
+ggsave("graphs_out/mental_health_gender.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -1385,6 +1416,7 @@ ggplot(sex_reprod1, aes(lga, value, fill = gender)) +
   labs(x = NULL, y = "Rate per 10,000 population", caption = "Source: Women's Health West, Women's Health Atlas, 2019",
        fill = NULL, title = "Males more likely to have STDs",
        subtitle = "Selected sexual and reproductive health indicators, 2018")
+ggsave("graphs_out/sexual_reproductive.eps") # eps for illustrator 
 ```
 
 
@@ -1419,6 +1451,7 @@ ggplot(fam_vio, aes(year, rate_per_100_000_population, colour = lga, label = rat
        caption = "Source: Crime Statistics Agency, 2020", colour = NULL) +
   theme(legend.position = "bottom") +
   geom_text_repel(show.legend = FALSE)
+ggsave("graphs_out/family_violence.eps") # eps for illustrator 
 ```
 
 \pagebreak
@@ -1471,6 +1504,7 @@ ggplot(teen_birth, aes(lga, value, fill = fct_rev(lga))) +
   geom_text(aes(label = value, y = 0.5), col = "white", fontface = "bold") + coord_flip() +
   labs(x = NULL, y = "Rate per 1,000 population", caption = "Source: Women's Health West, Women's Health Atlas, 2019",
        fill = NULL, title = "Lower teenage birth rate in Moonee Valley", subtitle = "Teenage birth rate, 2018. Aggregate two year rate")
+ggsave("graphs_out/teen_births.eps") # eps for illustrator 
 ```
 
 # Early childhood development
@@ -1513,6 +1547,7 @@ ggplot(aedc_merge, aes(year, pct, fill = year)) +
   labs(title = "Varied levels of childhood development vulnerability",
        subtitle = "Children developmentally vulnerable in two or more domains by Statistical Area Level 2 (SA2)",
        x = NULL, y = "Percentage", caption = "Source: Australian Early Development Census, 2019")
+ggsave("graphs_out/childhood_dev_vuln.eps") # eps for illustrator 
 ```
 
 
@@ -1546,6 +1581,7 @@ ggplot(aged_care_mv, aes(reorder(service_name, residential_places), residential_
        subtitle =  "Aged care places, 30 June 2019", fill = "Type",
        x = NULL, y = "Places", caption = "Source: AIHW, Aged Care Service List, 2020") + 
   theme(legend.position = c(0.8, 0.2)) +  guides(fill = guide_legend(nrow = 3))
+ggsave("graphs_out/aged_care.eps") # eps for illustrator 
 ```
 
 There is one government facility (Cyril Jewell House) in Keilor East. 
@@ -1584,6 +1620,7 @@ ggplot(death_prem, aes(year, prem_deaths, col = name, label = prem_deaths)) +
   scale_color_manual(values = mv2040_cols) +
   theme(legend.position = "bottom") +
   geom_text_repel(data = death_prem %>% filter(year == 2018), show.legend = FALSE)
+ggsave("graphs_out/premature_death.eps") # eps for illustrator 
 ```
 
 ### Top causes of death
