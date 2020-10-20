@@ -55,7 +55,7 @@ Some sort of infographic like the previous health tracker
 
 ABS - Australian Bureau of Statistics
 
-AIHW - Australian Institute of Health and Wellbeing
+AIHW - Australian Institute of Health and Welfare
 
 CI - Confidence interval (to indicate uncertainty)
 
