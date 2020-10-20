@@ -1,5 +1,7 @@
 ---
 title: "Moonee Valley Health Profile 2020"
+subtitle: "Indigenous language title"
+author: "add artwork and council logo"
 output:
   word_document:
     reference_docx: template.docx
@@ -24,21 +26,70 @@ mv_corp_cols <- c("#004F71", "#FFCD00", "#41B6E6", "#FF6A13")
 mf_cols <- c("#E55048", "#41B6E6", "#E3A51E")
 ```
 
+
+
+Acknowledgements
+
+Acknowledgement of country
+
+Other
+
+Other
+
+Women’s health sector
+
+Artist (artwork)
+
+
+November 2020
+
+\pagebreak
+
 # Executive summary
 
 Some sort of infographic like the previous health tracker
 
 \pagebreak
 
-# Introduction
+# Abbreviations
+
+ABS - Australian Bureau of Statistics
+
+AIHW - Australian Institute of Health and Wellbeing
+
+CI - Confidence interval (to indicate uncertainty)
+
+DHHS - Department of Health and Human Services (Victoria)
+
+IRSD - Index of Relative Socio-economic Disadvantage (this is one of the four SEIFA indices)
+
+SA2 - Statistical Area Level 2 (this is a geographical area that is part of the Australian Statistical Geography Standard)
+
+SEIFA - Socio-Economic Indexes for Areas - these are indices created by the ABS
+
+\pagebreak
+
+# Background
+
+Legislative requirements
+
+2016 health profile?
+
+MV2040: a neighbourhood approach to health and wellbeing
+
+How to use this document (purpose, aim, approach, data available/LGA/neighbourhood level, gender/COVID/Aboriginal and Torres Strait Islander health, format, definitions, references) 
+
+\pagebreak
+
+# Introduction (indigeous language)
 
 within the document, interleave with diagrams from https://www.aihw.gov.au/reports-data/australias-health
 
 \pagebreak
 
-# Population
+# Population (indigeous language)
 
-## Current and projected
+## Current and projected populations
 
 ```{r}
 pop_hh_raw <- read_excel("data_in/Forecast.id update (December 2017 update).xlsx", sheet = "Population and households") %>% 
@@ -66,13 +117,78 @@ ggsave("graphs_out/forecast_pop.eps") # eps for illustrator
 ## Age breakdown
 
 ```{r}
+# data from abs - regional population by age and sex
+
+# column names
+ages <- c("0-4", "5–9", "10–14", "15–19", "20–24", "25–29", "30–34", "35–39", "40–44", "45–49", "50–54", "55–59", "60–64", "65–69", "70–74", "75–79", "80–84", "85+")
+
+sa2_col_names <- c("S/T code", "S/T name", "GCCSA code", "GCCSA name",
+                   "SA4 code", "SA4 name", "SA3 code", "SA3 name", "SA2 code", "SA2 name")
+
+lga_col_names <- c("S/T code", "S/T name", "LGA code", "LGA name")
+
+# just victorian sa2s
+abs_age_sex_sa2 <- read_excel("data_in/abs_age_sex/32350ds0001_2019.xls", sheet = "Table 3",
+           range = "A589:AB1050", col_names = c(sa2_col_names, ages))
+
+# LGAs
+abs_age_sex_lga <- read_excel("data_in/abs_age_sex/32350ds0003_2019.xls", sheet = "Table 3",
+           range = "A11:V554", col_names = c(lga_col_names, ages)) 
+
+# greater melbourne
+greater_melb_age_sex <- abs_age_sex_sa2 %>% 
+  filter(`GCCSA code` == "2GMEL") %>% 
+  select(region = `GCCSA name`, `0-4`:`85+`) %>% 
+  pivot_longer(-region, names_to = "age", values_to = "count") %>% 
+  group_by(region, age) %>% 
+  summarise(count = sum(count)) %>% 
+  mutate(age = factor(age, levels = ages)) %>% 
+  arrange(age) %>% 
+  ungroup() %>% 
+  mutate(pct = round(count/sum(count)*100, 1))
+
+# moonee valley
+mv_age_sex <- abs_age_sex_lga %>% 
+  filter(`LGA name` == "Moonee Valley (C)") %>% 
+  select(region = `LGA name`, ages) %>% 
+  pivot_longer(-region, names_to = "age", values_to = "count") %>% 
+  group_by(region, age) %>% 
+  summarise(count = sum(count)) %>% 
+  mutate(age = factor(age, levels = ages)) %>% 
+  arrange(age) %>% 
+  ungroup() %>% 
+  mutate(pct = round(count/sum(count)*100, 1)) 
+
+# join 
+combined_age <- bind_rows(greater_melb_age_sex, mv_age_sex)
+```
+
+Data from the Australian Bureau of Statistics shows that Moonee Valley's population is slightly older than the population of Greater Melbourne. There are smaller proportions of young people and higher proportion of older people.
+
+```{r, fig.height=4.5, fig.width=7}
+ggplot(combined_age, aes(age, pct, fill = rev(region))) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col() + facet_wrap(~region) + 
+  geom_text(aes(label = pct, y = 0.5), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Moonee Valley's population is slightly older than Greater Melbourne's", 
+       subtitle = "Population at 30 June 2019",
+       x = "Age group", y = "Percentage", caption = "Source: ABS, Regional Population by Age and Sex, 2019")
+ggsave("graphs_out/combined_age.eps") # eps for illustrator 
+```
+
+
+
+```{r}
+# id information
 age_5y_sex_raw <- read_excel("data_in/Forecast.id update (December 2017 update).xlsx", sheet = "Age (by sex - 5yr)") %>% 
   clean_names() %>% 
   rename(age_grp = age_group) %>% 
   mutate(age_grp = str_replace(age_grp, " years and over", " plus")) %>% 
   mutate(age_grp = str_replace(age_grp, " years", "")) %>% 
   mutate(age_grp = factor(age_grp, levels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44",
-                                              "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85 plus"))) %>% 
+                                              "45-49", "50-54", "55-59", "60-64", "65-69",
+                                              "70-74", "75-79", "80-84", "85 plus"))) %>% 
   filter(area == "City of Moonee Valley")
 ```
 
@@ -103,30 +219,13 @@ pp_nh_data <- function(selected_neighbourhood){
 
 ```
 
-The population structure of the City of Moonee Valley is not forecast to change greatly between 2020 and 2040. There will be an increase in all age groups, though there will be a slight increase in the median age and a greater proportion of older residents.
-
-```{r, fig.height=4.25, fig.width=7}
-pp_mv <- pp_nh_data("City of Moonee Valley") %>% 
-  filter(year %in% c(2020, 2040))
-
-ggplot(pp_mv, aes(age_grp, per_cent_label, fill = gender)) +
-  geom_bar(stat = "identity", width = 1) + 
-  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
-  scale_y_continuous(breaks=c(-4, -2, 0, 2, 4), labels=c("4%", "2%", "0%", "2%", "4%")) + 
-  coord_flip() + 
-  scale_fill_manual(values = mv2040_cols) + 
-  labs(x = NULL, y = "Percentage", fill = NULL,
-       title = "The proportion of older adults in Moonee Valley will increase",
-       subtitle = "Forecast population (prop) by year 2020 and 2040  (at 30 June)",
-       caption = "Data source: .id consulting, Moonee Valley Population Forecasts, 2017") + 
-  facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
-ggsave("graphs_out/pop_pyr_pct.eps") # eps for illustrator 
-```
-
-This will see population increases in all age groups and will increase the need for service provision to meet the needs of all these people.
+The population structure of the City of Moonee Valley is not forecast to change greatly between 2020 and 2040. There will be an increase in all age groups, though there will be a slight increase in the median age and a greater proportion of older residents. This population increase will require an expansion of service provision to meet the needs of all these people. 
 
 ```{r, fig.height=4.25, fig.width=7}
 # with numbers
+pp_mv <- pp_nh_data("City of Moonee Valley") %>% 
+  filter(year %in% c(2020, 2040))
+
 pp_mv2 <- pp_mv %>% 
   mutate(number_label = if_else(gender == "Male", number, -number))
 
@@ -142,8 +241,6 @@ ggplot(pp_mv2, aes(age_grp, number_label, fill = gender)) +
   facet_wrap(~factor(year), ncol = 8) + theme(legend.position = "bottom") 
 ggsave("graphs_out/pop_pyr_nums.eps") # eps for illustrator 
 ```
-
-
 
 By neighbourhood, we can see that the highest proportions of those aged 65 years and over are in Milleara and Avondale Heights. Aberfeldie and Flemington have the highest proportions of young people.
 
@@ -215,13 +312,42 @@ ggplot(age_5yr_nh_2040, aes(fct_rev(area), pct, fill = age_gr2)) +
 ggsave("graphs_out/pop_age_nhood_2040.eps") # eps for illustrator 
 ```
 
-## Cultural and linguistic diversity
+## Household structure 
+
+Data from the 2016 Census shows that the most common household type is couples with children, who account for about 31 per cent of households. Lone person households make up about 25 per cent of households.
+
+```{r, fig.width=7, fig.height=4}
+# 2016 census data - edited extract from HDFMD
+households <- tibble(household_type = c("Couples without children","Couples with children","One parent families",
+                          "Other families","Lone person","Group household",
+                          "Visitor only households","Other not classifiable"),
+  `Moonee Valley (C)` = c(22.5, 30.7, 9.1, 2.7, 25, 4.7, 0.7, 4.7),
+    `Greater Melbourne` = c(22.5, 32.5, 9.7, 3.2, 22, 4.7, 0.9, 4.5)) %>% 
+  pivot_longer(-household_type, names_to = "region", values_to = "value")
+
+ggplot(households, aes(fct_rev(household_type), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col(position = position_dodge2(width = 0.9, preserve = 'single')) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold",
+            position = position_dodge2(width = 0.9, preserve = "single"), vjust=0.5, size=3.5) + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) + ylim(0, 35) +
+  labs(title = "Couples with children make up about 30% of households",
+       subtitle =  "Household type", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = c(0.8, 0.2)) +
+  guides(fill = guide_legend(nrow = 3)) + guides(fill = guide_legend(reverse=TRUE))
+ggsave("graphs_out/household_type.eps") # eps for illustrator 
+```
+
+
+
+## Cultural and linguistic diversity (Indigenous language)
 
 ### Indigenous population
 
-At the 2016 Census, there were 430 residents who identified as Aboriginal and/or Torres Strait Islander people. This was 0.4 per cent of the Moonee Valley population at the time. Census data also shows other differences between the Indigenous and non-Indigenous population in Moonee Valley:
+At the 2016 Census, there were 430 residents who identified as Aboriginal and/or Torres Strait Islander people. This was equal to 0.4 per cent of the Moonee Valley population at the time and is similar to neighbouring municipalities (0.5 per cent in Moreland and in Maribyrnong). Census data also shows other differences between the Indigenous and non-Indigenous population in Moonee Valley:
 
-* a lower median age (28 years) than for the non-Indigenous population (38 years)
+* a lower median age (28 years) for the indigenous population compared to the non-Indigenous population (38 years)
 * lower Year 12 completion rate (53 per cent compared to 66 per cent)
 * a higher proportion renting (59 per cent compared to 32 per cent)
 
@@ -244,9 +370,9 @@ ggsave("graphs_out/pop_indigenous.eps") # eps for illustrator
 
 \pagebreak
 
-### Languages spoken at home
+### Languages spoken at home (Indigenous language)
 
-The top languages spoken at home (other than English) by residents of the City of Moonee Valley are Italian, Greek, Vietnamese, Mandarin and Cantonese.
+The most common languages spoken at home (other than English) by residents of the City of Moonee Valley are Italian, Greek, Vietnamese, Mandarin, Cantonese and Arabic.
 
 ```{r}
 lanp_2016 <- read_csv("data_in/MV_LANP_2016.csv", skip = 10) %>% 
@@ -290,7 +416,7 @@ top_lang  %>%
 
 ### Proficiency in spoken English
 
-Census data shows that for Moonee Valley residents, for the most common languages other than English, those who spoke Hindi, Maltese, and Turkish were the most likely to self-assess that they spoke English 'Very well'.
+Those who spoke Hindi at home were more likely to also have good levels of spoken English. Census data shows that for Moonee Valley residents, for the most common languages other than English, those who spoke Hindi, Maltese, and Turkish were the most likely to also speak English 'Very well'.
 
 ```{r, fig.height=4.25, fig.width=7}
 lanp_engp_2016_raw <- read_csv("data_in/MV_LANP_by_ENGP_2016.csv", skip = 10) %>% 
@@ -328,9 +454,33 @@ ggplot(lanp_engp, aes(reorder(lanp, total), pct, fill = engp)) +
 ggsave("graphs_out/self_assessed_eng.eps") # eps for illustrator 
 ```
 
+### Multiculturalism makes Moonee Valley a better place to live
+
+Data from the Moonee Valley Community Survey shows that about six in ten residents value the multiculturalism in Moonee Valley. This was higher amongst females than males, and also higher in areas like Flemington and Ascot Vale where the population is more culturally diverse.
+
+```{r, fig.width=7, fig.height=2}
+multiculturalism <- tibble(
+        year = c(2020L, 2019L),
+         pct = c(62.1, 60.7),
+       ll = c(59.03656597, 57.55644629),
+       ul = c(65.06365579, 63.81469496)) %>% 
+  mutate(year = factor(year))
+
+ggplot(multiculturalism, aes(year, pct, fill = fair_red)) + 
+  theme_pubclean() + coord_flip() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + 
+  geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") +
+  theme(legend.position = "none") +
+  labs(title = "About six in ten residents value the multiculturalism in Moonee Valley",
+      subtitle = "Agreement that they 'value living in Moonee Valley because of its multiculturalism", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Moonee Valley Community Survey, 2020")
+ggsave("graphs_out/multiculturalism.eps") # eps for illustrator 
+```
+
+
 ## Self-reported health
 
-Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. This compares to about 42 per cent for Victoria and the Western Melbourne Area.
+Data from the Victorian Population Health Survey 2017 shows that about 47.5 per cent of Moonee Valley residents reported either 'excellent' or 'very good' health. This is higher than for Victoria and the Western Melbourne Area (approximately 42 per cent).
 
 ```{r, fig.height=2.5, fig.width=7}
 # function more just for single plots
@@ -354,7 +504,7 @@ vphs_ggplot_function(dataset = vphs_srhealth, yval = 2, title_text = "Moonee Val
 ggsave("graphs_out/health_status.eps") # eps for illustrator 
 ```
 
-The same data shows that women in Moonee Valley were more likely to self-report higher levels of health than males.
+The same data shows that women in Moonee Valley were more likely to self-report higher levels of health than males. About 42 per cent of men and 54 per cent of women reported ‘excellent’ or ‘very good’ levels of health.
 
 ```{r, fig.height=2.5, fig.width=7}
 vphs_srh_gender <- tibble(
@@ -379,7 +529,7 @@ ggsave("graphs_out/health_status_gender.eps") # eps for illustrator
 
 \pagebreak
 
-# Environmental factors
+# Environmental factors (Indigenous language)
 
 ## Socio-economic disadvantage
 
@@ -388,40 +538,42 @@ ggsave("graphs_out/health_status_gender.eps") # eps for illustrator
 irsd_lga_raw <- read_csv("data_in/SEIFA2016IRSD_LGA.csv") %>% 
   clean_names()
 
-seifa_all_scores <- irsd_lga_raw %>% 
-  filter(measure == "Score") %>% 
-  filter(time == 2016) %>% 
-  select(lga = local_government_areas_2016, seifaindextype, index_type, value) %>% 
-  mutate(mv = lga == "Moonee Valley (C)") %>% 
-  arrange(seifaindextype, value) %>% 
-  mutate(order = row_number()) %>% 
-  mutate(text2 = glue("{lga}, {value}")) %>% 
-  mutate(index_type = if_else(index_type == "Index of Relative Socio-economic Advantage and Disadvantage",
-                              "Index of Relative Socio-economic\n Advantage and Disadvantage", index_type))
+seifa_table <- irsd_lga_raw %>% 
+  filter(measure %in% c("Score", "Rank within State or Territory",
+                        "Rank within State or Territory - Decile", "Rank within State or Territory - Percentile")) %>% 
+  select(lga = local_government_areas_2016, index_type, measure, value) %>% 
+  
+  filter(lga == "Moonee Valley (C)") %>% 
+  select(-lga) %>% 
+  mutate(measure = case_when(measure == "Rank within State or Territory - Decile" ~ "Decile",
+                             measure == "Rank within State or Territory - Percentile" ~ "Percentile",
+                             TRUE ~ measure)) %>% 
+  mutate(measure = if_else(measure == "Rank within State or Territory", "Rank", measure)) %>% 
+  mutate(index_type = str_remove(index_type, "Index of ")) %>% 
+  pivot_wider(index_type, names_from = measure, values_from = value) %>% 
+  rename(Index = index_type)
 ```
 
-Data from the various Socio-Economic Indexes for Areas (SEIFA) indices show that overall Moonee Valley is fairly well advantaged when we compare it to other local government areas in Victoria. Scores in all indices are distributed with a national mean of 1,000 and a standard deviation of 100. Moonee Valley has an average score on the Index of Economic Resources (1,000), while it has an above average score on the Index of Education and Occupation (1,059), Index of Relative Socio-Economic Disadvantage (1,035), as well as the Index of Relative Socio-Economic Advantage and Disadvantage (1,046).
+Data from the various Socio-Economic Indexes for Areas (SEIFA) indices show that overall Moonee Valley is fairly well advantaged when we compare it to other local government areas in Victoria. Moonee Valley is in the second highest decile (ten equal groups, with decile 1 being the most disadvantaged) for the Index of Education and Occupation  and the Index of Relative Socio-Economic Advantage and Disadvantage. Moonee Valley is also in the eighth decile on the Index of Relative Socio-Economic Disadvantage and the seventh decile for the  Index of Economic Resources.  
 
-```{r, fig.width=7, fig.height=5}
-ggplot(seifa_all_scores, aes(order, value, fill = mv)) +
-  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
-  geom_col() + 
-  geom_text_repel(data = seifa_all_scores %>% filter(mv == TRUE),
-                  aes(label = text2), colour = "black", fontface = "bold", nudge_y = 50, nudge_x = -50, vjust = 0) +
-  facet_wrap(~index_type, scales = "free_x") +
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank()) +
-  theme(legend.position = "none") + scale_fill_manual(values = rev(mv2040_cols[1:2])) + 
-  labs(title = "Overall, Moonee Valley is quite advantaged",
-       subtitle = "Socio-Economic Indexes for Areas (SEIFA) indices, LGAs in Victoria, 2016",
-       x = NULL, y = "Index scores", 
-       caption = "ABS, Census 2016")
-ggsave("graphs_out/seifa_indices.eps") # eps for illustrator 
+\  
+
+```{r}
+seifa_table %>% 
+  flextable()  %>% 
+  autofit() %>% 
+  add_header_lines(values = "Socio-Economic Indexes for Areas (SEIFA) indices, Moonee Valley") %>% 
+  theme_vanilla() %>% 
+  fontsize(i = NULL, j = NULL, size = 10, part = "body") %>% 
+  footnote( i = 1, j = 1:4,
+            value = as_paragraph(
+              c("Source: ABS, Census 2016; (comparisons with Victoria)")
+            ),
+            ref_symbols = c(""),
+            part = "header")
 ```
 
-
-
+\  
 
 ```{r}
 irsd_raw <- read_csv("data_in/SEIFA2016IRSD.csv") %>%
@@ -449,7 +601,7 @@ irsd_nh <- irsd_raw %>%
 #   filter(!is.na(decile))
 ```
 
-However, the SEIFA Index of Relative Socio-economic Disadvantage (IRSD) also shows that there is great economic diversity in Moonee Valley households. Here the scores are split in to deciles. There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara with many area in the most disadvantaged deciles. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods with all of the population in the least disadvantaged deciles. Some of the areas in Flemington and Ascot vale are some of the most disadvantaged in Victoria.
+However, the SEIFA Index of Relative Socio-economic Disadvantage (IRSD) also shows that there is great economic diversity in Moonee Valley households. Here the scores are split in to deciles (each comprising ten per cent of scores, with decile 1 being the most disadvantaged). There are pockets of disadvantage in neighbourhoods like Flemington, Ascot Vale, Avondale Heights and Milleara with many area in the most disadvantaged deciles. In contrast, Strathmore and Strathmore Heights are the least disadvantaged neighbourhoods with all of the population in the least disadvantaged deciles. Some areas in Flemington and Ascot vale (the public housing estates) are some of the most disadvantaged in Victoria.
 
 ```{r, fig.height= 6, fig.width=7}
 ggplot(irsd_nh, aes(decile, prop)) +
@@ -462,9 +614,9 @@ ggplot(irsd_nh, aes(decile, prop)) +
 ggsave("graphs_out/seifa_nhood.eps") # eps for illustrator 
 ```
 
-This disparity is shown on the map below. The greatest concentrations of disadvantage are one the public housing estates in Flemington and Ascot Vale.
+This disparity disadvantage is shown in the map below. The greatest concentrations of disadvantage in Moonee Valley are one the public housing estates in Flemington and Ascot Vale.
 
-![SEIFA IRSD map](maps/SEIFA layout.png)
+![](maps/SEIFA layout.png)
 
 
 ```{r}
@@ -504,8 +656,15 @@ The Heat Vulnerability Index measures the impact of the Urban Heat Island effect
 ```
 
 
-![HVI map](maps/HVI layout.png)
+![](maps/HVI layout.png)
 
+## Open space
+
+refer to new strategy when it is available
+
+## Tree canopy cover
+
+perhaps Evie has a map
 
 ```{r}
 # plot(st_geometry(hvi_shp), col = NA, border = NA, bg = "white")
@@ -530,15 +689,13 @@ The Heat Vulnerability Index measures the impact of the Urban Heat Island effect
 # north(pos = "topleft")
 ```
 
-## Walkability
+## Walkability (Indigenous language)
 
 * See what Evie has done. Otherwise, just use the ones from MV2040
 
 \pagebreak
 
-# Gender inequality
-
-* also from this https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FGender%20Equality%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Gender%20Equality%20Moonee%20Valley.pdf
+# Gender inequality (Indigenous language)
 
 ```{r}
 census_wk_inc <- read_csv("data_in/census/2016Census_G17A_VIC_LGA.csv") %>% 
@@ -597,7 +754,7 @@ census_ineq <- bind_rows(census_wk_inc, census_unpwork, census_lfp) %>%
   select(-count)
 ```
 
-Data from the 2016 Census shows that females do more unpaid work (housework), while having lower incomes and being less likely to be in the labour force. The labour force participation rate is the proportion of the population aged 15 years and over that are in the labour force (i.e. either in work, or looking for work).
+Data from the 2016 Census shows that females do more unpaid work (housework), while having lower incomes and being less likely to participate in the labour force. The labour force participation rate is the proportion of the population aged 15 years and over that are in the labour force (i.e. either in work, or looking for work).
 
 ```{r, fig.height=3, fig.width=7}
 ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) + 
@@ -613,9 +770,9 @@ ggsave("graphs_out/gender_inequality.eps") # eps for illustrator
 
 \pagebreak
 
-# Unemployment
+# Unemployment (Indigenous language)
 
-The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne.
+The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne. The dataset runs to March 2020 and only reflects the impacts from the pandemic social restrictions.
 
 ```{r, fig.height=3, fig.width=7}
 # import from economic tracker
@@ -636,7 +793,7 @@ ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
 ggsave("graphs_out/unemployment_rate.eps") # eps for illustrator 
 ```
 
-The unemployment rate is highest in the Flemington and Ascot Vale Statistical Area Level 2 (SA2) geographical areas.
+The unemployment rate is highest in Flemington and Ascot Vale and lowest in Strathmore.
 
 ```{r}
 salm_sa2 <- salm_raw %>% 
@@ -653,12 +810,15 @@ ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
 ggsave("graphs_out/unemployment_sa2.eps") # eps for illustrator 
 ```
 
+While the unemployment rate across the municipality has generally remained lower that of Greater Melbourne, women, young people and those aged 70 years and over have experienced the greatest job losses since the pandemic began. Job losses across these groups could be explained by the fact that women and young people make up a greater proportion of the Accommodation and Food Services as well as the Retail Trade sectors which were hardest hit when by the pandemic. 
+
+Shelley to add more narrative around women and young people – mental health, caring duties, gender inequality. Predicted stunt to entering workforce !!!
 
 ```{r, fig.width=7, fig.height=4}
 # victorian data read in from other file - based on econ tracker
 
 # get the latest week from the other file 
-latest_week <- "19 September"
+latest_week <- "3 October"
 
 weekly_jobs_data <- read_csv("data_in/jobs_wages_by_age_data.csv") %>%
   mutate(age_group = factor(age_group, levels = c("Under 20", "20-29", "30-39", "40-49", "50-59", "60-69", "70 and over", "All ages"))) %>% 
@@ -677,11 +837,16 @@ ggplot(weekly_jobs_data, aes(age_group, latest_week, fill = sex)) +
 ggsave("graphs_out/change_jobs_age_gender.eps") # eps for illustrator 
 ```
 
+
+
+
 \pagebreak
 
-# Affordable housing
+# Housing (Indigenous language)
 
-According to the Rental Report from the Department of Health and Human Services, there were 21 affordable lettings in Moonee Valley in June 2020. These are private rental properties (newly leased) affordable to households on statutory incomes by bedroom number. There have been fewer than 30 affordable lettings in Moonee Valley since 2015. 
+## Affordable housing
+
+According to the Rental Report from the Department of Health and Human Services, there were only 21 affordable lettings in Moonee Valley in June 2020. These are private rental properties (newly leased) affordable to households on statutory (Centrelink) incomes by bedroom number. There have been fewer than 30 affordable lettings in Moonee Valley since 2015. 
 
 ```{r, fig.height=4, fig.width=7}
 rr_affordable_lga <- read_csv("data_in/dhhs_rental_report/lga_affordable.csv")
@@ -707,15 +872,63 @@ ggplot(mv_affordable, aes(month, values, colour = bedrooms, label = values)) +
   labs(title = "Few rentals in Moonee Valley are 'affordable'",
        subtitle = "Affordable lettings, City of Moonee Valley",
        x = NULL, y = "Dwellings", colour = NULL,
-       caption = "Source: Rental Report, Department of Health and Human Services, 2020")
+       caption = "Source: Rental Report, Department of Health and Human Services, 2020a")
 ggsave("graphs_out/affordable_rentals.eps") # eps for illustrator 
 ```
 
+## Homelessness
+
+Data from the Australian Bureau of Statistics shows show little change in the number of homeless persons in Moonee Valley between 2011 and 2016. Across the country, the number of homeless persons has risen, but in Moonee Valley, there was a slight decline, with 403 homeless persons in 2016, compared to 409 in 2011. The figure for 2016 (403 persons) is 1.6 per cent of the all homeless persons in Victoria (24,828).
+
+```{r}
+tibble(Region = c("Australia", "Victoria", "Moonee Valley (C)"),
+       `2011` = c(102439, 22259, 409),
+       `2016` = c(116427, 24828, 403),
+       `Change (#)` = c(13988, 2569, -6),
+       `Change (%)` = c("14%", "12%", "-1%"))   %>% 
+  mutate(`2011` = comma(`2011`)) %>% 
+  mutate(`2016` = comma(`2016`)) %>% 
+  mutate(`Change (#)` = comma(`Change (#)`)) %>% 
+  flextable() %>% 
+  autofit() %>% 
+  add_header_lines(values = "Homelessness estimates, 2016") %>% 
+  theme_vanilla() %>%
+  align(i = NULL, j = c(2,4), align = "right", part = "body") %>% 
+  footnote( i = 1, j = 1:4,
+            value = as_paragraph(
+              c("Source: ABS, Census 2016")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
+
+The largest concentrations of homeless residents are in Flemington, Ascot Vale and the Essendon - Aberfeldie area.
+
+```{r}
+tibble(SA2 = c("Flemington", "Ascot Vale", "Essendon - Aberfeldie", "Moonee Ponds",
+               "Keilor East", "Airport West", "Strathmore", "Niddrie - Essendon West", "Essendon Airport"),
+       `2011` = c(130L, 81L, 71L, 59L, 41L, 5L, 0L, 17L, 0L),
+       `2016` = c(126L, 112L, 76L, 43L, 18L, 13L, 10L, 4L, 0L),
+       `Change (#)` = c(-4L, 31L, 5L, -16L, -23L, 8L, 10L, -13L, 0L)) %>% 
+  flextable() %>% 
+  autofit() %>% 
+  add_header_lines(values = "Homelessness estimates by SA2, 2016") %>% 
+  theme_vanilla() %>%
+  align(i = NULL, j = c(2,3), align = "right", part = "body") %>% 
+  footnote( i = 1, j = 1:3,
+            value = as_paragraph(
+              c("Source: ABS, Census 2016")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+```
+
+
 \pagebreak
 
-# Community Safety
+# Community Safety (Indigenous language)
 
-Data from the Community Survey shows that about less than half of all residents feel safe walking alone in their local area at night. About 80 per cent feel safe at public transport stops and stations, while almost all residents feel safe when walking alone in their local area during the day.
+Data from the Council's annual community survey shows that about less than half of all residents feel safe walking alone in their local area at night. About 80 per cent feel safe at public transport stops and stations, while almost all residents feel safe when walking alone in their local area during the day.
 
 ```{r, fig.width=7, fig.height=4}
 cs_safety <- read_csv("data_in/community_survey/safety_full_2020.csv")
@@ -736,7 +949,7 @@ ggplot(cs_safety_mv, aes(year, pct, label = pct, colour = name)) +
        caption = "Source: Moonee Valley Community Survey, 2020") +
   scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
   theme(legend.position = "bottom") +
-  geom_text_repel(show.legend = FALSE)
+  geom_text_repel(show.legend = FALSE, nudge_y = 5)
 ggsave("graphs_out/perception_safety.eps") # eps for illustrator 
 ```
 
@@ -747,7 +960,8 @@ cs_safety_gender <- cs_safety %>%
   filter(cat == "Gender") %>% 
   filter(safety == "'Very safe' or 'safe'") %>% 
   mutate(name = str_replace(name, "your local", "your \nlocal")) %>% 
-  mutate(name = str_replace(name, "stops and", "stops \nand"))
+  mutate(name = str_replace(name, "stops and", "stops \nand")) %>% 
+  mutate(group = if_else(group == "Female", "Females", "Males"))
 
 ggplot(cs_safety_gender, aes(year, pct, label = pct, colour = name)) +
   theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
@@ -759,7 +973,7 @@ ggplot(cs_safety_gender, aes(year, pct, label = pct, colour = name)) +
        caption = "Source: Moonee Valley Community Survey, 2020") +
   scale_color_manual(values = mv2040_cols) + scale_x_continuous(breaks = seq(2018, 2020, 1)) +
   theme(legend.position = "bottom") +
-  geom_text_repel(show.legend = FALSE)
+  geom_text_repel(show.legend = FALSE, nudge_y = 5)
 ggsave("graphs_out/perception_safety_gender.eps") # eps for illustrator 
 ```
 
@@ -797,11 +1011,13 @@ nhwds %>%
 
 \pagebreak
 
-# Health Status
+# Health Status  (Indigenous language)
 
 ## Oral health
 
-Data from the Victorian Population Health Survey shows that Moonee Valley residents have better self-reported dental health, lower incidence of gum disease when compared to the Western Melbourne Area and Victoria. Moonee Valley residents are also less likely to delay visiting a dental professional because of cost when compared to Victoria.
+Data from the Victorian Population Health Survey shows that Moonee Valley residents have better self-reported dental health and lower incidence of gum disease when compared to the Western Melbourne Area and Victoria. Moonee Valley residents are also less likely to delay visiting a dental professional because of cost when compared to Victoria.
+
+Shelley to include narrative around the preventable presentations for oral health
 
 ```{r, fig.height=3, fig.width=7}
 vphs_srdhs <- read_csv("data_in/vphs/vphs_srdhs.csv") %>%  # self reported dental health status
@@ -873,16 +1089,15 @@ vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Large variati
 ggsave("graphs_out/fruit_veg.eps") # eps for illustrator 
 ```
 
+* food relief? Gender breakdown for those accessing food relief 
 
-## Chronic disease
+Shelley to include narrative around local food relief and state-wide trends during pandemic !!!
 
-* add more here
-* cancer from here https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FCancer%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Cancer%20Moonee%20Valley.pdf
-* ahpc data - diabetes and other things?
+## Chronic disease (Indigenous language)
 
 ### Tests for chronic disease
 
-Data from the Victorian Population Health Survey 2017 shows that testing for chronic disease in Moonee Valley is similar to levels in Western Melbourne. Bowel examinations are lower, and faecal blood occult tests are higher than for Western Melbourne, but these differences are not statistically significant.
+Data from the Victorian Population Health Survey 2017 shows that testing for chronic disease in Moonee Valley is similar to levels in Western Melbourne. Bowel examinations are lower, and faecal blood occult tests are higher than for Western Melbourne, though these differences are not statistically significant.
 
 ```{r, fig.height=4, fig.width=7}
 vphs_blood <- read_csv("data_in/vphs/vphs_blood.csv") %>%  # blood tests
@@ -944,7 +1159,7 @@ ggsave("graphs_out/bowel_disease_test_nh.eps") # eps for illustrator
 ```
 
 
-## Modifiable risk factors
+## Modifiable risk factors (Indigenous language)
 
 ### Smoking
 
@@ -1011,11 +1226,11 @@ ggplot(vphs_alcohol, aes(fct_rev(region), pct, fill = region)) +
 ggsave("graphs_out/alcohol.eps") # eps for illustrator 
 ```
 
-On and off licence alcohol outlets are generally distributed in the activity centres in Moonee Valley. These are generally in the east of the city.  
+On and off licence alcohol outlets are generally located in activity centres in Moonee Valley. These are most concentrated in the east of the municipality.  
 
-![Alcohol venues map](maps/Alcohol map layout.png)
+![](maps/Alcohol map layout.png)
 
-Data from Turning Point shows that there were over 600 alcohol related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males.
+Data from Turning Point shows that there were over 600 alcohol related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males, who were admitted at twice the rate of females.
 
 ```{r, fig.width=7, fig.height=3}
 hosp_adm_alc <- read_csv("data_in/aodstats/alcohol_hosp_admissions.csv", skip = 2) %>% 
@@ -1049,7 +1264,7 @@ ggplot(hosp_adm_alc_gend, aes(year, values, colour = group, label = values)) +
 ggsave("graphs_out/alcohol_hospitalisation_gender.eps") # eps for illustrator 
 ```
 
-Moonee valley has a higher rate of alcohol related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
+Moonee valley has a higher rate of alcohol related hospitalisations than many other local government areas in the North West region, though it is not the highest. 
 
 ```{r, fig.width=7, fig.height=3}
 hosp_adm_alc_comp <- read_csv("data_in/aodstats/alcohol_hosp_admissions_comp.csv", skip = 2) %>% 
@@ -1107,7 +1322,7 @@ hosp_adm_drugs_gend <- hosp_adm_drugs %>%
   filter(group %in% c("Male", "Female"))
 ```
 
-Data from Turning Point shows that there were over 300 illicit drugs related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males.
+Data from Turning Point shows that there were over 300 illicit drugs related hospital admissions for Moonee Valley residents in 2018-19. The majority of these were males. 
 
 ```{r, fig.width=7, fig.height=3}
 ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
@@ -1123,7 +1338,7 @@ ggplot(hosp_adm_drugs_gend, aes(year, values, colour = group, label = values)) +
 ggsave("graphs_out/drugs_hospitalisation_gender.eps") # eps for illustrator 
 ```
 
-Moonee valley has a higher rate of illicit drugs related hospitalisations than many other local government areas in the North West region, but it is not the highest. 
+Moonee valley has a higher rate of illicit drugs related hospitalisations than many other local government areas in the North West region, though it is not the highest. Alarmingly, it can also be seen that illicit drug related hospitalisations have been increasing steadily since 2012.
 
 ```{r, fig.width=7, fig.height=3}
 hosp_adm_drugs_comp <- read_csv("data_in/aodstats/illicit_drugs_hosp_admissions_comp.csv", skip = 2) %>% 
@@ -1162,9 +1377,9 @@ ggsave("graphs_out/drugs_hospitalisation_lga.eps") # eps for illustrator
 
 Data from the Victorian Responsible Gambling Foundation shows that over $77.6 million was spent on pokies in Moonee Valley in 2018-19.
 
-![pokies chart](images/gambling-in-victoria-moonee-valley.png)
+![](images/gambling-in-victoria-moonee-valley.png)
 
-In a usual year, almost $80 million is lost at pokies in venues in the City of Moonee Valley. This of course has been reduced as pokies venues have been closed temporarily  due to COVID-19.
+In a usual year, almost $80 million is lost at pokies in venues in the City of Moonee Valley. This figure has been reduced as pokies venues have been closed temporarily due to COVID-19.
 
 ```{r, fig.height=3, fig.width=7}
 pokies_time <- read_excel("data_in/vcglr/historical_yearly_egm_data_by_lga_2002-2020_1.xls", sheet = "2010-2020", skip = 8) %>% 
@@ -1191,7 +1406,7 @@ ggplot(pokies_time, aes(year, exp_m, colour = "#E55048", label = exp_m)) +
 ggsave("graphs_out/pokies_losses.eps") # eps for illustrator 
 ```
 
-Nearly $19 million was lost at the Skyways Taverner in the year to 30 June 2019, one of the highest in Victoria.
+Nearly $19 million was lost at the Skyways Taverner(in Airport West) in the year to 30 June 2019, one of the highest in Victoria.
 
 ```{r, fig.height=4, fig.width=7}
 pokies_venues_raw <- read_excel("data_in/vcglr/current_6_month_venue_data_release_.xls", sheet = "Detail Data 2018 - 2019", skip = 8) %>% 
@@ -1233,7 +1448,7 @@ ggsave("graphs_out/pokies_egms.eps") # eps for illustrator
 
 When looking at the distribution of Electronic Gaming Machines in Moonee Valley, we can see that they are concentrated in the east of the municipality.
 
-![Pokies venues map](maps/EGM map layout.png)
+![](maps/EGM map layout.png)
 
 ### Obesity
 
@@ -1274,6 +1489,8 @@ ggsave("graphs_out/soft_drink_takeaway.eps") # eps for illustrator
 
 Data from the Victorian Population Health Survey 2017 shows that about 58 per cent of Moonee Valley residents complied with the physical activity, compared to 48.5 per cent in the Western Melbourne Area. About 30 per cent of residents spent 7 or more hours sitting on an average weekday.
 
+Shelley to add covid narrative – see recent webinar notes and research findings !!!
+
 ```{r, fig.height=2.5, fig.width=7}
 vphs_phys <- read_csv("data_in/vphs/vphs_phys.csv") %>% 
   filter(selections == "Met guidelines") %>% 
@@ -1295,9 +1512,7 @@ ggplot(vphs_phys_act, aes(fct_rev(region), pct, fill = region)) +
 ```
 
 
-### Mental health
-
-* more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FMental%20Health%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Mental%20Health%20Moonee%20Valley.pdf
+## Mental health  (Indigenous language)
 
 Data from the Victorian Population Health Survey 2017 shows that about three in ten residents rated their life satisfaction and their feeling of life being worthwhile as 'very high'.
 
@@ -1373,7 +1588,7 @@ ggsave("graphs_out/mental_health_gender.eps") # eps for illustrator
 
 \pagebreak
 
-# Sexual and reporductive health
+# Sexual and reporductive health  (Indigenous language)
 
 ```{r}
 sex_reprod <- read_excel("data_in/sexual_reproductive_health.xlsx", sheet = "Sheet1") %>% 
@@ -1407,6 +1622,8 @@ sex_reprod1 <- sex_reprod %>%
 
 Rates of chlamydia, gonorrhoea, and hepatitis B are lower in Moonee Valley than for the Metro West region, and are lower for females than males.
 
+Narrative – the need for more education and awareness raising, particular with males. 
+
 ```{r, fig.width=7, fig.height=3}
 ggplot(sex_reprod1, aes(lga, value, fill = gender)) + 
   theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
@@ -1422,9 +1639,7 @@ ggsave("graphs_out/sexual_reproductive.eps") # eps for illustrator
 
 \pagebreak
 
-# Family violence
-
-* and more from here: https://victorianwomenshealthatlas.net.au/reports%2Ffactsheets%2FViolence%20Against%20Women%2FMoonee%20Valley%2FVWHAtlas%20Fact%20Sheet%20Violence%20Against%20Women%20Moonee%20Valley.pdf
+# Family violence (Indigenous language)
 
 ```{r}
 fam_violence_raw <- read_excel("data_in/Data_Tables_LGA_Family_Incidents_Year_Ending_June_2020.xlsx", sheet = "Table 01") %>% 
@@ -1454,9 +1669,18 @@ ggplot(fam_vio, aes(year, rate_per_100_000_population, colour = lga, label = rat
 ggsave("graphs_out/family_violence.eps") # eps for illustrator 
 ```
 
+Include pandemic narrative
+
+Not to Violence
+
+Vic Pol
+
+Women’s health agency data – women’s health west 
+
+
 \pagebreak
 
-# Births
+# Births (Indigenous language)
 
 Data from Moonee Valley's Maternal Child and Health (MCH) team show that there were 1,487 births in the municipality in the 2019-20 financial year. This is higher than in 2018-19, but lower than in earlier years. The highest number of births are recorded at the Strathmore and Milleara Integrated Learning and Development Centre (MILD) Maternal and Child Health centres.
 
@@ -1507,7 +1731,7 @@ ggplot(teen_birth, aes(lga, value, fill = fct_rev(lga))) +
 ggsave("graphs_out/teen_births.eps") # eps for illustrator 
 ```
 
-# Early childhood development
+# Early childhood development (Indigenous language)
 
 ```{r}
 #aedc
@@ -1536,7 +1760,7 @@ aedc_merge <- bind_rows(aedc_data_lga, aedc_data_sa2) %>%
  
 ```
 
-Data from the Australian Early Development Census shows that about seven per cent of children were developmentally vulnerable in two or more domains in 2018. This was lower than the figure in 2015. There seems to be a lot of variation in the data at the SA2 level.
+Data from the Australian Early Development Census shows that about seven per cent of children were developmentally vulnerable in two or more domains in 2018. This was lower than 2015 (eight per cent). There seems to be a lot of variation in the data at the SA2 level.
 
 ```{r}
 ggplot(aedc_merge, aes(year, pct, fill = year)) + 
@@ -1545,7 +1769,7 @@ ggplot(aedc_merge, aes(year, pct, fill = year)) +
   geom_text(aes(label = pct, vjust = -0.5), col = "black", fontface = "bold", position = position_dodge2(width = 0.9)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
   labs(title = "Varied levels of childhood development vulnerability",
-       subtitle = "Children developmentally vulnerable in two or more domains by Statistical Area Level 2 (SA2)",
+       subtitle = "Children developmentally vulnerable in two or more domains by SA2",
        x = NULL, y = "Percentage", caption = "Source: Australian Early Development Census, 2019")
 ggsave("graphs_out/childhood_dev_vuln.eps") # eps for illustrator 
 ```
@@ -1553,10 +1777,9 @@ ggsave("graphs_out/childhood_dev_vuln.eps") # eps for illustrator
 
 \pagebreak
 
-# Aged care
+# Aged care (Indigenous language)
 
-Data from the Australian Institute of Health and Wellbeing shows that in June 2019, there were 1,168 residential aged care places in the City of Moonee Valley. The majority of aged care facilities in Moonee Valley are not-for profit facilities or private facilities. 
-
+Data from the Australian Institute of Health and Wellbeing shows that in June 2019, there were 1,168 residential aged care places in the City of Moonee Valley. Nearly all of the aged care facilities in Moonee Valley are not-for profit facilities or private facilities. 
 
 ```{r, fig.height=5, fig.width=7}
 aged_care <- read_csv("data_in/shp/Services_141_Full_Data_data.csv") %>% 
@@ -1584,15 +1807,24 @@ ggplot(aged_care_mv, aes(reorder(service_name, residential_places), residential_
 ggsave("graphs_out/aged_care.eps") # eps for illustrator 
 ```
 
-There is one government facility (Cyril Jewell House) in Keilor East. 
+Cyril Jewell House, located in Keilor East, is the only government aged care facility in the municipality. 
 
-![Aged care map](maps/Aged care layout.png)
+![](maps/Aged care layout.png)
+
+Most of the deaths due to COVID-19 in Victoria have occurred in aged care facilities. Data from the Department of Health and Human Services shows that (up to 20 October 2020,) Within the municipality, there were:
+
+* 84 cases and nine deaths at the Embracia Moonee Valley facility in Avondale Heights
+* 71 cases and 15 deaths at the Gregory Lodge facility in Flemington
+* 68 cases and seven deaths at the Menarock Life facility in Essendon
+* 22 cases and four deaths at Arcadia Aged Care in Essendon
 
 ## Death
 
 ### Premature deaths
 
 Premature deaths in Moonee Valley declined between 2014 and 2018. There were 142.8 premature deaths per 100,000 in Moonee Valley in 2018, compared to 160.5 for Greater Melbourne.
+
+ADD covid 19 data if available by LGA !!!
 
 ```{r}
 # aihw data
@@ -1625,7 +1857,7 @@ ggsave("graphs_out/premature_death.eps") # eps for illustrator
 
 ### Top causes of death
 
-The most common causes of death in 2018 were Coronary heart disease, responsible for 289 deaths.
+The most common causes of death in for Moonee Valley in 2018 was coronary heart disease, responsible for 489 deaths.
 
 ```{r}
 # Top ten causes of death in the City of Moonee Valley, 2018
@@ -1649,10 +1881,26 @@ death_causes_data %>%
             part = "header")
 ```
 
+Leading underlying causes of death by age - add to narrative !!!
+
+As well as differences by sex, the leading causes of death also vary by age. Chronic diseases feature more prominently among people aged 45 and over, while the leading causes of death among people aged 1–44 are external causes, such as accidents and suicides (Figure 3.2).
+
+https://www.aihw.gov.au/reports/life-expectancy-death/deaths-in-australia/contents/leading-causes-of-death 
+
+A spotlight on Indigenous health and wellbeing (Indigenous Profile 2016 / 2020, inform RAP 2021-25?)
+
+
 \pagebreak
 
-# References
+# Definitions
+
+# References (Indigenous language)
+
 Australian Bureau of Statistics, 2016, *Census of Population and Housing, 2016*, Australian Government, Canberra.
+
+Australian Bureau of Statistics, *Census of Population and Housing 2016 Census of Population and Housing: Estimating homelessness, 2016*, March 2018, Australian Government, Canberra.
+
+Australian Bureau of Statistics, 2019, *3235.0 Regional Population by Age and Sex, Australia*, Australian Government, Canberra.
 
 Australian Bureau of Statistics, 2020, 'Weekly Payroll Jobs and Wages in Australia', 7 October, Australian Government, Canberra. https://www.abs.gov.au/statistics/labour/earnings-and-work-hours/weekly-payroll-jobs-and-wages-australia/latest-release, accessed 7 October 2019.
 
@@ -1674,7 +1922,9 @@ Department of Environment, Land, Water and Planning, 2020, *Heat Vulnerabilty In
 
 Dental Health Services Victoria, 2020, *City of Moonee Valley Oral Health Profile*, Department of Health and Human Services, Victorian Government, Melbourne.
 
-Department of Health and Human Services, 2020, 'Rental Report', Victorian Government, Melbourne, https://www.dhhs.vic.gov.au/publications/rental-report, accessed 22 September 2020.
+Department of Health and Human Services, 2020a, 'Rental Report', Victorian Government, Melbourne, https://www.dhhs.vic.gov.au/publications/rental-report, accessed 22 September 2020.
+
+Department of Health and Human Services, 2020b, 'Case locations and outbreaks', Victorian Government, Melbourne, https://www.dhhs.vic.gov.au/case-locations-and-outbreaks, accessed 20 October 2020.
 
 Department of Health and Human Services, 2017, *Victorian Population Health Survey 2017*, Victorian Government, Melbourne.
 
