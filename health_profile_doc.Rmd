@@ -1107,7 +1107,9 @@ ggsave("graphs_out/pot_prev_hosp_dental.eps") # eps for illustrator
 
 ## Healthy eating and food security
 
-* map of fast food/supermarkets? 
+Looking at the locations of supermarkets and (the larger) fast food outlets, we can see that they are spread across the municipality with concentrations in the activity centres, however, there are also a number of outlets near the Flemington public housing estate.
+
+![](maps/supermarkets.png)
 
 Data from the Victorian Population Health Survey shows that only 3.2 per cent of Moonee Valley residents met the fruit and vegetable consumption guidelines, though the margin of error for this indicator is large.
 
@@ -1515,6 +1517,38 @@ ggplot(vphs_obesity, aes(fct_rev(region), pct, fill = region)) +
 ggsave("graphs_out/soft_drink_takeaway.eps") # eps for illustrator 
 ```
 
+### Immunisation
+
+Data from the Australian Institute of Health and Welfare shows that within the postcode areas of Moonee Valley, the immunisation rate for one year olds is highest in the 3033, 3034, 3040 and 3041 postcodes. Immunisation rates are lower for two year olds. The immunisation rate is highest for five year olds in the 3039, 3041 and 3042 postcodes.
+
+```{r}
+#aihw immunisation rates 2016-17
+immu_raw <- read_excel("data_in/aihw-mhc-hpf-16-immunisation-datasheet-report-hc42.xlsx", sheet = "TAB 4", range = "A17:G42080")
+
+immu_raw_tab <- immu_raw %>% 
+  filter(Postcode %in% c("3031", "3032", "3033", "3034", "3039", "3040", "3041", "3042")) %>% 
+  filter(`Reporting Year` == "2016-17") %>% 
+  select(-`Interpret with caution  (#)`, -State, -`Reporting Year`) %>% 
+  rename(`Per cent fully immunised` = `Percent fully immunised (%)`) %>% 
+  pivot_wider(Postcode:`Associated residential areas`, names_from = "Age group", values_from = "Per cent fully immunised") %>% 
+  mutate(`Associated residential areas` = str_remove(`Associated residential areas`, ", Cross Keys, Essendon Fields"))
+
+immu_raw_tab %>% 
+  flextable()  %>% 
+  autofit() %>% 
+  fontsize(i = NULL, j = NULL, size = 10, part = "body") %>% 
+  add_header_lines(values = "Immunisation rates for Children, 2016-17") %>% 
+  theme_vanilla() %>% 
+  footnote( i = 1, j = 1:5,
+            value = as_paragraph(
+              c("Source: AIHW, Immunisation rates for children in 2016–17, 2018")
+            ),
+            ref_symbols = c(""),
+            part = "header")
+
+```
+
+\  
 
 ### Physical activity
 
@@ -1952,6 +1986,8 @@ Australian Bureau of Statistics, 2020, 'Weekly Payroll Jobs and Wages in Austral
 Australian Early Development Census, 2019, 'Additional Data Products', Australian Government, Canberra, https://www.aedc.gov.au/data/downloads, accessed 22 September 2019.
 
 Australian Institute of Health and Wellbeing, 2020, 'Aged Care Service List', Department of Health, Australian Government, Canberra, https://hwd.health.gov.au/datatool.html, accessed 22 September 2020.
+
+Australian Institute of Health and Wellbeing, 2020, 'Immunisation rates for children in 2016–17', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/immunisation/immunisation-rates-for-children-in-2016-17, accessed 27 October 2020.
 
 Australian Institute of Health and Wellbeing, 2020, 'Mortality Over Regions and Time', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/life-expectancy-death/mort-books/contents/mort-books, accessed 22 September 2020.
 
