@@ -55,6 +55,8 @@ Some sort of infographic like the previous health tracker
 
 ABS - Australian Bureau of Statistics
 
+AHPC - Australian Health Policy Collaboration 
+
 AIHW - Australian Institute of Health and Welfare
 
 CI - Confidence interval (to indicate the level of uncertainty in estimates)
@@ -318,34 +320,6 @@ ggplot(age_5yr_nh_2040, aes(fct_rev(area), pct, fill = age_gr2)) +
 ggsave("graphs_out/pop_age_nhood_2040.eps") # eps for illustrator 
 ```
 
-## Household structure 
-
-Data from the 2016 Census shows that the most common household type is couples with children, who account for approximately 31 per cent of households. Lone person households make up about 25 per cent of households.
-
-```{r, fig.width=7, fig.height=4}
-# 2016 census data - edited extract from HDFMD
-households <- tibble(household_type = c("Couples without children","Couples with children","One parent families",
-                          "Other families","Lone person","Group household",
-                          "Visitor only households","Other not classifiable"),
-  `Moonee Valley (C)` = c(22.5, 30.7, 9.1, 2.7, 25, 4.7, 0.7, 4.7),
-    `Greater Melbourne` = c(22.5, 32.5, 9.7, 3.2, 22, 4.7, 0.9, 4.5)) %>% 
-  pivot_longer(-household_type, names_to = "region", values_to = "value")
-
-ggplot(households, aes(fct_rev(household_type), value, fill = region)) + 
-  theme_pubclean() +
-  geom_col(position = position_dodge2(width = 0.9, preserve = 'single')) + 
-  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold",
-            position = position_dodge2(width = 0.9, preserve = "single"), vjust=0.5, size=3.5) + coord_flip() +
-  scale_fill_manual(values = rev(mv2040_cols[1:2])) + ylim(0, 35) +
-  labs(title = "Couples with children make up 31% of households",
-       subtitle =  "Household type", fill = NULL,
-       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
-  theme(legend.position = c(0.8, 0.2)) +
-  guides(fill = guide_legend(nrow = 3)) + guides(fill = guide_legend(reverse=TRUE))
-ggsave("graphs_out/household_type.eps") # eps for illustrator 
-```
-
-
 
 ## Cultural and linguistic diversity (Indigenous language)
 
@@ -482,6 +456,63 @@ ggplot(multiculturalism, aes(year, pct, fill = fair_red)) +
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: Moonee Valley Community Survey, 2020")
 ggsave("graphs_out/multiculturalism.eps") # eps for illustrator 
 ```
+
+## Education
+
+Data from the 2016 Census shows that about 30 per cent of Moonee Valley residents are attending an educational institution. About 24 per cent of these were in primary school, while 20 per cent were in secondary school and 26 per cent were in a tertiary or technical institution. A lower proportion of primary school students are in government schools (10.9 per cent) when compared to Greater Melbourne (16.8 per cent).
+
+```{r, fig.width=7, fig.height=4.5}
+ed_levels <- c("Preschool", "Primary - Government","Primary - Catholic", "Primary - other non Government",
+                     "Secondary - Government", "Secondary - Catholic","Secondary - other non Government",
+                          "Technical or further education institution", "University or tertiary institution","Other","Not stated")
+
+ed_raw <- tibble(education = ed_levels,
+  `Moonee Valley (C)` = c(4.9,10.9,10.6,2.9,8.4, 7.2,4,4.6,21.5,3.3,21.8),
+    `Greater Melbourne` = c(5.2,16.8,5.3,3,10.6,4.5,4.3,5.7,20.4,3.5,20.5))  %>% 
+  pivot_longer(-education, names_to = "region", values_to = "value")%>% 
+  mutate(education = factor(education, levels = ed_levels))
+
+ggplot(ed_raw, aes(fct_rev(education), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) + ylim(0, 35) +
+  labs(title = "A quarter of those in school are at primary school",
+       subtitle =  "Attending an educational institution", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") +
+  guides(fill = guide_legend(nrow = 3)) + guides(fill = guide_legend(reverse=TRUE))
+ggsave("graphs_out/education.eps") # eps for illustrator 
+```
+
+
+Data from the 2016 Census shows that there are higher levels of educational attainment in Moonee Valley when compared to Greater Melbourne. About 31 per cent of residents in Moonee Valley have a bachelor degree or higher, compared to 27.5 per cent for Greater Melbourne. 
+
+```{r}
+heap_levels <- c("Bachelor Degree level and above","Advanced Diploma and Diploma level", 
+                 "Certificate level IV","Certificate level III",
+                 "Year 12","Year 11","Year 10","Certificate level II",
+                 "Certificate level I","Year 9 or below","No educational attainment","Not stated")
+
+heap_raw <- tibble(level = heap_levels,
+                      `Moonee Valley (C)` = c(31.1,9,2.2,8.9, 16.3,5.1,5.7,0,0,8.7,1.3,9.3),
+                        `Greater Melbourne` = c(27.5,9.5,2.6,10.2,17.2,5.6,6.8,0.1,0,8,1.2,9.1)) %>% 
+  pivot_longer(-level, names_to = "region", values_to = "value") %>% 
+  mutate(level = factor(level, levels = heap_levels))
+
+ggplot(heap_raw, aes(fct_rev(level), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) + ylim(0, 35) +
+  labs(title = "About 31 per cent of residents have degrees",
+       subtitle =  "Highest level of educational attainment", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") +
+  guides(fill = guide_legend(nrow = 3)) + guides(fill = guide_legend(reverse=TRUE))
+ggsave("graphs_out/educational_attainment.eps") # eps for illustrator 
+```
+
 
 
 ## Self-reported health
@@ -768,7 +799,7 @@ ggplot(census_ineq, aes(fct_rev(cat2), pct, fill = gender)) +
   geom_col(position = "dodge") +
   geom_text(aes(label = pct, y = 3), col = "white", fontface = "bold", position = position_dodge(width = 1)) +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = c(0.8, 0.85)) + coord_flip() +
-  labs(title = "Women face labour force & unpaid work inequality", fill = NULL,
+  labs(title = "Women face labour force and unpaid work inequality", fill = NULL,
        x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") +
   guides(fill = guide_legend(nrow = 1))
 ggsave("graphs_out/gender_inequality.eps") # eps for illustrator 
@@ -776,79 +807,90 @@ ggsave("graphs_out/gender_inequality.eps") # eps for illustrator
 
 \pagebreak
 
-# Unemployment (Indigenous language)
 
-The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne. The dataset runs to March 2020 and only reflects the impacts from the pandemic social restrictions.
-
-```{r, fig.height=3, fig.width=7}
-# import from economic tracker
-salm_raw <- read_csv("data_in/salm_chart_rate_data.csv") 
-
-salm_mv <- salm_raw %>% 
-  filter(region %in% c("City of Moonee Valley", "Greater Melbourne")) 
-
-ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
-  geom_point() + geom_line() + ylim(3.5, 7.5) +
-  theme_pubclean() +
-  theme(legend.position = "bottom") + 
-  scale_colour_manual(values = mv2040_cols) + 
-  geom_text_repel(data = salm_mv %>% filter(date == as.Date("2020-03-01")), show.legend = FALSE) +
-  labs(title = "Moonee Valley's unemployment rate is generally low",
-       x = NULL, y = "Unemployment rate (%)", colour = NULL,
-       caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
-ggsave("graphs_out/unemployment_rate.eps") # eps for illustrator 
-```
-
-The unemployment rate is highest in Flemington and Ascot Vale and lowest in Strathmore.
-
-```{r}
-salm_sa2 <- salm_raw %>% 
-  filter(region != "City of Moonee Valley") %>% 
-  filter(region != "Greater Melbourne")
-
-ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
-  geom_point() + geom_line() + facet_wrap(~region) +
-  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
-  theme(legend.position = "none") + 
-  labs(title = "Higher unemployment in Flemington and Ascot Vale",
-       subtitle = "Unemployment Rate (Statistical Area Level 2)", x = NULL, y = "Unemployment rate (%)", colour = NULL,
-       caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
-ggsave("graphs_out/unemployment_sa2.eps") # eps for illustrator 
-```
-
-While the unemployment rate across the municipality has generally remained lower that of Greater Melbourne, women, young people and those aged 70 years and over have experienced the greatest job losses since the pandemic began. Job losses across these groups could be explained by the fact that women and young people make up a greater proportion of the Accommodation and Food Services as well as the Retail Trade sectors which were hardest hit when by the pandemic. 
-
-Shelley to add more narrative around women and young people – mental health, caring duties, gender inequality. Predicted stunt to entering workforce !!!
-
-```{r, fig.width=7, fig.height=4}
-# victorian data read in from other file - based on econ tracker
-
-# get the latest week from the other file 
-latest_week <- "3 October"
-
-weekly_jobs_data <- read_csv("data_in/jobs_wages_by_age_data.csv") %>%
-  mutate(age_group = factor(age_group, levels = c("Under 20", "20-29", "30-39", "40-49", "50-59", "60-69", "70 and over", "All ages"))) %>% 
-  filter(type == "Jobs")
-
-ggplot(weekly_jobs_data, aes(age_group, latest_week, fill = sex)) +
-  theme_pubclean() +
-  geom_col(position = position_dodge2(width = 0.9)) + ylim(min(weekly_jobs_data$latest_week)-2, 0) +
-  theme(legend.position = c(0.5, 0.1)) + scale_fill_manual(values = mv2040_cols) + 
-  geom_text(aes(label = latest_week, vjust = 1.5), col = "black", fontface = "bold", position = position_dodge2(width = 0.9)) +
-  labs(x = "Age group", y = "Change (%)",
-       title = "Women and young people have seen greater job losses\n since the start of the pandemic",
-       subtitle = glue("Change (%) in jobs in Victoria, 14 March to {latest_week}, 2020"), fill = NULL,
-       caption = "ABS, Weekly Payroll Jobs and Wages in Australia, 2020") +
-  guides(fill = guide_legend(nrow = 1))
-ggsave("graphs_out/change_jobs_age_gender.eps") # eps for illustrator 
-```
-
-Shelley - When home becomes the workplace - Women losing jobs and unpaid domestic labour
 
 
 \pagebreak
 
 # Housing (Indigenous language)
+
+## Dwelling structure
+
+The majority of dwellings in Moonee Valley are separate houses. They make up 57 per cent of dwellings (compared to 68 per cent in Greater Melbourne), with semi-detached and flats each making up 21 per cent. 
+
+```{r, fig.width=7, fig.height=3.5}
+strd_levels <- c("Separate house","Semi-detached","Flat or apartment","Other dwelling")
+
+strd_raw <- tibble(structure = strd_levels,
+  `Moonee Valley (C)` = c(57.4, 20.7, 21, 0.4),
+    `Greater Melbourne` = c(67.8, 16.8, 14.7, 0.4)) %>% 
+  pivot_longer(-structure, names_to = "region", values_to = "value") %>% 
+  mutate(structure = factor(structure, levels = strd_levels))
+
+ggplot(strd_raw, aes(fct_rev(structure), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) +
+  labs(title = "Most dwellings are separate houses",
+       subtitle =  "Dwelling structure", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") + ylim(0,80)
+ggsave("graphs_out/dwelling_structure.eps") # eps for illustrator 
+```
+
+
+## Tenure type
+
+About two-thirds of dwellings are owned in Moonee Valley. Of these, 35 per cent are owned outright, while 29 per cent are owned with a mortgage. Another 32.5 per cent of homes are rented (of the rented dwellings, about 14 per cent are social housing). There are a higher proportion of those who own their home outright in Moonee Valley compared to Greater Melbourne, and also a higher proportion of those rented dwellings.
+
+```{r, fig.width=7, fig.height=3.5}
+tend_levels <- c("Owned outright", "Owned with a mortgage", "Rented", "Other tenure type", "Tenure type not stated")
+
+tend_raw <- tibble(tenure = tend_levels,
+  `Moonee Valley (C)` = c(35, 29.1, 32.5, 0.6, 2.9),
+    `Greater Melbourne` = c(30.4, 36, 30, 0.8, 2.7)) %>% 
+  pivot_longer(-tenure, names_to = "region", values_to = "value") %>% 
+  mutate(tenure = factor(tenure, levels = tend_levels))
+
+ggplot(tend_raw, aes(fct_rev(tenure), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) +
+  labs(title = "About two-in-three homes are owned in Moonee Valley ",
+       subtitle = "Tenure type", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") + ylim(0, 40)
+ggsave("graphs_out/tenure_type.eps") # eps for illustrator 
+```
+
+
+## Household structure 
+
+Data from the 2016 Census shows that the most common household type is couples with children, who account for approximately 31 per cent of households. Lone person households make up about 25 per cent of households.
+
+```{r, fig.width=7, fig.height=4}
+# 2016 census data - edited extract from HDFMD
+households <- tibble(household_type = c("Couples without children","Couples with children","One parent families",
+                          "Other families","Lone person","Group household",
+                          "Visitor only households","Other not classifiable"),
+  `Moonee Valley (C)` = c(22.5, 30.7, 9.1, 2.7, 25, 4.7, 0.7, 4.7),
+    `Greater Melbourne` = c(22.5, 32.5, 9.7, 3.2, 22, 4.7, 0.9, 4.5)) %>% 
+  pivot_longer(-household_type, names_to = "region", values_to = "value")
+
+ggplot(households, aes(fct_rev(household_type), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) + ylim(0, 35) +
+  labs(title = "Couples with children make up 31% of households",
+       subtitle =  "Household type", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") +
+  guides(fill = guide_legend(nrow = 3)) + guides(fill = guide_legend(reverse=TRUE))
+ggsave("graphs_out/household_type.eps") # eps for illustrator 
+```
 
 ## Affordable housing
 
@@ -985,7 +1027,147 @@ ggsave("graphs_out/perception_safety_gender.eps") # eps for illustrator
 
 \pagebreak
 
-# Health workforce
+# Employment (include Woi-wurrung language) 
+
+## Employment type
+
+Data from the 2016 Census shows that there are similar employment levels in Moonee Valley when compared to Greater Melbourne. About 60 per cent of those in the labour force work full time, while about 30 per cent work part time.
+
+```{r, fig.width=7, fig.height=3.5}
+empl_levels <- c("Worked full-time", "Worked part-time", "Away from work", "Unemployed")
+
+empl_raw <- tibble(category = empl_levels,
+  `Moonee Valley (C)` = c(59.2, 30.4, 4.7, 5.7),
+    `Greater Melbourne` = c(58, 30.6, 4.6, 6.8)) %>% 
+  pivot_longer(-category, names_to = "region", values_to = "value") %>% 
+  mutate(category = factor(category, levels = empl_levels))
+
+ggplot(empl_raw, aes(fct_rev(category), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) +
+  labs(title = "About 59% of the labour force work full time",
+       subtitle =  "Employment type for those in the labour force", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") + ylim(0,80)
+ggsave("graphs_out/empl_status.eps") # eps for illustrator 
+```
+
+Males in Moonee Valley are more likely to work full-time than females. About 71 per cent of males work full-time, compared to 47 per cent of females.
+
+```{r, fig.width=7, fig.height=3.5}
+empl_gender <- read_csv("data_in/census/lfsp_combined_gender_2016.csv", skip = 9) %>% 
+  clean_names() %>% 
+  filter(!is.na(count)) %>% 
+  select(lfsp = lfsp_labour_force_status, sex = sexp_sex, region = lga_ur, count) %>% 
+  mutate(lfsp2 = case_when(lfsp == "Employed, worked full-time" ~ "Worked full-time",
+                          lfsp == "Employed, worked part-time" ~ "Worked part-time",
+                          lfsp == "Employed, away from work" ~ "Away from work",
+                          lfsp %in% c("Unemployed, looking for full-time work",
+                                      "Unemployed, looking for part-time work") ~ "Unemployed",
+                          TRUE ~ "Other")) %>% 
+  group_by(region, sex, lfsp2) %>% 
+  summarise(count = sum(count)) %>% 
+  filter(lfsp2 != "Other") %>% 
+  mutate(lfsp2 = factor(lfsp2, levels = empl_levels)) %>% 
+  ungroup() %>% 
+  group_by(region, sex) %>% 
+  mutate(pct = round(count/sum(count)*100, 1)) %>% 
+  rename(category = lfsp2, value = pct) %>% 
+  mutate(sex = if_else(sex == "Female", "Females", "Males"))
+
+ggplot(empl_gender, aes(fct_rev(category), value, fill = sex)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~sex) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = mv2040_cols) +
+  labs(title = "Males are much more likely to work full-time than females",
+       subtitle =  "Employment type by gender for those in the labour force, Moonee Valley", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") + ylim(0,80)
+ggsave("graphs_out/empl_status_gender.eps") # eps for illustrator 
+```
+
+
+## Occupation
+
+Data from the 2016 Census shows that about 29 per cent of Moonee Valley residents work in professional jobs, with another 15 per cent in managerial positions. This compares to 25 per cent and 13 per cent respectively for Greater Melbourne. The next most common occupation types are clerical and administrative workers, technicians and trades workers, sales workers, and community services workers.
+
+```{r, fig.width=7, fig.height=3.5}
+occ_levels <- c("Managers", "Professionals", "Technicians and Trades Workers", "Community and Personal Service Workers", "Clerical and Administrative Workers", "Sales Workers", "Machinery Operators and Drivers", "Labourers", "Inadequately described", "Not stated")
+
+occ_raw <- tibble(category = occ_levels,
+  `Moonee Valley (C)` = c(15, 29.3, 10.2, 9.5, 15.4, 9.6, 3.6, 5.7, 1.1, 0.7),
+    `Greater Melbourne` = c(13.2, 25, 12.6, 10.2, 13.9, 9.7, 5.6, 8.1, 1, 0.7)) %>% 
+  pivot_longer(-category, names_to = "region", values_to = "value") %>% 
+  mutate(category = factor(category, levels = occ_levels))
+
+occ_order <- occ_raw %>% 
+  filter(region == "Moonee Valley (C)") %>% 
+  arrange(value) %>% 
+  mutate(order = row_number()) %>% 
+  select(category, order)
+
+occ_table <- left_join(occ_raw, occ_order)
+
+ggplot(occ_table, aes(reorder(category, order), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) +
+  labs(title = "Three-in-ten residents work in professional jobs",
+       subtitle =  "Occupation of employed persons", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") + ylim(0,80)
+ggsave("graphs_out/occupation.eps") # eps for illustrator 
+```
+
+## Industry of employment
+
+Data from the 2016 Census shows that the most common industries of employment for Moonee Valley residents are:
+
+* Health care and Social Assistance (11.3 per cent of those employed)
+* Education and training (10.3 per cent)
+* Professional, Scientific and Technical Services (10.2 per cent)
+* Retail Trade (9.5 per cent)
+
+These top four industries are the same (in a different order) as for Greater Melbourne.
+
+```{r, fig.width=7, fig.height=5}
+indp_levels <- c("Agriculture, Forestry and Fishing", "Mining", "Manufacturing", "Electricity, Gas, Water and Waste Services", "Construction", "Wholesale Trade", "Retail Trade", "Accommodation and Food Services", "Transport, Postal and Warehousing", "Information Media and Telecommunications", "Financial and Insurance Services", "Rental, Hiring and Real Estate Services", "Professional, Scientific and Technical Services", "Administrative and Support Services", "Public Administration and Safety", "Education and Training", "Health Care and Social Assistance", "Arts and Recreation Services", "Other Services", "Inadequately described", "Not stated")
+
+indp_raw <- tibble(category = indp_levels,
+  `Moonee Valley (C)` = c(0.3, 0.2, 5.8, 0.9, 7.5, 2.9, 9.5, 5.9, 5.9, 2.3, 5.5, 1.8,
+                          10.2, 3.4, 6.5, 10.3, 11.3, 2.7, 3.1, 2.9, 1.1),
+    `Greater Melbourne` = c(0.6, 0.2, 7.7, 1, 8.2, 3.5, 10.1, 6.5, 5, 2.2, 4.5, 1.7,
+                            9, 3.6, 5, 8.6, 12, 2.1, 3.6, 3.6, 1.3)) %>% 
+  pivot_longer(-category, names_to = "region", values_to = "value") %>% 
+  mutate(category = factor(category, levels = indp_levels))
+
+indp_order <- indp_raw %>% 
+  filter(region == "Moonee Valley (C)") %>% 
+  arrange(value) %>% 
+  mutate(order = row_number()) %>% 
+  select(category, order)
+
+indp_table <- left_join(indp_raw, indp_order)
+
+ggplot(indp_table, aes(reorder(category, order), value, fill = region)) + 
+  theme_pubclean() +
+  geom_col() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_text(aes(label = value, hjust = -0.05), col = "black", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) +
+  labs(title = "Health care and social assistance is the \nmost common industry of employment",
+       subtitle =  "Industry of employment of employed persons", fill = NULL,
+       x = NULL, y = "Percentage", caption = "Source: ABS, Census 2016") + 
+  theme(legend.position = "none") + ylim(0,15)
+ggsave("graphs_out/industry_of_employment.eps") # eps for illustrator 
+```
+
+\pagebreak
+
+## Health workforce
 
 Data from the National Health Workforce Data Set shows that there were over 1,500 health professionals working in Moonee Valley in 2017. About one-third of these were nurses and midwives.
 
@@ -1014,6 +1196,75 @@ nhwds %>%
             part = "header")
   
 ```
+
+## People experiencing unemployment (Indigenous language)
+
+The unemployment rate in the City of Moonee Valley has generally been lower than the rate for Greater Melbourne. The dataset runs to March 2020 and only reflects the impacts from the pandemic social restrictions.
+
+```{r, fig.height=3, fig.width=7}
+# import from economic tracker
+salm_raw <- read_csv("data_in/salm_chart_rate_data.csv") 
+
+salm_mv <- salm_raw %>% 
+  filter(region %in% c("City of Moonee Valley", "Greater Melbourne")) 
+
+ggplot(salm_mv, aes(date, values, colour = region, label = values)) +
+  geom_point() + geom_line() + ylim(3.5, 7.5) +
+  theme_pubclean() +
+  theme(legend.position = "bottom") + 
+  scale_colour_manual(values = mv2040_cols) + 
+  geom_text_repel(data = salm_mv %>% filter(date == as.Date("2020-03-01")), show.legend = FALSE) +
+  labs(title = "Moonee Valley's unemployment rate is generally low",
+       x = NULL, y = "Unemployment rate (%)", colour = NULL,
+       caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+ggsave("graphs_out/unemployment_rate.eps") # eps for illustrator 
+```
+
+The unemployment rate is highest in Flemington and Ascot Vale and lowest in Strathmore.
+
+```{r}
+salm_sa2 <- salm_raw %>% 
+  filter(region != "City of Moonee Valley") %>% 
+  filter(region != "Greater Melbourne")
+
+ggplot(salm_sa2, aes(date, values, colour = fair_red, label = values)) +
+  geom_point() + geom_line() + facet_wrap(~region) +
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  theme(legend.position = "none") + 
+  labs(title = "Higher unemployment in Flemington and Ascot Vale",
+       subtitle = "Unemployment Rate (Statistical Area Level 2)", x = NULL, y = "Unemployment rate (%)", colour = NULL,
+       caption = "Source: Small Area Labour Markets, Department of Education, Skills and Employment, 2020")
+ggsave("graphs_out/unemployment_sa2.eps") # eps for illustrator 
+```
+
+While the unemployment rate across the municipality has generally remained lower that of Greater Melbourne, women, young people and those aged 70 years and over have experienced the greatest job losses since the pandemic began. Job losses across these groups could be explained by the fact that women and young people make up a greater proportion of the Accommodation and Food Services as well as the Retail Trade sectors which were hardest hit when by the pandemic. 
+
+Shelley to add more narrative around women and young people – mental health, caring duties, gender inequality. Predicted stunt to entering workforce !!!
+
+```{r, fig.width=7, fig.height=4}
+# victorian data read in from other file - based on econ tracker
+
+# get the latest week from the other file 
+latest_week <- "3 October"
+
+weekly_jobs_data <- read_csv("data_in/jobs_wages_by_age_data.csv") %>%
+  mutate(age_group = factor(age_group, levels = c("Under 20", "20-29", "30-39", "40-49", "50-59", "60-69", "70 and over", "All ages"))) %>% 
+  filter(type == "Jobs")
+
+ggplot(weekly_jobs_data, aes(age_group, latest_week, fill = sex)) +
+  theme_pubclean() +
+  geom_col(position = position_dodge2(width = 0.9)) + ylim(min(weekly_jobs_data$latest_week)-2, 0) +
+  theme(legend.position = c(0.5, 0.1)) + scale_fill_manual(values = mv2040_cols) + 
+  geom_text(aes(label = latest_week, vjust = 1.5), col = "black", fontface = "bold", position = position_dodge2(width = 0.9)) +
+  labs(x = "Age group", y = "Change (%)",
+       title = "Women and young people have seen greater job losses\n since the start of the pandemic",
+       subtitle = glue("Change (%) in jobs in Victoria, 14 March to {latest_week}, 2020"), fill = NULL,
+       caption = "ABS, Weekly Payroll Jobs and Wages in Australia, 2020") +
+  guides(fill = guide_legend(nrow = 1))
+ggsave("graphs_out/change_jobs_age_gender.eps") # eps for illustrator 
+```
+
+Shelley - When home becomes the workplace - Women losing jobs and unpaid domestic labour
 
 \pagebreak
 
@@ -1117,7 +1368,7 @@ Data from the Victorian Population Health Survey shows that only 3.2 per cent of
 vphs_fvi <- read_csv("data_in/vphs/vphs_fvi.csv") %>%  # self reported dental health status
   filter(selections == "Met fruit and vegetable consumption guidelines")
 
-vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Large variations in fruit and vegetable consumption",
+vphs_ggplot_function(dataset = vphs_fvi, yval = 0.2, title_text = "Very few residents eat enough fruit and vegetables",
                      subtitle_text = "Consumed two serves of fruit and five serves of vegetables per day")
 ggsave("graphs_out/fruit_veg.eps") # eps for illustrator 
 ```
@@ -1127,6 +1378,30 @@ ggsave("graphs_out/fruit_veg.eps") # eps for illustrator
 Shelley to include narrative around local food relief and state-wide trends during pandemic !!!
 
 ## Chronic disease (Indigenous language)
+
+### Estimates for diabetes
+
+The Australian Health Policy Collaboration estimates that the rate of diabetes in Moonee Valley (3.7 per cent) is lower than for Greater Melbourne (4.1 per cent). Based on their modelled estimates, about 2,260 people in Moonee Valley have diabetes.
+
+```{r, fig.width=7, fig.height=2.5}
+#ahpc Nov 2017
+diabetes_est <- tibble(
+            region = c("Moonee Valley (C)", "Greater Melbourne"),
+              pct = c(3.698, 4.057),
+                ll = c(3.37, 4.004),
+                ul = c(4.026, 4.11))
+
+ggplot(diabetes_est, aes(fct_rev(region), pct, fill = region)) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + coord_flip() + 
+  geom_text(aes(label = round(pct,1), y = 0.25), col = "white", fontface = "bold") +
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + 
+  labs(title = "Lower rate of diabetes", 
+       subtitle = "Estimated population aged 25-64 with diabetes",
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: AHPC, Australia's Health Tracker Atlas, 2017")
+ggsave("graphs_out/diabetes_est.eps") # eps for illustrator 
+```
+
 
 ### Tests for chronic disease
 
@@ -1432,7 +1707,7 @@ ggplot(pokies_time, aes(year, exp_m, colour = "#E55048", label = exp_m)) +
   scale_y_continuous(limits = c(40, 80)) + 
   geom_text_repel(show.legend = FALSE) +
   annotate("text", x = as.Date("2018-09-01"), y = 55, label = "Pokies have been closed\n since 16 March 2020\n due to COVID-19") +
-  labs(title = "Nearly $80 million lost a year to pokies in a normal year",
+  labs(title = "Nearly $80 million lost a year to pokies per financial year",
        subtitle = "Expenditure on Electronic Gaming Machines in Moonee Valley, year to 30 June",
        x = NULL, y = "Expenditure ($ millions)", colour = NULL,
        caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
@@ -1536,8 +1811,8 @@ immu_raw_tab <- immu_raw %>%
 immu_raw_tab %>% 
   flextable()  %>% 
   autofit() %>% 
-  fontsize(i = NULL, j = NULL, size = 10, part = "body") %>% 
-  add_header_lines(values = "Immunisation rates for Children, 2016-17") %>% 
+  fontsize(i = NULL, j = NULL, size = 9, part = "body") %>% 
+  add_header_lines(values = "Immunisation rates (percentage fully immunised) for children, 2016-17") %>% 
   theme_vanilla() %>% 
   footnote( i = 1, j = 1:5,
             value = as_paragraph(
@@ -1645,7 +1920,7 @@ ggplot(vphs_mh_gender, aes(gender, pct, fill = gender)) +
   geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + facet_wrap(~indicator) + 
   geom_text(aes(label = pct, y = 4), col = "white", fontface = "bold") +
   scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") +
-  labs(title = "Males more likely to have mental health issues, but less likely to seek help",
+  labs(title = "Males more likely to have mental health issues,\nthough less likely to seek help",
       subtitle = "Seeking help for anxiety and depression by gender", 
        x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian Population Health Survey, 2017")
 ggsave("graphs_out/mental_health_gender.eps") # eps for illustrator 
@@ -1888,6 +2163,34 @@ Cyril Jewell House, located in Keilor East, is the only government aged care fac
 
 ![](maps/Aged care layout.png)
 
+## COVID-19 cases
+
+Up until 25 October 2020, there had been 814 COVID-19 cases recorded for residents of the City of Moonee Valley. This places Moonee Valley ninth among all municipalities within Victoria.
+
+```{r}
+covid_cases <- read_csv("data_in/COVID19 Data Viz LGA Data - lga.csv") %>% 
+  clean_names() %>% 
+  select(lga = lga_display, cases, population) %>% 
+  filter(!is.na(lga)) %>% 
+  arrange(desc(cases)) %>% 
+  mutate(is_mv = lga == "Moonee Valley") # boolean
+
+ggplot(covid_cases %>% head(10), aes(reorder(lga, cases), cases, fill = is_mv)) + 
+  theme_pubclean() +
+  geom_col() + geom_text(aes(label = cases, y = 100), col = "white", fontface = "bold") + coord_flip() +
+  scale_fill_manual(values = rev(mv2040_cols[1:2])) + theme(legend.position = "none") +
+  labs(title = "COVID-19 cases by LGA",
+       subtitle =  "Top ten LGAs in Victoria", fill = NULL,
+       x = NULL, y = "Cases (since the start of the pandemic)",
+       caption = "Source: DHHS, Victorian coronavirus data, 25 October, 2020c")
+ggsave("graphs_out/covid_cases.eps") # eps for illustrator 
+
+```
+
+# Death
+
+## COVID-19 deaths in aged care facilities
+
 Most of the deaths due to COVID-19 in Victoria have occurred in aged care facilities. Data from the Department of Health and Human Services shows that (up to 20 October 2020,) Within the municipality, there were:
 
 * 84 cases and nine deaths at the Embracia Moonee Valley facility in Avondale Heights
@@ -1895,9 +2198,7 @@ Most of the deaths due to COVID-19 in Victoria have occurred in aged care facili
 * 68 cases and seven deaths at the Menarock Life facility in Essendon
 * 22 cases and four deaths at Arcadia Aged Care in Essendon
 
-## Death
-
-### Premature deaths
+## Premature deaths
 
 Premature deaths in Moonee Valley declined between 2014 and 2018. There were 142.8 premature deaths per 100,000 in Moonee Valley in 2018, compared to 160.5 for Greater Melbourne.
 
@@ -1932,7 +2233,7 @@ ggplot(death_prem, aes(year, prem_deaths, col = name, label = prem_deaths)) +
 ggsave("graphs_out/premature_death.eps") # eps for illustrator 
 ```
 
-### Top causes of death
+## Top causes of death
 
 The most common causes of death in for Moonee Valley in 2018 was coronary heart disease, responsible for 489 deaths.
 
@@ -1985,9 +2286,11 @@ Australian Bureau of Statistics, 2020, 'Weekly Payroll Jobs and Wages in Austral
 
 Australian Early Development Census, 2019, 'Additional Data Products', Australian Government, Canberra, https://www.aedc.gov.au/data/downloads, accessed 22 September 2019.
 
+Australian Health Policy Collaboration, 2017, 'Australia's Health Tracker Atlas', Victoria University and Torrens University, https://atlasesaustralia.com.au/ahpc/, accessed 22 September 2020.
+
 Australian Institute of Health and Wellbeing, 2020, 'Aged Care Service List', Department of Health, Australian Government, Canberra, https://hwd.health.gov.au/datatool.html, accessed 22 September 2020.
 
-Australian Institute of Health and Wellbeing, 2020, 'Immunisation rates for children in 2016–17', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/immunisation/immunisation-rates-for-children-in-2016-17, accessed 27 October 2020.
+Australian Institute of Health and Wellbeing, 2018, 'Immunisation rates for children in 2016–17', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/immunisation/immunisation-rates-for-children-in-2016-17, accessed 27 October 2020.
 
 Australian Institute of Health and Wellbeing, 2020, 'Mortality Over Regions and Time', Department of Health, Australian Government, Canberra, https://www.aihw.gov.au/reports/life-expectancy-death/mort-books/contents/mort-books, accessed 22 September 2020.
 
@@ -1999,13 +2302,15 @@ Crime Statistics Agency, 2020, 'Latest Victorian Crime Data', Victorian Governme
 
 Department of Education, Skills and Employment, 2020, 'Small Area Labour Markets', Australian Government, Canberra, https://www.employment.gov.au/small-area-labour-markets-publication-0, accessed 22 September 2020.
 
-Department of Environment, Land, Water and Planning, 2020, *Heat Vulnerabilty Index*, Victorian Government, Melbourne.
+Department of Environment, Land, Water and Planning, 2020, *Heat Vulnerability Index*, Victorian Government, Melbourne.
 
 Dental Health Services Victoria, 2020, *City of Moonee Valley Oral Health Profile*, Department of Health and Human Services, Victorian Government, Melbourne.
 
 Department of Health and Human Services, 2020a, 'Rental Report', Victorian Government, Melbourne, https://www.dhhs.vic.gov.au/publications/rental-report, accessed 22 September 2020.
 
 Department of Health and Human Services, 2020b, 'Case locations and outbreaks', Victorian Government, Melbourne, https://www.dhhs.vic.gov.au/case-locations-and-outbreaks, accessed 20 October 2020.
+
+Department of Health and Human Services, 2020c, 'Victorian coronavirus data ', Victorian Government, Melbourne, https://discover.data.vic.gov.au/dataset/victorian-coronavirus-data, accessed 25 October 2020.
 
 Department of Health and Human Services, 2017, *Victorian Population Health Survey 2017*, Victorian Government, Melbourne.
 

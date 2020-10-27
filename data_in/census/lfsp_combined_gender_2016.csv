@@ -1,0 +1,34 @@
+_,,,,
+,,,,
+"2016 Census - Counting Persons, Place of Usual Residence (MB)",,,,
+LFSP Labour Force Status and SEXP Sex by GCCSA (UR),,,,
+Counting: Persons Place of Usual Residence,,,,
+,,,,
+Filters:,,,,
+Default Summation,Persons Place of Usual Residence,,,
+,,,,
+Counting,LFSP Labour Force Status,SEXP Sex,LGA (UR),Count
+Persons Place of Usual Residence,"Employed, worked full-time",Male,Moonee Valley (C),22103
+Persons Place of Usual Residence,"Employed, worked full-time",Female,Moonee Valley (C),14161
+Persons Place of Usual Residence,"Employed, worked part-time",Male,Moonee Valley (C),6095
+Persons Place of Usual Residence,"Employed, worked part-time",Female,Moonee Valley (C),12537
+Persons Place of Usual Residence,"Employed, away from work",Male,Moonee Valley (C),1218
+Persons Place of Usual Residence,"Employed, away from work",Female,Moonee Valley (C),1643
+Persons Place of Usual Residence,"Unemployed, looking for full-time work",Male,Moonee Valley (C),1161
+Persons Place of Usual Residence,"Unemployed, looking for full-time work",Female,Moonee Valley (C),678
+Persons Place of Usual Residence,"Unemployed, looking for part-time work",Male,Moonee Valley (C),679
+Persons Place of Usual Residence,"Unemployed, looking for part-time work",Female,Moonee Valley (C),945
+Persons Place of Usual Residence,Not in the labour force,Male,Moonee Valley (C),12197
+Persons Place of Usual Residence,Not in the labour force,Female,Moonee Valley (C),17635
+Persons Place of Usual Residence,Not stated,Male,Moonee Valley (C),2909
+Persons Place of Usual Residence,Not stated,Female,Moonee Valley (C),3151
+Persons Place of Usual Residence,Not applicable,Male,Moonee Valley (C),10030
+Persons Place of Usual Residence,Not applicable,Female,Moonee Valley (C),9524
+,,,,
+"Data Source: Census of Population and Housing, 2016, TableBuilder",,,,
+,,,,
+INFO,Cells in this table have been randomly adjusted to avoid the release of confidential data. No reliance should be placed on small cells.,,,
+,,,,
+,,,,
+"Copyright Commonwealth of Australia, 2018, see abs.gov.au/copyright",,,,
+"ABS data licensed under Creative Commons, see abs.gov.au/ccby",,,,
