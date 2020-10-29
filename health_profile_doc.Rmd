@@ -1707,7 +1707,7 @@ ggplot(pokies_time, aes(year, exp_m, colour = "#E55048", label = exp_m)) +
   scale_y_continuous(limits = c(40, 80)) + 
   geom_text_repel(show.legend = FALSE) +
   annotate("text", x = as.Date("2018-09-01"), y = 55, label = "Pokies have been closed\n since 16 March 2020\n due to COVID-19") +
-  labs(title = "Nearly $80 million lost a year to pokies per financial year",
+  labs(title = "Nearly $80 million lost to pokies every financial year",
        subtitle = "Expenditure on Electronic Gaming Machines in Moonee Valley, year to 30 June",
        x = NULL, y = "Expenditure ($ millions)", colour = NULL,
        caption = "Source: Victorian Commission for Gambling and Liquor Regulation, 2020")
