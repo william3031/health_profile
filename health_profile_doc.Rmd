@@ -564,6 +564,33 @@ ggplot(vphs_srh_gender, aes(fct_rev(selection), pct, fill = selection)) +
 ggsave("graphs_out/health_status_gender.eps") # eps for illustrator 
 ```
 
+## People with disabilities
+
+Older Moonee Valley residents are more likely to have a disability. About five per cent of Moonee Valley residents overall have a core need for assistance for activities (a proxy for disability), however for those aged 85 years and over, it is 56 per cent for females and 47 per cent for males. For those aged 75-84 years, it is 29 per cent for females and 21 per cent for males. About two per cent of those aged under 65 years in Moonee Valley have a core need for assistance.
+
+```{r}
+# census data - just copied from the disability profile in trim 17/308961
+dis_age_levels <- c("0-4 years","5-14 years","15-19 years","20-24 years","25-34 years","35-44 years",
+                       "45-54 years","55-64 years","65-74 years","75-84 years","85 years and over")
+
+dis_age <- tibble(age = dis_age_levels,
+             Males = c(1.3, 3.4, 2.2, 1.4, 1, 1.6, 2.6, 3.8, 9, 21.1, 47.3),
+           Females = c(0.6, 1.4, 1.4, 1.6, 1.1, 1.5, 2.1, 4.7, 10.3, 29.2, 55.6)) %>%
+  pivot_longer(-age, names_to = "gender", values_to = "pct") %>% 
+  mutate(age = factor(age, levels = dis_age_levels))
+
+ggplot(dis_age, aes(fct_rev(age), pct, fill = gender)) + 
+  theme_pubclean() + theme(strip.background = element_rect(fill="#fafafa")) + 
+  geom_col() + facet_wrap(~gender) + ylim(0, 60) +
+  geom_text(aes(label = pct, hjust = -0.05), col = "black", fontface = "bold") + 
+  scale_fill_manual(values = mv2040_cols) + theme(legend.position = "none") + coord_flip() +
+  labs(title = "Older residents are more likely to have a disability", 
+       subtitle = "Proportion of the population with a need for assitance by age",
+       x = "Age group", y = "Percentage", caption = "Source: ABS, Census, 2016")
+ggsave("graphs_out/combined_age.eps") # eps for illustrator 
+
+```
+
 \pagebreak
 
 # Environmental factors (Indigenous language)
@@ -1379,9 +1406,47 @@ Shelley to include narrative around local food relief and state-wide trends duri
 
 ## Chronic disease (Indigenous language)
 
+### Doctor diagnosed chronic disease
+
+Almost a quarter (23 per cent) of residents in Moonee Valley have two or more chronic diseases; this is lower than for Victoria (25 per cent). The most common are anxiety or depression and asthma. About 15 per cent of residents have arthritis. 
+
+```{r, fig.width=7, fig.height=4}
+vphs_mv_joined <- read_csv("data_out/vphs_comparison_mv.csv")
+vphs_comparison_all <- read_csv("data_out/vphs_comparison.csv")
+
+chron_disease_vic <- vphs_comparison_all %>% 
+  filter(lga == "Victoria") %>% 
+  filter(type == "Doctor diagnosed \nchronic disease") %>% 
+  select(-type, -lga, -percentage) %>% 
+  rename(pct = vic_point_est, ll = vic_lower, ul = vic_upper) %>%
+  mutate(region = "Victoria")
+  
+chron_dis_mv <- vphs_mv_joined %>% 
+  clean_names() %>% 
+  filter(type == "Doctor diagnosed \nchronic disease") %>% 
+  select(-type) %>% 
+  rename(pct = percentage, ll = lower_limit, ul = upper_limit) %>% 
+  mutate(region = "Moonee Valley")
+
+chron_dis <- bind_rows(chron_disease_vic, chron_dis_mv) %>% 
+  mutate(pct = round(pct, 1))
+
+ggplot(chron_dis, aes(reorder(indicator, pct), pct, fill = region)) + 
+  theme_pubclean() + facet_wrap(~region) + theme(strip.background = element_rect(fill="#fafafa")) +
+  coord_flip() +
+  geom_col() + geom_errorbar(aes(ymin = ll, ymax = ul, width=.1)) + 
+  geom_text(aes(label = pct, y = 3), col = "white", fontface = "bold") +
+  theme(legend.position = "none") + scale_fill_manual(values = mv2040_cols) +
+  labs(title = "23% of residents have two or more chronic diseases",
+      subtitle = "Doctor diagnosed chronic disease, Moonee Valley", 
+       x = NULL, y = "Percentage (with 95% CI)", caption = "Source: DHHS, Victorian population Health Survey, 2017")
+ggsave("graphs_out/chron_disease.eps") # eps for illustrator 
+```
+
+
 ### Estimates for diabetes
 
-The Australian Health Policy Collaboration estimates that the rate of diabetes in Moonee Valley (3.7 per cent) is lower than for Greater Melbourne (4.1 per cent). Based on their modelled estimates, about 2,260 people in Moonee Valley have diabetes.
+The Australian Health Policy Collaboration estimates that the rate of diabetes in Moonee Valley (3.7 per cent) is lower than for Greater Melbourne (4.1 per cent).  Based on their modelled estimates, about 2,260 people in Moonee Valley have diabetes.
 
 ```{r, fig.width=7, fig.height=2.5}
 #ahpc Nov 2017
